@@ -85,8 +85,7 @@ export function PoloCard({ name, description, image, tag, href }: PoloCardProps)
         </motion.h2>
 
         <motion.p variants={itemVariants} style={{
-          fontSize: '0.8rem', color: '#8fb3cc', lineHeight: 1.5, margin: 0,
-          whiteSpace: 'pre-line'
+          fontSize: '0.8rem', color: '#8fb3cc', lineHeight: 1.5, margin: 0
         }}>
           {description}
         </motion.p>
