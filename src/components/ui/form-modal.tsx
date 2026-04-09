@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Check } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 interface FormModalProps {
   isOpen: boolean
@@ -31,9 +31,25 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
   const [enviando, setEnviando] = useState(false)
   const [enviado, setEnviado] = useState(false)
   const [showNormas, setShowNormas] = useState(false)
+  const [vagasRestantes, setVagasRestantes] = useState<number>(-1)
+
+  useEffect(() => {
+    if (scriptUrl && isOpen) {
+      fetch(scriptUrl)
+        .then(res => res.json())
+        .then(data => setVagasRestantes(data.vagas ?? -1))
+        .catch(() => setVagasRestantes(-1))
+    }
+  }, [scriptUrl, isOpen])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    if (vagasRestantes === 0) {
+      alert('Desculpe, as vagas esgotaram!')
+      return
+    }
+    
     setEnviando(true)
 
     if (scriptUrl) {
@@ -150,6 +166,21 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
                 >
                   {dias} · {horario}
                 </motion.p>
+                {vagasRestantes >= 0 && (
+                  <motion.p 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.35 }}
+                    style={{ 
+                      fontSize: '0.7rem', 
+                      color: vagasRestantes <= 5 ? '#e05c5c' : '#3dba7e', 
+                      fontWeight: 700,
+                      marginTop: '4px'
+                    }}
+                  >
+                    {vagasRestantes === 0 ? '❌ VAGAS ESGOTADAS' : `✓ ${vagasRestantes} vagas restantes`}
+                  </motion.p>
+                )}
               </div>
               <motion.button
                 whileHover={{ scale: 1.1, rotate: 90 }}
@@ -544,14 +575,16 @@ IMPORTANTE:
                   </motion.div>
 
                   <motion.button
-                    whileHover={{ scale: 1.02, boxShadow: '0 8px 25px rgba(245, 166, 35, 0.4)' }}
-                    whileTap={{ scale: 0.98 }}
+                    whileHover={vagasRestantes === 0 ? {} : { scale: 1.02, boxShadow: '0 8px 25px rgba(245, 166, 35, 0.4)' }}
+                    whileTap={vagasRestantes === 0 ? {} : { scale: 0.98 }}
                     type="submit"
-                    disabled={enviando}
+                    disabled={enviando || vagasRestantes === 0}
                     style={{
                       width: '100%',
                       padding: '16px',
-                      background: 'linear-gradient(135deg, #f5a623 0%, #e09510 100%)',
+                      background: vagasRestantes === 0 
+                        ? 'linear-gradient(135deg, #666 0%, #444 100%)' 
+                        : 'linear-gradient(135deg, #f5a623 0%, #e09510 100%)',
                       color: '#0d1a26',
                       border: 'none',
                       borderRadius: '12px',
@@ -559,8 +592,8 @@ IMPORTANTE:
                       fontWeight: 800,
                       textTransform: 'uppercase',
                       letterSpacing: '1px',
-                      cursor: enviando ? 'not-allowed' : 'pointer',
-                      opacity: enviando ? 0.7 : 1,
+                      cursor: enviando || vagasRestantes === 0 ? 'not-allowed' : 'pointer',
+                      opacity: enviando || vagasRestantes === 0 ? 0.7 : 1,
                       boxShadow: '0 4px 15px rgba(245, 166, 35, 0.3)',
                     }}
                   >
@@ -571,7 +604,7 @@ IMPORTANTE:
                       >
                         Enviando...
                       </motion.span>
-                    ) : 'Enviar Inscrição'}
+                    ) : vagasRestantes === 0 ? 'Vagas Esgotadas' : 'Enviar Inscrição'}
                   </motion.button>
                 </form>
               )}
