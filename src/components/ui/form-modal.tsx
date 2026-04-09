@@ -83,17 +83,18 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
           />
 
           <motion.div
-            initial={{ opacity: 0, y: 50, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 30, scale: 0.95 }}
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             style={{
               position: 'fixed',
               top: '50%',
               left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: '92%',
-              maxWidth: '480px',
+              marginTop: '-45vh',
+              marginLeft: '-240px',
+              width: '480px',
+              maxWidth: '92vw',
               maxHeight: '90vh',
               background: 'linear-gradient(180deg, #162a3d 0%, #0d1a26 100%)',
               borderRadius: '20px',
