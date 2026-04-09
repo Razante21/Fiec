@@ -57,7 +57,7 @@ export function PoloCard({ name, description, image, tag, href }: PoloCardProps)
         background: 'linear-gradient(to top, rgba(30, 58, 82, 0.95) 0%, rgba(30, 58, 82, 0.6) 50%, rgba(30, 58, 82, 0.3) 100%)',
       }} />
 
-      <div style={{ padding: '20px 20px 10px', textAlign: 'center', flex: 1, position: 'relative', zIndex: 1 }}>
+      <div style={{ padding: '20px 20px 0px', textAlign: 'center', flex: 1, position: 'relative', zIndex: 1 }}>
         {tag && (
           <span style={{
             display: 'inline-block',
