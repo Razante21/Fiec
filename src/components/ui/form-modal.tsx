@@ -30,6 +30,7 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
   })
   const [enviando, setEnviando] = useState(false)
   const [enviado, setEnviado] = useState(false)
+  const [showNormas, setShowNormas] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -421,6 +422,90 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
                       }}
                       placeholder="seu@email.com"
                     />
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.38 }}
+                    style={{ marginBottom: '14px' }}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setShowNormas(!showNormas)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: '#f5a623',
+                        fontSize: '0.85rem',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        textDecoration: 'underline',
+                        padding: 0,
+                      }}
+                    >
+                      {showNormas ? '▼' : '▶'} Ler as Normas Regimentais
+                    </button>
+                    
+                    {showNormas && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        style={{
+                          marginTop: '10px',
+                          padding: '14px',
+                          background: 'rgba(0, 0, 0, 0.3)',
+                          borderRadius: '10px',
+                          border: '1px solid rgba(255, 255, 255, 0.1)',
+                          maxHeight: '200px',
+                          overflowY: 'auto',
+                        }}
+                      >
+                        <p style={{ fontSize: '0.7rem', color: '#a0b2c1', lineHeight: 1.6, whiteSpace: 'pre-line' }}>
+{`PROGRAMA DE EDUCAÇÃO DIGITAL - NORMAS INTERNAS – CORPO DISCENTE
+
+II SEMESTRE 2026
+
+Início das aulas:
+Dia 03/08/26 - Turmas de 2ª e 4ª feiras
+Dia 04/08/26 - Turmas de 3ª e 5ª Feiras
+
+Horário dos cursos: o aluno deverá seguir o cronograma de aulas, conforme o polo em que está matriculado.
+
+1. O aluno deverá manter suas informações atualizadas para necessidade de contato (e-mail, telefone e endereço).
+
+2. O aluno que não frequentar a primeira semana de aula, sem justificativa por escrito, será considerado aluno evadido e sua vaga será oferecida aos candidatos em lista de espera, seguindo a ordem de inscrição.
+
+3. O aluno deverá respeitar o horário de início e término das aulas.
+
+4. Os alunos, maiores de 18 anos, poderão, quando apresentarem um motivo justo, solicitar saída antes do término do período das aulas; os alunos, menores de 18 anos, só poderão se retirar do estabelecimento durante o período entre as aulas, com autorização expressa dos pais ou responsáveis.
+
+5. Poderá haver junção de turmas de mesmo módulo considerando o número de alunos evadidos e desistentes.
+
+6. O aluno que não concluir o módulo básico não pode ingressar no intermediário, e o que não concluir o módulo intermediário, não poderá ingressar no avançado, salvo se possuir conhecimento e atender os pré-requisitos exigidos.
+
+7. O aluno matriculado que desistir do curso não terá assegurada sua vaga para a próxima oferta.
+
+8. O aluno, se precisar, poderá pedir remanejamento de polo e/ou horário (transferência), junto à coordenação do Programa na FIEC, desde que haja vaga.
+
+9. Qualquer aluno matriculado, ou seu representante legal, que se considerar prejudicado no transcorrer do curso, deverá procurar protocolar requerimento junto à coordenação do programa.
+
+10. Ao término de cada módulo o aluno deverá manifestar seu interesse em continuar no curso, bem como fazer a rematrícula para o próximo módulo, de forma a garantir sua vaga, caso contrário, sua vaga poderá ser disponibilizada ao próximo inscrito da lista.
+
+11. A FIEC não se responsabiliza por objetos deixados em suas dependências (celulares, carteiras, bicicletas, etc.).
+
+IMPORTANTE:
+- É condição obrigatória a frequência ao curso para o cumprimento da carga horária curricular (mínimo de 75% do total das horas letivas);
+- Não é permitido o uso de qualquer aparelho eletrônico em sala de aula, exceto os autorizados para a aprendizagem do aluno;
+- É vedado ao aluno fumar no recinto da escola, nos termos da legislação pertinente;
+- É vedado ao aluno ocupar-se, durante as atividades escolares, de qualquer ação alheia ao desenvolvimento de sua aprendizagem;
+- É proibido ao aluno comer e beber em sala de aula;
+- É dever do aluno colaborar na conservação e higiene do prédio, do mobiliário e de todo material de uso coletivo;
+- Serão observadas as medidas relativas à proteção de dados pessoais, conforme Lei 13.709/2018 (LGPD).`}
+                        </p>
+                      </motion.div>
+                    )}
                   </motion.div>
 
                   <motion.div
