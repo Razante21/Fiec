@@ -76,9 +76,9 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
             style={{
               position: 'fixed',
               inset: 0,
-              background: 'rgba(13, 26, 38, 0.85)',
-              backdropFilter: 'blur(4px)',
-              zIndex: 50,
+              background: 'rgba(13, 26, 38, 0.9)',
+              backdropFilter: 'blur(8px)',
+              zIndex: 9998,
             }}
           />
 
@@ -94,13 +94,13 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
               transform: 'translate(-50%, -50%)',
               width: '92%',
               maxWidth: '480px',
-              maxHeight: '92vh',
+              maxHeight: '90vh',
               background: 'linear-gradient(180deg, #162a3d 0%, #0d1a26 100%)',
               borderRadius: '20px',
               border: '1px solid rgba(245, 166, 35, 0.3)',
               boxShadow: '0 25px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(245, 166, 35, 0.1)',
               overflow: 'hidden',
-              zIndex: 51,
+              zIndex: 9999,
             }}
           >
             <motion.div
