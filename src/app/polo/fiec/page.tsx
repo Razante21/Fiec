@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import { FormModal } from '@/components/ui/form-modal'
 
 const VAGAS_TOTAL = 40
 
@@ -39,6 +40,8 @@ export default function PoloFiec() {
     { id: 'm2-4', tag: 'Módulo II — Intermediário', dias: '2ª e 4ª-feira', horario: '19h00 às 20h30', formUrl: 'LINK_FORM_FIEC_M2_24_4', scriptUrl: 'SCRIPT_URL_AQUI', vagas: -1, esgotado: false },
     { id: 'm2-5', tag: 'Módulo II — Intermediário', dias: '3ª e 5ª-feira', horario: '08h30 às 10h00', formUrl: 'LINK_FORM_FIEC_M2_35_1', scriptUrl: 'SCRIPT_URL_AQUI', vagas: -1, esgotado: false },
   ])
+  const [modalOpen, setModalOpen] = useState(false)
+  const [selectedModulo, setSelectedModulo] = useState<ModuloData | null>(null)
 
   useEffect(() => {
     const loadVagas = async () => {
@@ -222,7 +225,7 @@ export default function PoloFiec() {
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>
                 {modulos.filter(m => m.tag === 'Módulo I — Básico').map((modulo, idx) => (
-                  <ModuloCard key={modulo.id} modulo={modulo} index={idx} />
+                  <ModuloCard key={modulo.id} modulo={modulo} index={idx} onClick={() => { setSelectedModulo(modulo); setModalOpen(true) }} />
                 ))}
               </div>
             </div>
@@ -250,7 +253,7 @@ export default function PoloFiec() {
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>
                 {modulos.filter(m => m.tag === 'Módulo II — Intermediário').map((modulo, idx) => (
-                  <ModuloCard key={modulo.id} modulo={modulo} index={idx + 3} />
+                  <ModuloCard key={modulo.id} modulo={modulo} index={idx + 3} onClick={() => { setSelectedModulo(modulo); setModalOpen(true) }} />
                 ))}
               </div>
             </div>
@@ -312,11 +315,21 @@ export default function PoloFiec() {
       }}>
         Programa de Educação Digital · FIEC · II Semestre 2026
       </footer>
+
+      <FormModal
+        isOpen={modalOpen}
+        onClose={() => { setModalOpen(false); setSelectedModulo(null) }}
+        polo="Polo FIEC"
+        modulo={selectedModulo?.tag || ''}
+        dias={selectedModulo?.dias || ''}
+        horario={selectedModulo?.horario || ''}
+        scriptUrl={selectedModulo?.scriptUrl}
+      />
     </main>
   )
 }
 
-function ModuloCard({ modulo, index }: { modulo: ModuloData; index: number }) {
+function ModuloCard({ modulo, index, onClick }: { modulo: ModuloData; index: number; onClick: () => void }) {
   const [width, setWidth] = useState(0)
   
   useEffect(() => {
@@ -332,24 +345,13 @@ function ModuloCard({ modulo, index }: { modulo: ModuloData; index: number }) {
     return '#3dba7e'
   }
 
-  const getTextColor = () => {
-    if (modulo.vagas === 0) return 'vermelho'
-    if (modulo.vagas <= 10) return 'amarelo'
-    return ''
-  }
-
   return (
-    <motion.a
-      href={modulo.esgotado ? 'LINK_LISTA_ESPERA_POLO_FIEC' : modulo.formUrl}
-      target="_blank"
+    <motion.div
+      onClick={modulo.esgotado ? undefined : onClick}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 * index }}
-      whileHover={{ 
-        y: -3, 
-        borderColor: '#f5a623',
-        boxShadow: '0 8px 24px rgba(0,0,0,.3)',
-      }}
+      whileHover={modulo.esgotado ? {} : { y: -3, borderColor: '#f5a623', boxShadow: '0 8px 24px rgba(0,0,0,.3)' }}
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -364,6 +366,7 @@ function ModuloCard({ modulo, index }: { modulo: ModuloData; index: number }) {
         overflow: 'hidden',
         opacity: modulo.esgotado ? 0.55 : 1,
         pointerEvents: modulo.esgotado ? 'none' : 'auto',
+        cursor: modulo.esgotado ? 'not-allowed' : 'pointer',
       }}
     >
       <span style={{ fontSize: '0.6rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#f5a623', marginBottom: '4px' }}>
@@ -450,6 +453,6 @@ function ModuloCard({ modulo, index }: { modulo: ModuloData; index: number }) {
           </svg>
         </span>
       )}
-    </motion.a>
+    </motion.div>
   )
 }
