@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polo Veredas – Inscrições · FIEC</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #0d1a26;
+    --surface:  #1e3a52;
+    --surface2: #162a3d;
+    --surface3: #112030;
+    --accent:   #f5a623;
+    --blue-hl:  #4a9eca;
+    --green:    #3dba7e;
+    --red:      #e05c5c;
+    --yellow:   #f5c842;
+    --text:     #ffffff;
+    --text-sub: #8fb3cc;
+    --divider:  rgba(255,255,255,.07);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6; }
+  .header-polo { background: radial-gradient(ellipse 60% 60% at 8% 20%, rgba(245,166,35,.10) 0%, transparent 60%), linear-gradient(175deg, #091520 0%, #0d1a26 100%); padding: 32px 24px 44px; text-align: center; position: relative; border-bottom: 1px solid var(--divider); }
+  .header-polo::after { content: ''; position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%); width: 80px; height: 3px; background: var(--accent); border-radius: 2px 2px 0 0; }
+  .btn-voltar { display: inline-flex; align-items: center; gap: 6px; color: var(--text-sub); text-decoration: none; font-size: .78rem; text-transform: uppercase; letter-spacing: .12em; margin-bottom: 22px; transition: color .2s; }
+  .btn-voltar svg { width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s; }
+  .btn-voltar:hover { color: var(--accent); }
+  .btn-voltar:hover svg { transform: translateX(-3px); }
+  .polo-sub-tag-header { display: inline-block; background: var(--accent); color: var(--bg); font-size: .62rem; font-weight: 800; padding: 3px 12px; border-radius: 3px; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 12px; }
+  .header-polo h1 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(2.2rem, 7vw, 3.8rem); text-transform: uppercase; letter-spacing: .02em; line-height: 1; }
+  .header-polo .local-label { display: block; font-size: .82rem; color: var(--text-sub); margin-top: 8px; letter-spacing: .04em; }
+  .container { max-width: 1040px; margin: 44px auto; padding: 0 24px; display: grid; grid-template-columns: 270px 1fr; gap: 32px; align-items: start; }
+  .sidebar { position: sticky; top: 24px; display: flex; flex-direction: column; gap: 14px; }
+  .address-card { background: var(--surface); border-radius: 12px; border: 1px solid var(--divider); overflow: hidden; }
+  .address-card-header { background: var(--surface2); padding: 14px 18px; border-bottom: 1px solid var(--divider); }
+  .address-card-header span { font-size: .66rem; text-transform: uppercase; letter-spacing: .18em; color: var(--accent); font-weight: 700; }
+  .address-card-body { padding: 18px; }
+  .address-card-body h2 { font-family:'Barlow Condensed',sans-serif; font-size:1.4rem; font-weight:700; text-transform:uppercase; margin-bottom:6px; line-height:1.1; }
+  .address-card-body p { color:var(--text-sub); font-size:.85rem; line-height:1.6; }
+  .inscricoes-title { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:clamp(1.8rem,5vw,2.6rem); text-transform:uppercase; margin-bottom:24px; padding-bottom:14px; border-bottom:1px solid var(--divider); }
+  .inscricoes-title span { color:var(--accent); }
+  .secao-turma { margin-bottom:28px; }
+  .secao-header { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .secao-header h4 { font-family:'Barlow Condensed',sans-serif; font-size:1rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--text-sub); white-space:nowrap; }
+  .secao-divider { flex:1; height:1px; background:var(--divider); }
+  .modulos-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:10px; }
+  .modulo-btn { display:flex; flex-direction:column; padding:16px 16px 14px; background:var(--surface); border:1px solid var(--divider); border-radius:10px; text-decoration:none; color:var(--text); transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease; position:relative; overflow:hidden; }
+  .modulo-btn:hover { transform:translateY(-3px); border-color:var(--accent); box-shadow:0 8px 24px rgba(0,0,0,.3); }
+  .modulo-tag { font-size:.6rem; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--accent); margin-bottom:4px; }
+  .modulo-dias { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:1rem; text-transform:uppercase; line-height:1.1; margin-bottom:3px; }
+  .modulo-horario { font-size:.78rem; color:var(--text-sub); margin-bottom:10px; }
+  .vagas-bar-wrap { margin-bottom:10px; }
+  .vagas-bar-bg { height:4px; background:rgba(255,255,255,.08); border-radius:2px; overflow:hidden; }
+  .vagas-bar-fill { height:100%; border-radius:2px; transition:width .6s ease; background:var(--green); }
+  .vagas-bar-fill.amarelo { background:var(--yellow); }
+  .vagas-bar-fill.vermelho { background:var(--red); }
+  .vagas-texto { font-size:.68rem; color:var(--text-sub); margin-top:4px; }
+  .vagas-texto strong { color:var(--green); }
+  .vagas-texto strong.amarelo { color:var(--yellow); }
+  .vagas-texto strong.vermelho { color:var(--red); }
+  .modulo-cta { display:inline-flex; align-items:center; gap:5px; font-size:.72rem; font-weight:700; font-family:'Barlow Condensed',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--blue-hl); transition:color .2s,gap .2s; margin-top:auto; }
+  .modulo-btn:hover .modulo-cta { color:var(--accent); gap:8px; }
+  .modulo-cta svg { width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round; }
+  .modulo-btn.esgotado { opacity:.55; pointer-events:none; }
+  .esgotado-badge { display:inline-block; background:rgba(224,92,92,.15); color:var(--red); border:1px solid rgba(224,92,92,.3); font-size:.6rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:2px 8px; border-radius:3px; margin-top:auto; }
+  .requisitos-box { background:rgba(61,186,126,.06); border:1px solid rgba(61,186,126,.18); border-left:3px solid var(--green); padding:14px 16px; border-radius:8px; font-size:.82rem; line-height:1.6; color:var(--text-sub); margin:18px 0 24px; }
+  .requisitos-box strong { color:var(--green); }
+  .espera-section { margin-top:36px; padding:24px 22px; background:var(--surface2); border-radius:12px; border:1px solid var(--divider); text-align:center; }
+  .espera-section p { font-size:.82rem; color:var(--text-sub); margin-bottom:14px; line-height:1.6; }
+  .espera-btn { display:inline-flex; align-items:center; gap:7px; background:transparent; border:1.5px solid var(--blue-hl); color:var(--blue-hl); font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:.88rem; letter-spacing:.1em; text-transform:uppercase; text-decoration:none; padding:9px 22px; border-radius:6px; transition:background .2s,color .2s; }
+  .espera-btn:hover { background:var(--blue-hl); color:var(--bg); }
+  .espera-btn svg { width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round; }
+  .presencial-aviso { display:flex; align-items:flex-start; gap:14px; background:rgba(245,166,35,.08); border:1.5px solid rgba(245,166,35,.35); border-left:4px solid var(--accent); border-radius:10px; padding:18px 20px; margin-bottom:28px; }
+  .presencial-aviso-icon { flex-shrink:0; width:36px; height:36px; background:rgba(245,166,35,.12); border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--accent); }
+  .presencial-aviso-body { display:flex; flex-direction:column; gap:4px; }
+  .presencial-aviso-titulo { font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:1rem; text-transform:uppercase; letter-spacing:.06em; color:var(--accent); }
+  .presencial-aviso-info { font-size:.85rem; color:var(--text-sub); line-height:1.5; }
+  .presencial-aviso-info strong { color:var(--text); font-weight:600; }
+  .espera-sidebar-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: transparent;
+    border: 1.5px solid var(--blue-hl);
+    color: var(--blue-hl);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: .88rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 11px 16px;
+    border-radius: 10px;
+    transition: background .2s, color .2s;
+  }
+  .espera-sidebar-btn:hover { background: var(--blue-hl); color: var(--bg); }
+  .espera-sidebar-btn svg { flex-shrink: 0; }
+  footer { padding:32px 24px; text-align:center; color:var(--text-sub); font-size:.74rem; letter-spacing:.06em; border-top:1px solid var(--divider); margin-top:56px; }
+  @media(max-width:768px){ .container{grid-template-columns:1fr;} .sidebar{position:static;} .modulos-grid{grid-template-columns:1fr 1fr;} }
+  @media(max-width:480px){ .modulos-grid{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+
+<svg style="display:none">
+  <symbol id="ico-back" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></symbol>
+  <symbol id="ico-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></symbol>
+  <symbol id="ico-list" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></symbol>
+</svg>
+
+<header class="header-polo">
+  <a href="https://sites.google.com/fiec.com.br/inclusodigitalfiec-2025/in%C3%ADcio_1" class="btn-voltar">
+    <svg><use href="#ico-back"/></svg> Todos os polos
+  </a>
+  <h1>Polo Veredas</h1>
+</header>
+
+<div class="container">
+
+  <aside class="sidebar">
+    <div class="address-card">
+      <div class="address-card-header"><span>Endereço</span></div>
+      <div class="address-card-body">
+        <h2>Veredas</h2>
+        <p>Rod. Cônego Cyriaco Scaranelo Pires, 4.735<br>Bairro Veredas da Conquista</p>
+      </div>
+    </div>
+
+    <a href="LINK_LISTA_ESPERA_POLO_VEREDAS" class="espera-sidebar-btn" target="_blank">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      Lista de Espera
+    </a>
+  </aside>
+
+  <main class="inscricoes-list">
+    <h2 class="inscricoes-title">Inscrições <span>2026</span></h2>
+    <div class="secao-turma">
+      <div class="secao-header">
+        <h4>Módulo Intermediário</h4>
+        <div class="secao-divider"></div>
+      </div>
+            <div class="requisitos-box">
+        <strong>Pré-requisito para esta turma:</strong><br>
+        É necessário ter concluído o módulo básico do curso de inclusão digital da FIEC ou ter conhecimentos básicos de informática e computação: uso do sistema operacional Windows, manipulação de arquivos e pastas, edição de textos com WordPad ou Microsoft Office, navegação na internet e uso das ferramentas do Google.
+      </div>
+      <div class="modulos-grid">
+        <a href="LINK_FORM_VEREDAS_INT_4" class="modulo-btn" data-form="LINK_FORM_VEREDAS_INT_4" data-script-url="SCRIPT_URL_AQUI" target="_blank">
+          <span class="modulo-tag">Módulo Intermediário</span>
+          <span class="modulo-dias">Quarta-feira</span>
+          <span class="modulo-horario">08h30 às 10h30</span>
+          <div class="vagas-bar-wrap">
+            <div class="vagas-bar-bg"><div class="vagas-bar-fill" style="width:0%"></div></div>
+            <p class="vagas-texto"><strong>Carregando vagas...</strong></p>
+          </div>
+          <span class="modulo-cta">Inscrever-se <svg><use href="#ico-arrow"/></svg></span>
+          <span class="esgotado-badge" style="display:none">Vagas esgotadas</span>
+        </a>
+      </div>
+    </div>
+    <div class="espera-section">
+      <p>Não encontrou vaga na turma desejada? Entre na lista de espera e entraremos em contato assim que uma vaga for liberada.</p>
+      <a href="LINK_LISTA_ESPERA_POLO_VEREDAS" class="espera-btn">
+        <svg><use href="#ico-list"/></svg> Entrar na Lista de Espera
+      </a>
+    </div>
+  </main>
+
+</div>
+
+<footer>Programa de Educação Digital · FIEC · II Semestre 2026</footer>
+
+<script>
+const VAGAS_TOTAL = 40;
+
+async function carregarVagas(formId, cardEl) {
+  const barFill = cardEl.querySelector('.vagas-bar-fill');
+  const vagasTexto = cardEl.querySelector('.vagas-texto strong');
+  const cta = cardEl.querySelector('.modulo-cta');
+  const esgotadoBadge = cardEl.querySelector('.esgotado-badge');
+  const APPS_SCRIPT_URL = cardEl.dataset.scriptUrl;
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'SCRIPT_URL_AQUI') {
+    const wrap = cardEl.querySelector('.vagas-bar-wrap');
+    if (wrap) wrap.style.display = 'none';
+    return;
+  }
+  try {
+    const res = await fetch(APPS_SCRIPT_URL);
+    if (!res.ok) throw new Error('erro');
+    const data = await res.json();
+    const inscritos = data.inscritos ?? 0;
+    const restantes = Math.max(0, VAGAS_TOTAL - inscritos);
+    const pct = Math.min(100, (inscritos / VAGAS_TOTAL) * 100).toFixed(0);
+    barFill.style.width = pct + '%';
+    if (restantes === 0) {
+      barFill.classList.add('vermelho');
+      vagasTexto.classList.add('vermelho');
+      vagasTexto.textContent = 'Vagas esgotadas';
+      cta && (cta.style.display = 'none');
+      esgotadoBadge && (esgotadoBadge.style.display = 'inline-block');
+      cardEl.classList.add('esgotado');
+      // Redireciona para lista de espera ao clicar
+      const listaEspera = document.querySelector('.espera-btn');
+      if (listaEspera) cardEl.setAttribute('href', listaEspera.getAttribute('href'));
+    } else if (restantes <= 10) {
+      barFill.classList.add('amarelo');
+      vagasTexto.classList.add('amarelo');
+      vagasTexto.textContent = restantes + ' vagas restantes';
+    } else {
+      vagasTexto.textContent = restantes + ' vagas restantes';
+    }
+  } catch(e) {
+    const wrap = cardEl.querySelector('.vagas-bar-wrap');
+    if (wrap) wrap.style.display = 'none';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.modulo-btn[data-form]').forEach(card => {
+    carregarVagas(card.dataset.form, card);
+  });
+});
+</script>
+</body>
+</html>

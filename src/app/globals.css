@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #0d1a26;
+  --surface: #1e3a52;
+  --surface2: #162a3d;
+  --surface3: #112030;
+  --accent: #f5a623;
+  --blue-hl: #4a9eca;
+  --green: #3dba7e;
+  --red: #e05c5c;
+  --yellow: #f5c842;
+  --text: #ffffff;
+  --text-sub: #8fb3cc;
+  --divider: rgba(255, 255, 255, 0.07);
+}
+
+body {
+  font-family: 'Barlow', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
