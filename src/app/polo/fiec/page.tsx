@@ -326,7 +326,16 @@ export default function PoloFiec() {
         horario={selectedModulo?.horario || ''}
         scriptUrl={selectedModulo?.scriptUrl}
         listaEsperaOnly
-        listaEsperaTurmas="FIEC: Módulo I — Básico - 2ª e 4ª-feira - 08h30 às 10h00; FIEC: Módulo I — Básico - 3ª e 5ª-feira - 14h00 às 15h30; FIEC: Módulo I — Básico - 3ª e 5ª-feira - 19h00 às 20h30; FIEC: Módulo II — Intermediário - 2ª e 4ª-feira - 10h15 às 11h45; FIEC: Módulo II — Intermediário - 2ª e 4ª-feira - 14h00 às 15h30; FIEC: Módulo II — Intermediário - 2ª e 4ª-feira - 16h00 às 17h30; FIEC: Módulo II — Intermediário - 2ª e 4ª-feira - 19h00 às 20h30; FIEC: Módulo II — Intermediário - 3ª e 5ª-feira - 08h30 às 10h00"
+        listaEsperaTurmas={[
+          'FIEC: Módulo I — Básico - 2ª e 4ª-feira - 08h30 às 10h00',
+          'FIEC: Módulo I — Básico - 3ª e 5ª-feira - 14h00 às 15h30',
+          'FIEC: Módulo I — Básico - 3ª e 5ª-feira - 19h00 às 20h30',
+          'FIEC: Módulo II — Intermediário - 2ª e 4ª-feira - 10h15 às 11h45',
+          'FIEC: Módulo II — Intermediário - 2ª e 4ª-feira - 14h00 às 15h30',
+          'FIEC: Módulo II — Intermediário - 2ª e 4ª-feira - 16h00 às 17h30',
+          'FIEC: Módulo II — Intermediário - 2ª e 4ª-feira - 19h00 às 20h30',
+          'FIEC: Módulo II — Intermediário - 3ª e 5ª-feira - 08h30 às 10h00',
+        ]}
       />
 
       <FormModal
@@ -338,7 +347,16 @@ export default function PoloFiec() {
         horario=""
         scriptUrl=""
         listaEsperaOnly
-        listaEsperaTurmas="FIEC: Módulo I — Básico - 2ª e 4ª-feira - 08h30 às 10h00; FIEC: Módulo I — Básico - 3ª e 5ª-feira - 14h00 às 15h30; FIEC: Módulo I — Básico - 3ª e 5ª-feira - 19h00 às 20h30; FIEC: Módulo II — Intermediário - 2ª e 4ª-feira - 10h15 às 11h45; FIEC: Módulo II — Intermediário - 2ª e 4ª-feira - 14h00 às 15h30; FIEC: Módulo II — Intermediário - 2ª e 4ª-feira - 16h00 às 17h30; FIEC: Módulo II — Intermediário - 2ª e 4ª-feira - 19h00 às 20h30; FIEC: Módulo II — Intermediário - 3ª e 5ª-feira - 08h30 às 10h00"
+        listaEsperaTurmas={[
+          'FIEC: Módulo I — Básico - 2ª e 4ª-feira - 08h30 às 10h00',
+          'FIEC: Módulo I — Básico - 3ª e 5ª-feira - 14h00 às 15h30',
+          'FIEC: Módulo I — Básico - 3ª e 5ª-feira - 19h00 às 20h30',
+          'FIEC: Módulo II — Intermediário - 2ª e 4ª-feira - 10h15 às 11h45',
+          'FIEC: Módulo II — Intermediário - 2ª e 4ª-feira - 14h00 às 15h30',
+          'FIEC: Módulo II — Intermediário - 2ª e 4ª-feira - 16h00 às 17h30',
+          'FIEC: Módulo II — Intermediário - 2ª e 4ª-feira - 19h00 às 20h30',
+          'FIEC: Módulo II — Intermediário - 3ª e 5ª-feira - 08h30 às 10h00',
+        ]}
       />
     </main>
   )

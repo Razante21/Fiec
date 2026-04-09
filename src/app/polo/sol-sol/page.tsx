@@ -47,7 +47,9 @@ export default function PoloSolSol() {
         horario=""
         scriptUrl=""
         listaEsperaOnly
-        listaEsperaTurmas="SOL-SOL: Módulo I — Básico - 2ª e 4ª-feira - 08h30 às 10h00"
+        listaEsperaTurmas={[
+          'Sol-Sol: Módulo I — Básico - 2ª e 4ª-feira - 08h30 às 10h00',
+        ]}
       />
     </main>
   )

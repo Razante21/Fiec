@@ -49,7 +49,9 @@ export default function PoloJdBrasil() {
         horario=""
         scriptUrl=""
         listaEsperaOnly
-        listaEsperaTurmas="JARDIM BRASIL: Módulo II — Intermediário - 2ª e 4ª-feira - 13h30 às 15h00"
+        listaEsperaTurmas={[
+          'JD Brasil: Módulo II — Intermediário - 2ª e 4ª-feira - 13h30 às 15h00',
+        ]}
       />
     </main>
   )

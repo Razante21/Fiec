@@ -48,7 +48,9 @@ export default function PoloComunidadeIndependente() {
         horario=""
         scriptUrl=""
         listaEsperaOnly
-        listaEsperaTurmas="COMUNIDADE INDEPENDENTE: Módulo II — Intermediário - 3ª e 5ª-feira - 14h00 às 16h00"
+        listaEsperaTurmas={[
+          'Comunidade Independente: Módulo II — Intermediário - 3ª e 5ª-feira - 14h00 às 16h00',
+        ]}
       />
     </main>
   )

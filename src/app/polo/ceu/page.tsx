@@ -83,6 +83,9 @@ export default function PoloCeu() {
         horario=""
         scriptUrl=""
         listaEsperaOnly
+        listaEsperaTurmas={[
+          'CEU: Módulo II — Intermediário - 3ª e 5ª-feira - 14h00 às 15h30',
+        ]}
       />
     </main>
   )
