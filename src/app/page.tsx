@@ -202,6 +202,29 @@ export default function Inicio() {
             <p style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 'clamp(3.5rem, 10vw, 6rem)', fontWeight: 800, lineHeight: 1, color: '#ffffff' }}>30/06/2026</p>
           </motion.div>
         </FadeContent>
+
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.5 }}
+          style={{ marginTop: '60px' }}
+        >
+          <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{ repeat: Infinity, duration: 1.5 }}
+            style={{ color: '#f5a623', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '2px', cursor: 'pointer' }}
+            onClick={() => {
+              document.getElementById('polos')?.scrollIntoView({ behavior: 'smooth' })
+            }}
+          >
+            Ver polos disponíveis
+            <motion.div style={{ display: 'flex', justifyContent: 'center', marginTop: '8px' }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f5a623" strokeWidth="2">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </motion.div>
+          </motion.div>
+        </motion.div>
       </motion.section>
 
       {/* Info Strip */}
@@ -220,7 +243,7 @@ export default function Inicio() {
       </AnimatedContent>
 
       {/* Polos Section */}
-      <div style={{ background: '#0d1a26', padding: '80px 24px' }}>
+      <div id="polos" style={{ background: '#0d1a26', padding: '80px 24px' }}>
         <AnimatedContent direction="vertical" distance={30} duration={0.5}>
           <motion.p style={{
             textAlign: 'center', 
