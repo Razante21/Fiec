@@ -32,12 +32,22 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
   const [enviado, setEnviado] = useState(false)
   const [showNormas, setShowNormas] = useState(false)
   const [vagasRestantes, setVagasRestantes] = useState<number>(-1)
+  const [isListaEspera, setIsListaEspera] = useState(false)
+  const [formLista, setFormLista] = useState({
+    turma: '',
+    nome: '',
+    telefone: '',
+    email: '',
+  })
 
   useEffect(() => {
     if (scriptUrl && isOpen) {
       fetch(scriptUrl)
         .then(res => res.json())
-        .then(data => setVagasRestantes(data.vagas ?? -1))
+        .then(data => {
+          setVagasRestantes(data.vagas ?? -1)
+          setIsListaEspera(data.vagas === 0)
+        })
         .catch(() => setVagasRestantes(-1))
     }
   }, [scriptUrl, isOpen])
@@ -45,8 +55,12 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (vagasRestantes === 0) {
-      alert('Desculpe, as vagas esgotaram!')
+    if (isListaEspera) {
+      // Enviar para lista de espera
+      setEnviando(true)
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      setEnviando(false)
+      setEnviado(true)
       return
     }
     
@@ -245,7 +259,7 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
                       textTransform: 'uppercase',
                     }}
                   >
-                    Inscrição Enviada!
+                    {isListaEspera ? 'Inscrição na Lista de Espera Enviada!' : 'Inscrição Enviada!'}
                   </motion.h3>
                   <motion.p 
                     initial={{ opacity: 0 }}
@@ -253,9 +267,165 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
                     transition={{ delay: 0.4 }}
                     style={{ color: '#8fb3cc', fontSize: '0.9rem' }}
                   >
-                    Você receberá um e-mail de confirmação em breve.
+                    {isListaEspera 
+                      ? 'Você receberá um e-mail quando houver vagas disponíveis.' 
+                      : 'Você receberá um e-mail de confirmação em breve.'}
                   </motion.p>
                 </motion.div>
+              ) : isListaEspera ? (
+                <form onSubmit={handleSubmit}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.15 }}
+                    style={{ marginBottom: '14px' }}
+                  >
+                    <label style={{ display: 'block', fontSize: '0.8rem', color: '#a0b2c1', marginBottom: '6px', fontWeight: 600 }}>
+                      Qual turma da Inclusão e Educação Digital em lista de espera você tem interesse? *
+                    </label>
+                    <select
+                      required
+                      value={formLista.turma}
+                      onChange={e => setFormLista({...formLista, turma: e.target.value})}
+                      style={{
+                        width: '100%',
+                        padding: '12px 14px',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                        borderRadius: '10px',
+                        color: '#fff',
+                        fontSize: '0.9rem',
+                        outline: 'none',
+                      }}
+                    >
+                      <option value="" style={{ color: '#888' }}>Selecione uma turma</option>
+                      <option value="FIEC: Básico - 3ª e 5ª - 08h às 10h">POLO FIEC: Básico - 3ª e 5ª - 08h às 10h</option>
+                      <option value="FIEC: Básico - 2ª e 4ª - 16h às 18h">POLO FIEC: Básico - 2ª e 4ª - 16h às 18h</option>
+                      <option value="FIEC: Básico - 2ª e 4ª - 19h às 21h">POLO FIEC: Básico - 2ª e 4ª - 19h às 21h</option>
+                      <option value="FIEC: Intermediário - 2ª e 4ª - 10h às 12h">POLO FIEC: Intermediário - 2ª e 4ª - 10h às 12h</option>
+                      <option value="FIEC: Intermediário - 2ª e 4ª - 14h às 16h">POLO FIEC: Intermediário - 2ª e 4ª - 14h às 16h</option>
+                      <option value="FIEC: Avançado - 2ª e 4ª - 08h às 10h">POLO FIEC: Avançado - 2ª e 4ª - 08h às 10h</option>
+                      <option value="FIEC: Avançado - 3ª e 5ª - 14h às 16h">POLO FIEC: Avançado - 3ª e 5ª - 14h às 16h</option>
+                      <option value="CEU: Básico - 3ª e 5ª - 14h às 16h">POLO CEU: Básico - 3ª e 5ª - 14h às 16h</option>
+                      <option value="CASA DA PROVIDÊNCIA: Intermediário - 2ª e 4ª - 09h30 às 11h30">POLO CASA DA PROVIDÊNCIA: Intermediário - 2ª e 4ª - 09h30 às 11h30</option>
+                      <option value="SOL-SOL: Avançado - 3ª e 5ª - 09h30 às 11h30">POLO SOL-SOL: Avançado - 3ª e 5ª - 09h30 às 11h30</option>
+                      <option value="JD BRASIL: Intermediário - 2ª e 4ª - 15h30 às 17h30">POLO JD BRASIL: Intermediário - 2ª e 4ª - 15h30 às 17h30</option>
+                      <option value="COMUNIDADE INDEPENDENTE: Intermediário - 3ª e 5ª - 14h às 16h">POLO COMUNIDADE INDEPENDENTE: Intermediário - 3ª e 5ª - 14h às 16h</option>
+                    </select>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    style={{ marginBottom: '14px' }}
+                  >
+                    <label style={{ display: 'block', fontSize: '0.8rem', color: '#a0b2c1', marginBottom: '6px', fontWeight: 600 }}>
+                      Nome Completo *
+                    </label>
+                    <motion.input
+                      whileFocus={{ borderColor: '#f5a623', boxShadow: '0 0 0 3px rgba(245, 166, 35, 0.2)' }}
+                      type="text"
+                      required
+                      value={formLista.nome}
+                      onChange={e => setFormLista({...formLista, nome: e.target.value})}
+                      style={{
+                        width: '100%',
+                        padding: '12px 14px',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                        borderRadius: '10px',
+                        color: '#fff',
+                        fontSize: '0.95rem',
+                        outline: 'none',
+                      }}
+                      placeholder="Seu nome completo"
+                    />
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.25 }}
+                    style={{ marginBottom: '14px' }}
+                  >
+                    <label style={{ display: 'block', fontSize: '0.8rem', color: '#a0b2c1', marginBottom: '6px', fontWeight: 600 }}>
+                      Telefone (somente números) *
+                    </label>
+                    <motion.input
+                      whileFocus={{ borderColor: '#f5a623', boxShadow: '0 0 0 3px rgba(245, 166, 35, 0.2)' }}
+                      type="tel"
+                      required
+                      maxLength={11}
+                      value={formLista.telefone}
+                      onChange={e => setFormLista({...formLista, telefone: e.target.value.replace(/\D/g, '')})}
+                      style={{
+                        width: '100%',
+                        padding: '12px 14px',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                        borderRadius: '10px',
+                        color: '#fff',
+                        fontSize: '0.9rem',
+                        outline: 'none',
+                      }}
+                      placeholder="11999999999"
+                    />
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    style={{ marginBottom: '20px' }}
+                  >
+                    <label style={{ display: 'block', fontSize: '0.8rem', color: '#a0b2c1', marginBottom: '6px', fontWeight: 600 }}>
+                      E-mail *
+                    </label>
+                    <motion.input
+                      whileFocus={{ borderColor: '#f5a623', boxShadow: '0 0 0 3px rgba(245, 166, 35, 0.2)' }}
+                      type="email"
+                      required
+                      value={formLista.email}
+                      onChange={e => setFormLista({...formLista, email: e.target.value})}
+                      style={{
+                        width: '100%',
+                        padding: '12px 14px',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                        borderRadius: '10px',
+                        color: '#fff',
+                        fontSize: '0.9rem',
+                        outline: 'none',
+                      }}
+                      placeholder="seu@email.com"
+                    />
+                  </motion.div>
+
+                  <motion.button
+                    whileHover={{ scale: 1.02, boxShadow: '0 8px 25px rgba(245, 166, 35, 0.4)' }}
+                    whileTap={{ scale: 0.98 }}
+                    type="submit"
+                    disabled={enviando}
+                    style={{
+                      width: '100%',
+                      padding: '16px',
+                      background: 'linear-gradient(135deg, #f5a623 0%, #e09510 100%)',
+                      color: '#0d1a26',
+                      border: 'none',
+                      borderRadius: '12px',
+                      fontSize: '1rem',
+                      fontWeight: 800,
+                      textTransform: 'uppercase',
+                      letterSpacing: '1px',
+                      cursor: enviando ? 'not-allowed' : 'pointer',
+                      opacity: enviando ? 0.7 : 1,
+                      boxShadow: '0 4px 15px rgba(245, 166, 35, 0.3)',
+                    }}
+                  >
+                    {enviando ? 'Enviando...' : 'Entrar na Lista de Espera'}
+                  </motion.button>
+                </form>
               ) : (
                 <form onSubmit={handleSubmit}>
                   <motion.div
