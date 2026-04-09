@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import { FormModal } from '@/components/ui/form-modal'
 
 const VAGAS_TOTAL = 40
 
@@ -17,6 +18,7 @@ interface ModuloData {
 }
 
 export default function PoloBemViver() {
+  const [listaEsperaModalOpen, setListaEsperaModalOpen] = useState(false)
   const [modulos, setModulos] = useState<ModuloData[]>([
     { id: 'bas-1', tag: 'Básico / Celular', dias: '2ª e 4ª-feira', horario: '09h30 às 11h30', formUrl: 'LINK_FORM_BEMVIVER_BAS_24', scriptUrl: 'SCRIPT_URL_AQUI', vagas: -1, esgotado: false },
     { id: 'int-1', tag: 'Intermediário / Celular', dias: '3ª e 5ª-feira', horario: '09h30 às 11h30', formUrl: 'LINK_FORM_BEMVIVER_INT_35', scriptUrl: 'SCRIPT_URL_AQUI', vagas: -1, esgotado: false },
@@ -88,10 +90,10 @@ export default function PoloBemViver() {
             </div>
           </motion.div>
 
-          <motion.a href="LINK_LISTA_ESPERA_POLO_BEM_VIVER" target="_blank" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 }} whileHover={{ background: '#4a9eca', color: '#0d1a26' }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'transparent', border: '1.5px solid #4a9eca', color: '#4a9eca', fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: '0.88rem', letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none', padding: '11px 16px', borderRadius: '10px' }}>
+          <motion.button onClick={() => setListaEsperaModalOpen(true)} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 }} whileHover={{ background: '#4a9eca', color: '#0d1a26' }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'transparent', border: '1.5px solid #4a9eca', color: '#4a9eca', fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: '0.88rem', letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none', padding: '11px 16px', borderRadius: '10px', cursor: 'pointer' }}>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></svg>
             Lista de Espera
-          </motion.a>
+          </motion.button>
         </aside>
 
         <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>
@@ -139,10 +141,10 @@ export default function PoloBemViver() {
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} style={{ marginTop: '36px', padding: '24px 22px', background: '#162a3d', borderRadius: '12px', border: '1px solid rgba(255,255,255,.07)', textAlign: 'center' }}>
             <p style={{ fontSize: '0.82rem', color: '#8fb3cc', marginBottom: '14px' }}>Não encontrou vaga na turma desejada? Entre na lista de espera e entraremos em contato assim que uma vaga for liberada.</p>
-            <a href="LINK_LISTA_ESPERA_POLO_BEM_VIVER" target="_blank" style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', background: 'transparent', border: '1.5px solid #4a9eca', color: '#4a9eca', fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: '0.88rem', letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none', padding: '9px 22px', borderRadius: '6px' }}>
+            <button onClick={() => setListaEsperaModalOpen(true)} style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', background: 'transparent', border: '1.5px solid #4a9eca', color: '#4a9eca', fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: '0.88rem', letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none', padding: '9px 22px', borderRadius: '6px', cursor: 'pointer' }}>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></svg>
               Entrar na Lista de Espera
-            </a>
+            </button>
           </motion.div>
         </motion.main>
       </div>
@@ -150,6 +152,16 @@ export default function PoloBemViver() {
       <footer style={{ padding: '32px 24px', textAlign: 'center', color: '#8fb3cc', fontSize: '0.74rem', letterSpacing: '0.06em', borderTop: '1px solid rgba(255,255,255,.07)', marginTop: '56px' }}>
         Programa de Educação Digital · FIEC · II Semestre 2026
       </footer>
+      <FormModal
+        isOpen={listaEsperaModalOpen}
+        onClose={() => setListaEsperaModalOpen(false)}
+        polo="Polo Bem Viver"
+        modulo=""
+        dias=""
+        horario=""
+        scriptUrl=""
+        listaEsperaOnly
+      />
     </main>
   )
 }

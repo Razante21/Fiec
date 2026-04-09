@@ -13,9 +13,10 @@ interface FormModalProps {
   horario: string
   scriptUrl?: string
   listaEsperaOnly?: boolean
+  listaEsperaTurmas?: string[]
 }
 
-export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, scriptUrl, listaEsperaOnly }: FormModalProps) {
+export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, scriptUrl, listaEsperaOnly, listaEsperaTurmas }: FormModalProps) {
   const [enviando, setEnviando] = useState(false)
   const [enviado, setEnviado] = useState(false)
   const [showNormas, setShowNormas] = useState(false)
@@ -34,6 +35,23 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
     termo3: false,
     termo4: false,
   })
+  const defaultTurmas = [
+    { value: 'FIEC: Básico - 3ª e 5ª - 08h às 10h', label: 'POLO FIEC: Básico - 3ª e 5ª - 08h às 10h' },
+    { value: 'FIEC: Básico - 2ª e 4ª - 16h às 18h', label: 'POLO FIEC: Básico - 2ª e 4ª - 16h às 18h' },
+    { value: 'FIEC: Básico - 2ª e 4ª - 19h às 21h', label: 'POLO FIEC: Básico - 2ª e 4ª - 19h às 21h' },
+    { value: 'FIEC: Intermediário - 2ª e 4ª - 10h às 12h', label: 'POLO FIEC: Intermediário - 2ª e 4ª - 10h às 12h' },
+    { value: 'FIEC: Intermediário - 2ª e 4ª - 14h às 16h', label: 'POLO FIEC: Intermediário - 2ª e 4ª - 14h às 16h' },
+    { value: 'FIEC: Avançado - 2ª e 4ª - 08h às 10h', label: 'POLO FIEC: Avançado - 2ª e 4ª - 08h às 10h' },
+    { value: 'FIEC: Avançado - 3ª e 5ª - 14h às 16h', label: 'POLO FIEC: Avançado - 3ª e 5ª - 14h às 16h' },
+    { value: 'CEU: Básico - 3ª e 5ª - 14h às 16h', label: 'POLO CEU: Básico - 3ª e 5ª - 14h às 16h' },
+    { value: 'CASA DA PROVIDÊNCIA: Intermediário - 2ª e 4ª - 09h30 às 11h30', label: 'POLO CASA DA PROVIDÊNCIA: Intermediário - 2ª e 4ª - 09h30 às 11h30' },
+    { value: 'SOL-SOL: Avançado - 3ª e 5ª - 09h30 às 11h30', label: 'POLO SOL-SOL: Avançado - 3ª e 5ª - 09h30 às 11h30' },
+    { value: 'JD BRASIL: Intermediário - 2ª e 4ª - 15h30 às 17h30', label: 'POLO JD BRASIL: Intermediário - 2ª e 4ª - 15h30 às 17h30' },
+    { value: 'COMUNIDADE INDEPENDENTE: Intermediário - 3ª e 5ª - 14h às 16h', label: 'POLO COMUNIDADE INDEPENDENTE: Intermediário - 3ª e 5ª - 14h às 16h' },
+  ]
+
+  const turmas = listaEsperaTurmas || defaultTurmas.map(t => t.value)
+
   const [formLista, setFormLista] = useState({
     turma: '',
     nome: '',
@@ -310,18 +328,9 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
                       }}
                     >
                       <option value="" style={{ color: '#888' }}>Selecione uma turma</option>
-                      <option value="FIEC: Básico - 3ª e 5ª - 08h às 10h">POLO FIEC: Básico - 3ª e 5ª - 08h às 10h</option>
-                      <option value="FIEC: Básico - 2ª e 4ª - 16h às 18h">POLO FIEC: Básico - 2ª e 4ª - 16h às 18h</option>
-                      <option value="FIEC: Básico - 2ª e 4ª - 19h às 21h">POLO FIEC: Básico - 2ª e 4ª - 19h às 21h</option>
-                      <option value="FIEC: Intermediário - 2ª e 4ª - 10h às 12h">POLO FIEC: Intermediário - 2ª e 4ª - 10h às 12h</option>
-                      <option value="FIEC: Intermediário - 2ª e 4ª - 14h às 16h">POLO FIEC: Intermediário - 2ª e 4ª - 14h às 16h</option>
-                      <option value="FIEC: Avançado - 2ª e 4ª - 08h às 10h">POLO FIEC: Avançado - 2ª e 4ª - 08h às 10h</option>
-                      <option value="FIEC: Avançado - 3ª e 5ª - 14h às 16h">POLO FIEC: Avançado - 3ª e 5ª - 14h às 16h</option>
-                      <option value="CEU: Básico - 3ª e 5ª - 14h às 16h">POLO CEU: Básico - 3ª e 5ª - 14h às 16h</option>
-                      <option value="CASA DA PROVIDÊNCIA: Intermediário - 2ª e 4ª - 09h30 às 11h30">POLO CASA DA PROVIDÊNCIA: Intermediário - 2ª e 4ª - 09h30 às 11h30</option>
-                      <option value="SOL-SOL: Avançado - 3ª e 5ª - 09h30 às 11h30">POLO SOL-SOL: Avançado - 3ª e 5ª - 09h30 às 11h30</option>
-                      <option value="JD BRASIL: Intermediário - 2ª e 4ª - 15h30 às 17h30">POLO JD BRASIL: Intermediário - 2ª e 4ª - 15h30 às 17h30</option>
-                      <option value="COMUNIDADE INDEPENDENTE: Intermediário - 3ª e 5ª - 14h às 16h">POLO COMUNIDADE INDEPENDENTE: Intermediário - 3ª e 5ª - 14h às 16h</option>
+                      {turmas.map(turma => (
+                        <option key={turma} value={turma}>{turma}</option>
+                      ))}
                     </select>
                   </motion.div>
 

@@ -1,6 +1,8 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { FormModal } from '@/components/ui/form-modal'
 
 interface ModuloData {
   id: string
@@ -15,6 +17,9 @@ export default function PoloCeu() {
   const modulos: ModuloData[] = [
     { id: 'm2-1', tag: 'Módulo II — Intermediário', dias: '3ª e 5ª-feira', horario: '14h00 às 15h30', formUrl: 'LINK_FORM_CEU_M2_35', scriptUrl: 'SCRIPT_URL_AQUI' },
   ]
+  const [modalOpen, setModalOpen] = useState(false)
+  const [selectedModulo, setSelectedModulo] = useState<ModuloData | null>(null)
+  const [listaEsperaModalOpen, setListaEsperaModalOpen] = useState(false)
 
   const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.08 } } }
   const itemVariants = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100 } } }
@@ -36,7 +41,7 @@ export default function PoloCeu() {
             <div style={{ background: '#162a3d', padding: '14px 18px', borderBottom: '1px solid rgba(255,255,255,.07)' }}><span style={{ fontSize: '0.66rem', textTransform: 'uppercase', letterSpacing: '0.18em', color: '#f5a623', fontWeight: 700 }}>Endereço</span></div>
             <div style={{ padding: '18px' }}><h2 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '1.4rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>CEU</h2><p style={{ color: '#8fb3cc', fontSize: '0.85rem' }}>Rua Jordalino Pietro Bom, 1300<br />Jardim São Conrado</p></div>
           </motion.div>
-          <motion.a href="LINK_LISTA_ESPERA_POLO_CEU" target="_blank" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 }} whileHover={{ background: '#4a9eca', color: '#0d1a26' }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'transparent', border: '1.5px solid #4a9eca', color: '#4a9eca', fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: '0.88rem', letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none', padding: '11px 16px', borderRadius: '10px' }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></svg>Lista de Espera</motion.a>
+          <motion.button onClick={() => setListaEsperaModalOpen(true)} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 }} whileHover={{ background: '#4a9eca', color: '#0d1a26' }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'transparent', border: '1.5px solid #4a9eca', color: '#4a9eca', fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: '0.88rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '11px 16px', borderRadius: '10px', cursor: 'pointer' }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></svg>Lista de Espera</motion.button>
         </aside>
 
         <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>
@@ -52,15 +57,51 @@ export default function PoloCeu() {
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} style={{ marginTop: '36px', padding: '24px 22px', background: '#162a3d', borderRadius: '12px', border: '1px solid rgba(255,255,255,.07)', textAlign: 'center' }}>
             <p style={{ fontSize: '0.82rem', color: '#8fb3cc', marginBottom: '14px' }}>Não encontrou vaga? Entre na lista de espera.</p>
-            <a href="LINK_LISTA_ESPERA_POLO_CEU" target="_blank" style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', background: 'transparent', border: '1.5px solid #4a9eca', color: '#4a9eca', fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: '0.88rem', letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none', padding: '9px 22px', borderRadius: '6px' }}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></svg>Entrar na Lista de Espera</a>
+            <button onClick={() => setListaEsperaModalOpen(true)} style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', background: 'transparent', border: '1.5px solid #4a9eca', color: '#4a9eca', fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: '0.88rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '9px 22px', borderRadius: '6px', cursor: 'pointer' }}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></svg>Entrar na Lista de Espera</button>
           </motion.div>
         </motion.main>
       </div>
       <footer style={{ padding: '32px 24px', textAlign: 'center', color: '#8fb3cc', fontSize: '0.74rem', borderTop: '1px solid rgba(255,255,255,.07)', marginTop: '56px' }}>Programa de Educação Digital · FIEC · II Semestre 2026</footer>
+
+      <FormModal
+        isOpen={modalOpen}
+        onClose={() => { setModalOpen(false); setSelectedModulo(null) }}
+        polo="Polo CEU"
+        modulo={selectedModulo?.tag || ''}
+        dias={selectedModulo?.dias || ''}
+        horario={selectedModulo?.horario || ''}
+        scriptUrl={selectedModulo?.scriptUrl}
+        listaEsperaOnly
+      />
+
+      <FormModal
+        isOpen={listaEsperaModalOpen}
+        onClose={() => setListaEsperaModalOpen(false)}
+        polo="Polo CEU"
+        modulo=""
+        dias=""
+        horario=""
+        scriptUrl=""
+        listaEsperaOnly
+        listaEsperaTurmas={[
+          'CEU: Básico - 3ª e 5ª - 14h às 16h',
+          'FIEC: Básico - 3ª e 5ª - 08h às 10h',
+          'FIEC: Básico - 2ª e 4ª - 16h às 18h',
+          'FIEC: Básico - 2ª e 4ª - 19h às 21h',
+          'FIEC: Intermediário - 2ª e 4ª - 10h às 12h',
+          'FIEC: Intermediário - 2ª e 4ª - 14h às 16h',
+          'FIEC: Avançado - 2ª e 4ª - 08h às 10h',
+          'FIEC: Avançado - 3ª e 5ª - 14h às 16h',
+          'CASA DA PROVIDÊNCIA: Intermediário - 2ª e 4ª - 09h30 às 11h30',
+          'SOL-SOL: Avançado - 3ª e 5ª - 09h30 às 11h30',
+          'JD BRASIL: Intermediário - 2ª e 4ª - 15h30 às 17h30',
+          'COMUNIDADE INDEPENDENTE: Intermediário - 3ª e 5ª - 14h às 16h',
+        ]}
+      />
     </main>
   )
 }
 
 function ModuloCard({ modulo, index }: { modulo: ModuloData; index: number }) {
-  return (<motion.a href={modulo.formUrl} target="_blank" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 * index }} whileHover={{ y: -3, borderColor: '#f5a623', boxShadow: '0 8px 24px rgba(0,0,0,.3)' }} style={{ display: 'flex', flexDirection: 'column', padding: '16px 16px 14px', background: '#1e3a52', border: '1px solid rgba(255,255,255,.07)', borderRadius: '10px', textDecoration: 'none', color: 'white' }}><span style={{ fontSize: '0.6rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#f5a623', marginBottom: '4px' }}>{modulo.tag}</span><span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: '1rem', textTransform: 'uppercase', lineHeight: 1.1, marginBottom: '3px' }}>{modulo.dias}</span><span style={{ fontSize: '0.78rem', color: '#8fb3cc', marginBottom: '10px' }}>{modulo.horario}</span><span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.72rem', fontWeight: 700, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: '0.1em', textTransform: 'uppercase', color: '#4a9eca', marginTop: 'auto' }}>Inscrever-se <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="13 6 19 12 13 18" /></svg></span></motion.a>)
+  return (<motion.div onClick={() => {}} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 * index }} whileHover={{ y: -3, borderColor: '#f5a623', boxShadow: '0 8px 24px rgba(0,0,0,.3)' }} style={{ display: 'flex', flexDirection: 'column', padding: '16px 16px 14px', background: '#1e3a52', border: '1px solid rgba(255,255,255,.07)', borderRadius: '10px', textDecoration: 'none', color: 'white', cursor: 'not-allowed' }}><span style={{ fontSize: '0.6rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#f5a623', marginBottom: '4px' }}>{modulo.tag}</span><span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: '1rem', textTransform: 'uppercase', lineHeight: 1.1, marginBottom: '3px' }}>{modulo.dias}</span><span style={{ fontSize: '0.78rem', color: '#8fb3cc', marginBottom: '10px' }}>{modulo.horario}</span><span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.72rem', fontWeight: 700, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: '0.1em', textTransform: 'uppercase', color: '#4a9eca', marginTop: 'auto' }}>Em breve <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="13 6 19 12 13 18" /></svg></span></motion.div>)
 }

@@ -1,10 +1,13 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { FormModal } from '@/components/ui/form-modal'
 
 interface ModuloData { id: string; tag: string; dias: string; horario: string; formUrl: string }
 
 export default function PoloCasaDaProvidencia() {
+  const [listaEsperaModalOpen, setListaEsperaModalOpen] = useState(false)
   const modulos: ModuloData[] = [{ id: 'm2-1', tag: 'Módulo II — Intermediário', dias: '2ª e 4ª-feira', horario: '09h30 às 11h00', formUrl: 'LINK_FORM_PROVIDENCIA_M2_24' }]
 
   const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.08 } } }
@@ -20,7 +23,7 @@ export default function PoloCasaDaProvidencia() {
       <div style={{ maxWidth: '1040px', margin: '44px auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '270px 1fr', gap: '32px', alignItems: 'start' }}>
         <aside style={{ position: 'sticky', top: '24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }} style={{ background: '#1e3a52', borderRadius: '12px', border: '1px solid rgba(255,255,255,.07)', overflow: 'hidden' }}><div style={{ background: '#162a3d', padding: '14px 18px', borderBottom: '1px solid rgba(255,255,255,.07)' }}><span style={{ fontSize: '0.66rem', textTransform: 'uppercase', letterSpacing: '0.18em', color: '#f5a623', fontWeight: 700 }}>Endereço</span></div><div style={{ padding: '18px' }}><h2 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '1.4rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>Casa da Providência</h2><p style={{ color: '#8fb3cc', fontSize: '0.85rem' }}>Rua Aimore, 290<br />Jardim Olinda</p></div></motion.div>
-          <motion.a href="LINK_LISTA_ESPERA_POLO_CASA_DA_PROVIDENCIA" target="_blank" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 }} whileHover={{ background: '#4a9eca', color: '#0d1a26' }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'transparent', border: '1.5px solid #4a9eca', color: '#4a9eca', fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: '0.88rem', letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none', padding: '11px 16px', borderRadius: '10px' }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></svg>Lista de Espera</motion.a>
+          <motion.button onClick={() => setListaEsperaModalOpen(true)} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 }} whileHover={{ background: '#4a9eca', color: '#0d1a26' }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'transparent', border: '1.5px solid #4a9eca', color: '#4a9eca', fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: '0.88rem', letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none', padding: '11px 16px', borderRadius: '10px', cursor: 'pointer' }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></svg>Lista de Espera</motion.button>
         </aside>
 
         <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>
@@ -32,10 +35,20 @@ export default function PoloCasaDaProvidencia() {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>{modulos.map((m, i) => <ModuloCard key={m.id} modulo={m} index={i} />)}</div>
             </div>
           </motion.div>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} style={{ marginTop: '36px', padding: '24px 22px', background: '#162a3d', borderRadius: '12px', border: '1px solid rgba(255,255,255,.07)', textAlign: 'center' }}><p style={{ fontSize: '0.82rem', color: '#8fb3cc', marginBottom: '14px' }}>Não encontrou vaga? Entre na lista de espera.</p><a href="LINK_LISTA_ESPERA_POLO_CASA_DA_PROVIDENCIA" target="_blank" style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', background: 'transparent', border: '1.5px solid #4a9eca', color: '#4a9eca', fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: '0.88rem', letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none', padding: '9px 22px', borderRadius: '6px' }}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></svg>Entrar na Lista de Espera</a></motion.div>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} style={{ marginTop: '36px', padding: '24px 22px', background: '#162a3d', borderRadius: '12px', border: '1px solid rgba(255,255,255,.07)', textAlign: 'center' }}><p style={{ fontSize: '0.82rem', color: '#8fb3cc', marginBottom: '14px' }}>Não encontrou vaga? Entre na lista de espera.</p><button onClick={() => setListaEsperaModalOpen(true)} style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', background: 'transparent', border: '1.5px solid #4a9eca', color: '#4a9eca', fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: '0.88rem', letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none', padding: '9px 22px', borderRadius: '6px', cursor: 'pointer' }}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></svg>Entrar na Lista de Espera</button></motion.div>
         </motion.main>
       </div>
       <footer style={{ padding: '32px 24px', textAlign: 'center', color: '#8fb3cc', fontSize: '0.74rem', borderTop: '1px solid rgba(255,255,255,.07)', marginTop: '56px' }}>Programa de Educação Digital · FIEC · II Semestre 2026</footer>
+      <FormModal
+        isOpen={listaEsperaModalOpen}
+        onClose={() => setListaEsperaModalOpen(false)}
+        polo="Polo Casa da Providência"
+        modulo=""
+        dias=""
+        horario=""
+        scriptUrl=""
+        listaEsperaOnly
+      />
     </main>
   )
 }
