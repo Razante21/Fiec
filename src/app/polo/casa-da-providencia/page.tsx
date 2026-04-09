@@ -48,6 +48,9 @@ export default function PoloCasaDaProvidencia() {
         horario=""
         scriptUrl=""
         listaEsperaOnly
+        listaEsperaTurmas={[
+          'CASA DA PROVIDÊNCIA: Intermediário - 2ª e 4ª - 09h30 às 11h00',
+        ]}
       />
     </main>
   )

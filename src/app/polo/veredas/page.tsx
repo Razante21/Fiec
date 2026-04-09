@@ -48,6 +48,7 @@ export default function PoloVeredas() {
         horario=""
         scriptUrl=""
         listaEsperaOnly
+        listaEsperaTurmas="VEREDAS: Módulo Intermediário - Quarta-feira - 08h30 às 10h30"
       />
     </main>
   )

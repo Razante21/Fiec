@@ -161,6 +161,10 @@ export default function PoloBemViver() {
         horario=""
         scriptUrl=""
         listaEsperaOnly
+        listaEsperaTurmas={[
+          'Bem Viver: Básico / Celular - 2ª e 4ª - 09h30 às 11h30',
+          'Bem Viver: Intermediário / Celular - 3ª e 5ª - 09h30 às 11h30',
+        ]}
       />
     </main>
   )
