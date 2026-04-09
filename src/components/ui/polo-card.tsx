@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from "framer-motion"
+import { useState } from "react"
 
 interface PoloCardProps {
   name: string
@@ -11,6 +12,10 @@ interface PoloCardProps {
 }
 
 export function PoloCard({ name, description, image, tag, href }: PoloCardProps) {
+  const [imgError, setImgError] = useState(false)
+  
+  const fallbackImage = "https://images.unsplash.com/photo-1569025690938-a00729c9e1f9?w=800&h=600&fit=crop"
+  
   return (
     <motion.a
       href={href}
@@ -27,9 +32,32 @@ export function PoloCard({ name, description, image, tag, href }: PoloCardProps)
         flexDirection: 'column',
         border: '1px solid rgba(255, 255, 255, 0.05)',
         overflow: 'hidden',
+        position: 'relative',
+        minHeight: '200px',
       }}
     >
-      <div style={{ padding: '35px 20px', textAlign: 'center', flex: 1 }}>
+      {/* Imagem de fundo */}
+      <img
+        src={imgError ? fallbackImage : image}
+        alt={name}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+        }}
+        onError={() => setImgError(true)}
+      />
+      
+      {/* Overlay escuro sobre a imagem */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: 'linear-gradient(to top, rgba(30, 58, 82, 0.95) 0%, rgba(30, 58, 82, 0.6) 50%, rgba(30, 58, 82, 0.3) 100%)',
+      }} />
+
+      <div style={{ padding: '35px 20px', textAlign: 'center', flex: 1, position: 'relative', zIndex: 1 }}>
         {tag && (
           <span style={{
             display: 'inline-block',
@@ -76,6 +104,8 @@ export function PoloCard({ name, description, image, tag, href }: PoloCardProps)
         fontWeight: 700,
         textTransform: 'uppercase',
         letterSpacing: '0.5px',
+        position: 'relative',
+        zIndex: 1,
       }}>
         Acessar Polo
       </div>
