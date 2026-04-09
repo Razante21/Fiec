@@ -12,9 +12,15 @@ interface FormModalProps {
   dias: string
   horario: string
   scriptUrl?: string
+  listaEsperaOnly?: boolean
 }
 
-export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, scriptUrl }: FormModalProps) {
+export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, scriptUrl, listaEsperaOnly }: FormModalProps) {
+  const [enviando, setEnviando] = useState(false)
+  const [enviado, setEnviado] = useState(false)
+  const [showNormas, setShowNormas] = useState(false)
+  const [vagasRestantes, setVagasRestantes] = useState<number>(-1)
+  const [isListaEspera, setIsListaEspera] = useState(listaEsperaOnly || false)
   const [formData, setFormData] = useState({
     nome: '',
     dataNascimento: '',
@@ -28,11 +34,6 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
     termo3: false,
     termo4: false,
   })
-  const [enviando, setEnviando] = useState(false)
-  const [enviado, setEnviado] = useState(false)
-  const [showNormas, setShowNormas] = useState(false)
-  const [vagasRestantes, setVagasRestantes] = useState<number>(-1)
-  const [isListaEspera, setIsListaEspera] = useState(false)
   const [formLista, setFormLista] = useState({
     turma: '',
     nome: '',
@@ -41,7 +42,13 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
   })
 
   useEffect(() => {
-    if (scriptUrl && isOpen) {
+    setIsListaEspera(listaEsperaOnly || false)
+    setEnviado(false)
+    setFormLista({ turma: '', nome: '', telefone: '', email: '' })
+  }, [isOpen, listaEsperaOnly])
+
+  useEffect(() => {
+    if (scriptUrl && isOpen && !listaEsperaOnly) {
       fetch(scriptUrl)
         .then(res => res.json())
         .then(data => {
@@ -50,7 +57,7 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
         })
         .catch(() => setVagasRestantes(-1))
     }
-  }, [scriptUrl, isOpen])
+  }, [scriptUrl, isOpen, listaEsperaOnly])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -162,24 +169,28 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
                     marginBottom: '4px',
                   }}
                 >
-                  {polo}
+                  {listaEsperaOnly ? 'Lista de Espera' : polo}
                 </motion.h2>
-                <motion.p 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.25 }}
-                  style={{ fontSize: '0.8rem', color: '#f5a623', fontWeight: 600 }}
-                >
-                  {modulo}
-                </motion.p>
-                <motion.p 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                  style={{ fontSize: '0.75rem', color: '#8fb3cc', marginTop: '2px' }}
-                >
-                  {dias} · {horario}
-                </motion.p>
+                {!listaEsperaOnly && (
+                  <>
+                    <motion.p 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.25 }}
+                      style={{ fontSize: '0.8rem', color: '#f5a623', fontWeight: 600 }}
+                    >
+                      {modulo}
+                    </motion.p>
+                    <motion.p 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.3 }}
+                      style={{ fontSize: '0.75rem', color: '#8fb3cc', marginTop: '2px' }}
+                    >
+                      {dias} · {horario}
+                    </motion.p>
+                  </>
+                )}
                 {vagasRestantes >= 0 && (
                   <motion.p 
                     initial={{ opacity: 0 }}
@@ -194,7 +205,7 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
                   >
                     {vagasRestantes === 0 ? '❌ VAGAS ESGOTADAS' : `✓ ${vagasRestantes} vagas restantes`}
                   </motion.p>
-                )}
+                  )}
               </div>
               <motion.button
                 whileHover={{ scale: 1.1, rotate: 90 }}

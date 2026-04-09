@@ -42,6 +42,7 @@ export default function PoloFiec() {
   ])
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedModulo, setSelectedModulo] = useState<ModuloData | null>(null)
+  const [listaEsperaModalOpen, setListaEsperaModalOpen] = useState(false)
 
   useEffect(() => {
     const loadVagas = async () => {
@@ -166,9 +167,8 @@ export default function PoloFiec() {
             </div>
           </motion.div>
 
-          <motion.a
-            href="LINK_LISTA_ESPERA_POLO_FIEC"
-            target="_blank"
+          <motion.button
+            onClick={() => setListaEsperaModalOpen(true)}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.6 }}
@@ -190,13 +190,14 @@ export default function PoloFiec() {
               padding: '11px 16px',
               borderRadius: '10px',
               transition: 'background 0.2s, color 0.2s',
+              cursor: 'pointer',
             }}
           >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" />
             </svg>
             Lista de Espera
-          </motion.a>
+          </motion.button>
         </aside>
 
         <motion.main
@@ -324,6 +325,18 @@ export default function PoloFiec() {
         dias={selectedModulo?.dias || ''}
         horario={selectedModulo?.horario || ''}
         scriptUrl={selectedModulo?.scriptUrl}
+        listaEsperaOnly
+      />
+
+      <FormModal
+        isOpen={listaEsperaModalOpen}
+        onClose={() => setListaEsperaModalOpen(false)}
+        polo="Polo FIEC"
+        modulo=""
+        dias=""
+        horario=""
+        scriptUrl=""
+        listaEsperaOnly
       />
     </main>
   )
