@@ -327,9 +327,9 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
                         outline: 'none',
                       }}
                     >
-                      <option value="" style={{ color: '#888' }}>Selecione uma turma</option>
+                      <option value="" style={{ color: '#888', background: '#162a3d' }}>Selecione uma turma</option>
                       {turmas.map(turma => (
-                        <option key={turma} value={turma}>{turma}</option>
+                        <option key={turma} value={turma} style={{ color: '#fff', background: '#162a3d' }}>{turma}</option>
                       ))}
                     </select>
                   </motion.div>

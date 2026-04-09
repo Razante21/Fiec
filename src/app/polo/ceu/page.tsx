@@ -83,20 +83,6 @@ export default function PoloCeu() {
         horario=""
         scriptUrl=""
         listaEsperaOnly
-        listaEsperaTurmas={[
-          'CEU: Básico - 3ª e 5ª - 14h às 16h',
-          'FIEC: Básico - 3ª e 5ª - 08h às 10h',
-          'FIEC: Básico - 2ª e 4ª - 16h às 18h',
-          'FIEC: Básico - 2ª e 4ª - 19h às 21h',
-          'FIEC: Intermediário - 2ª e 4ª - 10h às 12h',
-          'FIEC: Intermediário - 2ª e 4ª - 14h às 16h',
-          'FIEC: Avançado - 2ª e 4ª - 08h às 10h',
-          'FIEC: Avançado - 3ª e 5ª - 14h às 16h',
-          'CASA DA PROVIDÊNCIA: Intermediário - 2ª e 4ª - 09h30 às 11h30',
-          'SOL-SOL: Avançado - 3ª e 5ª - 09h30 às 11h30',
-          'JD BRASIL: Intermediário - 2ª e 4ª - 15h30 às 17h30',
-          'COMUNIDADE INDEPENDENTE: Intermediário - 3ª e 5ª - 14h às 16h',
-        ]}
       />
     </main>
   )
