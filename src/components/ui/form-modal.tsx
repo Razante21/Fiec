@@ -96,7 +96,8 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
               marginLeft: '-240px',
               width: '480px',
               maxWidth: '92vw',
-              maxHeight: '90vh',
+              maxHeight: '85vh',
+              height: 'auto',
               background: 'linear-gradient(180deg, #162a3d 0%, #0d1a26 100%)',
               borderRadius: '20px',
               border: '1px solid rgba(245, 166, 35, 0.3)',
@@ -173,7 +174,7 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
             <div style={{
               padding: '20px 24px 24px',
               overflowY: 'auto',
-              maxHeight: 'calc(92vh - 100px)',
+              maxHeight: 'calc(85vh - 100px)',
             }}>
               {enviado ? (
                 <motion.div 
