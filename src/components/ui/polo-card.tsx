@@ -63,13 +63,13 @@ export function PoloCard({ name, description, image, tag, href }: PoloCardProps)
             display: 'inline-block',
             background: '#f5a623',
             color: '#0d1a26',
-            fontSize: '0.65rem',
+            fontSize: '0.55rem',
             fontWeight: 800,
-            padding: '4px 10px',
-            borderRadius: '4px',
+            padding: '2px 6px',
+            borderRadius: '3px',
             textTransform: 'uppercase',
-            letterSpacing: '0.5px',
-            marginBottom: '10px'
+            letterSpacing: '0.3px',
+            marginBottom: '6px'
           }}>
             {tag}
           </span>
