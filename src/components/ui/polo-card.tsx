@@ -33,7 +33,7 @@ export function PoloCard({ name, description, image, tag, href }: PoloCardProps)
         border: '1px solid rgba(255, 255, 255, 0.05)',
         overflow: 'hidden',
         position: 'relative',
-        minHeight: '200px',
+        height: '280px',
       }}
     >
       {/* Imagem de fundo */}
@@ -87,8 +87,9 @@ export function PoloCard({ name, description, image, tag, href }: PoloCardProps)
         </h2>
 
         <p style={{
-          fontSize: '0.85rem',
-          color: '#a0b2c1',
+          fontSize: '0.9rem',
+          fontWeight: 600,
+          color: '#ffffff',
           lineHeight: 1.5,
         }}>
           {description}
