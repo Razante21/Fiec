@@ -84,11 +84,11 @@ export function PoloCard({ name, description, image, tag, href }: PoloCardProps)
           {name}
         </motion.h2>
 
-        <motion.p variants={itemVariants} style={{
-          fontSize: '0.8rem', color: '#8fb3cc', lineHeight: 1.5, margin: 0
-        }}>
-          {description}
-        </motion.p>
+        <motion.div variants={itemVariants} style={{ fontSize: '0.8rem', color: '#8fb3cc', lineHeight: 1.5, margin: 0 }}>
+          {description.split('\n').map((line, i) => (
+            <span key={i} style={{ display: 'block' }}>{line}</span>
+          ))}
+        </motion.div>
 
         <motion.button
           variants={itemVariants}
