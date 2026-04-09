@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { X } from 'lucide-react'
+import { X, Check } from 'lucide-react'
 import { useState } from 'react'
 
 interface FormModalProps {
@@ -35,9 +35,30 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
     e.preventDefault()
     setEnviando(true)
 
-    // Simular envio (aqui você vai conectar com seu Apps Script)
-    await new Promise(resolve => setTimeout(resolve, 1500))
+    if (scriptUrl) {
+      try {
+        const res = await fetch(scriptUrl, {
+          method: 'POST',
+          body: JSON.stringify({
+            ...formData,
+            poloid: polo,
+            modulo,
+            dias,
+            horario,
+          }),
+        })
+        const data = await res.json()
+        if (!data.success) {
+          alert(data.error || 'Erro ao enviar')
+          setEnviando(false)
+          return
+        }
+      } catch (err) {
+        console.error(err)
+      }
+    }
     
+    await new Promise(resolve => setTimeout(resolve, 1000))
     setEnviando(false)
     setEnviado(true)
   }
@@ -46,117 +67,174 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
             onClick={onClose}
             style={{
               position: 'fixed',
               inset: 0,
-              background: 'rgba(0, 0, 0, 0.7)',
+              background: 'rgba(13, 26, 38, 0.85)',
+              backdropFilter: 'blur(4px)',
               zIndex: 50,
             }}
           />
 
-          {/* Modal */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            initial={{ opacity: 0, y: 50, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 30, scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             style={{
               position: 'fixed',
               top: '50%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              width: '90%',
-              maxWidth: '600px',
-              maxHeight: '90vh',
-              background: '#162a3d',
-              borderRadius: '16px',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
+              width: '92%',
+              maxWidth: '480px',
+              maxHeight: '92vh',
+              background: 'linear-gradient(180deg, #162a3d 0%, #0d1a26 100%)',
+              borderRadius: '20px',
+              border: '1px solid rgba(245, 166, 35, 0.3)',
+              boxShadow: '0 25px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(245, 166, 35, 0.1)',
               overflow: 'hidden',
               zIndex: 51,
             }}
           >
-            {/* Header */}
-            <div style={{
-              padding: '20px 24px',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              style={{
+                padding: '24px 24px 16px',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
               <div>
-                <h2 style={{
-                  fontFamily: "'Barlow Condensed', sans-serif",
-                  fontSize: '1.5rem',
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  color: '#fff',
-                  marginBottom: '4px',
-                }}>
+                <motion.h2 
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2 }}
+                  style={{
+                    fontFamily: "'Barlow Condensed', sans-serif",
+                    fontSize: '1.6rem',
+                    fontWeight: 800,
+                    textTransform: 'uppercase',
+                    color: '#fff',
+                    marginBottom: '4px',
+                  }}
+                >
                   {polo}
-                </h2>
-                <p style={{ fontSize: '0.85rem', color: '#a0b2c1' }}>
-                  {modulo} · {dias} · {horario}
-                </p>
+                </motion.h2>
+                <motion.p 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.25 }}
+                  style={{ fontSize: '0.8rem', color: '#f5a623', fontWeight: 600 }}
+                >
+                  {modulo}
+                </motion.p>
+                <motion.p 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  style={{ fontSize: '0.75rem', color: '#8fb3cc', marginTop: '2px' }}
+                >
+                  {dias} · {horario}
+                </motion.p>
               </div>
-              <button
+              <motion.button
+                whileHover={{ scale: 1.1, rotate: 90 }}
+                whileTap={{ scale: 0.9 }}
                 onClick={onClose}
                 style={{
-                  background: 'none',
+                  background: 'rgba(255, 255, 255, 0.1)',
                   border: 'none',
-                  color: '#a0b2c1',
+                  color: '#8fb3cc',
                   cursor: 'pointer',
-                  padding: '8px',
+                  padding: '10px',
+                  borderRadius: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
-                <X size={24} />
-              </button>
-            </div>
+                <X size={20} />
+              </motion.button>
+            </motion.div>
 
-            {/* Form */}
             <div style={{
-              padding: '24px',
+              padding: '20px 24px 24px',
               overflowY: 'auto',
-              maxHeight: 'calc(90vh - 80px)',
+              maxHeight: 'calc(92vh - 100px)',
             }}>
               {enviado ? (
-                <div style={{ textAlign: 'center', padding: '40px 20px' }}>
-                  <div style={{
-                    width: '60px',
-                    height: '60px',
-                    borderRadius: '50%',
-                    background: '#3dba7e',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 20px',
-                  }}>
-                    <span style={{ fontSize: '30px', color: '#fff' }}>✓</span>
-                  </div>
-                  <h3 style={{
-                    fontFamily: "'Barlow Condensed', sans-serif",
-                    fontSize: '1.5rem',
-                    fontWeight: 700,
-                    color: '#fff',
-                    marginBottom: '10px',
-                  }}>
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ type: 'spring', stiffness: 200 }}
+                  style={{ textAlign: 'center', padding: '40px 20px' }}
+                >
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.2, type: 'spring', stiffness: 300 }}
+                    style={{
+                      width: '80px',
+                      height: '80px',
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, #3dba7e 0%, #2ea36b 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      margin: '0 auto 24px',
+                      boxShadow: '0 10px 30px rgba(61, 186, 126, 0.4)',
+                    }}
+                  >
+                    <Check size={40} color="#fff" strokeWidth={3} />
+                  </motion.div>
+                  <motion.h3 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    style={{
+                      fontFamily: "'Barlow Condensed', sans-serif",
+                      fontSize: '1.8rem',
+                      fontWeight: 800,
+                      color: '#fff',
+                      marginBottom: '12px',
+                      textTransform: 'uppercase',
+                    }}
+                  >
                     Inscrição Enviada!
-                  </h3>
-                  <p style={{ color: '#a0b2c1', fontSize: '0.9rem' }}>
-                    Você receberá um e-mail de confirmação.
-                  </p>
-                </div>
+                  </motion.h3>
+                  <motion.p 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                    style={{ color: '#8fb3cc', fontSize: '0.9rem' }}
+                  >
+                    Você receberá um e-mail de confirmação em breve.
+                  </motion.p>
+                </motion.div>
               ) : (
                 <form onSubmit={handleSubmit}>
-                  <div style={{ marginBottom: '16px' }}>
-                    <label style={{ display: 'block', fontSize: '0.85rem', color: '#a0b2c1', marginBottom: '6px' }}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.15 }}
+                    style={{ marginBottom: '14px' }}
+                  >
+                    <label style={{ display: 'block', fontSize: '0.8rem', color: '#a0b2c1', marginBottom: '6px', fontWeight: 600 }}>
                       Nome Completo *
                     </label>
-                    <input
+                    <motion.input
+                      whileFocus={{ borderColor: '#f5a623', boxShadow: '0 0 0 3px rgba(245, 166, 35, 0.2)' }}
                       type="text"
                       required
                       value={formData.nome}
@@ -164,22 +242,30 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
                       style={{
                         width: '100%',
                         padding: '12px 14px',
-                        background: '#0d1a26',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        borderRadius: '8px',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                        borderRadius: '10px',
                         color: '#fff',
                         fontSize: '0.95rem',
+                        outline: 'none',
+                        transition: 'border-color 0.2s, box-shadow 0.2s',
                       }}
                       placeholder="Seu nome completo"
                     />
-                  </div>
+                  </motion.div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '14px' }}
+                  >
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.85rem', color: '#a0b2c1', marginBottom: '6px' }}>
+                      <label style={{ display: 'block', fontSize: '0.8rem', color: '#a0b2c1', marginBottom: '6px', fontWeight: 600 }}>
                         Data de Nascimento *
                       </label>
-                      <input
+                      <motion.input
+                        whileFocus={{ borderColor: '#f5a623', boxShadow: '0 0 0 3px rgba(245, 166, 35, 0.2)' }}
                         type="date"
                         required
                         value={formData.dataNascimento}
@@ -187,19 +273,21 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
                         style={{
                           width: '100%',
                           padding: '12px 14px',
-                          background: '#0d1a26',
-                          border: '1px solid rgba(255, 255, 255, 0.1)',
-                          borderRadius: '8px',
+                          background: 'rgba(255, 255, 255, 0.05)',
+                          border: '1px solid rgba(255, 255, 255, 0.15)',
+                          borderRadius: '10px',
                           color: '#fff',
-                          fontSize: '0.95rem',
+                          fontSize: '0.9rem',
+                          outline: 'none',
                         }}
                       />
                     </div>
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.85rem', color: '#a0b2c1', marginBottom: '6px' }}>
-                        CPF (somente números) *
+                      <label style={{ display: 'block', fontSize: '0.8rem', color: '#a0b2c1', marginBottom: '6px', fontWeight: 600 }}>
+                        CPF *
                       </label>
-                      <input
+                      <motion.input
+                        whileFocus={{ borderColor: '#f5a623', boxShadow: '0 0 0 3px rgba(245, 166, 35, 0.2)' }}
                         type="text"
                         required
                         maxLength={11}
@@ -208,23 +296,30 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
                         style={{
                           width: '100%',
                           padding: '12px 14px',
-                          background: '#0d1a26',
-                          border: '1px solid rgba(255, 255, 255, 0.1)',
-                          borderRadius: '8px',
+                          background: 'rgba(255, 255, 255, 0.05)',
+                          border: '1px solid rgba(255, 255, 255, 0.15)',
+                          borderRadius: '10px',
                           color: '#fff',
-                          fontSize: '0.95rem',
+                          fontSize: '0.9rem',
+                          outline: 'none',
                         }}
                         placeholder="00000000000"
                       />
                     </div>
-                  </div>
+                  </motion.div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.25 }}
+                    style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '14px' }}
+                  >
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.85rem', color: '#a0b2c1', marginBottom: '6px' }}>
+                      <label style={{ display: 'block', fontSize: '0.8rem', color: '#a0b2c1', marginBottom: '6px', fontWeight: 600 }}>
                         Telefone *
                       </label>
-                      <input
+                      <motion.input
+                        whileFocus={{ borderColor: '#f5a623', boxShadow: '0 0 0 3px rgba(245, 166, 35, 0.2)' }}
                         type="tel"
                         required
                         maxLength={11}
@@ -233,20 +328,22 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
                         style={{
                           width: '100%',
                           padding: '12px 14px',
-                          background: '#0d1a26',
-                          border: '1px solid rgba(255, 255, 255, 0.1)',
-                          borderRadius: '8px',
+                          background: 'rgba(255, 255, 255, 0.05)',
+                          border: '1px solid rgba(255, 255, 255, 0.15)',
+                          borderRadius: '10px',
                           color: '#fff',
-                          fontSize: '0.95rem',
+                          fontSize: '0.9rem',
+                          outline: 'none',
                         }}
                         placeholder="11999999999"
                       />
                     </div>
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.85rem', color: '#a0b2c1', marginBottom: '6px' }}>
+                      <label style={{ display: 'block', fontSize: '0.8rem', color: '#a0b2c1', marginBottom: '6px', fontWeight: 600 }}>
                         CEP *
                       </label>
-                      <input
+                      <motion.input
+                        whileFocus={{ borderColor: '#f5a623', boxShadow: '0 0 0 3px rgba(245, 166, 35, 0.2)' }}
                         type="text"
                         required
                         maxLength={8}
@@ -255,22 +352,29 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
                         style={{
                           width: '100%',
                           padding: '12px 14px',
-                          background: '#0d1a26',
-                          border: '1px solid rgba(255, 255, 255, 0.1)',
-                          borderRadius: '8px',
+                          background: 'rgba(255, 255, 255, 0.05)',
+                          border: '1px solid rgba(255, 255, 255, 0.15)',
+                          borderRadius: '10px',
                           color: '#fff',
-                          fontSize: '0.95rem',
+                          fontSize: '0.9rem',
+                          outline: 'none',
                         }}
                         placeholder="00000000"
                       />
                     </div>
-                  </div>
+                  </motion.div>
 
-                  <div style={{ marginBottom: '16px' }}>
-                    <label style={{ display: 'block', fontSize: '0.85rem', color: '#a0b2c1', marginBottom: '6px' }}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    style={{ marginBottom: '14px' }}
+                  >
+                    <label style={{ display: 'block', fontSize: '0.8rem', color: '#a0b2c1', marginBottom: '6px', fontWeight: 600 }}>
                       Endereço *
                     </label>
-                    <input
+                    <motion.input
+                      whileFocus={{ borderColor: '#f5a623', boxShadow: '0 0 0 3px rgba(245, 166, 35, 0.2)' }}
                       type="text"
                       required
                       value={formData.endereco}
@@ -278,21 +382,28 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
                       style={{
                         width: '100%',
                         padding: '12px 14px',
-                        background: '#0d1a26',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        borderRadius: '8px',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                        borderRadius: '10px',
                         color: '#fff',
-                        fontSize: '0.95rem',
+                        fontSize: '0.9rem',
+                        outline: 'none',
                       }}
                       placeholder="Rua, número, bairro"
                     />
-                  </div>
+                  </motion.div>
 
-                  <div style={{ marginBottom: '20px' }}>
-                    <label style={{ display: 'block', fontSize: '0.85rem', color: '#a0b2c1', marginBottom: '6px' }}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.35 }}
+                    style={{ marginBottom: '18px' }}
+                  >
+                    <label style={{ display: 'block', fontSize: '0.8rem', color: '#a0b2c1', marginBottom: '6px', fontWeight: 600 }}>
                       E-mail *
                     </label>
-                    <input
+                    <motion.input
+                      whileFocus={{ borderColor: '#f5a623', boxShadow: '0 0 0 3px rgba(245, 166, 35, 0.2)' }}
                       type="email"
                       required
                       value={formData.email}
@@ -300,90 +411,81 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
                       style={{
                         width: '100%',
                         padding: '12px 14px',
-                        background: '#0d1a26',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        borderRadius: '8px',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                        borderRadius: '10px',
                         color: '#fff',
-                        fontSize: '0.95rem',
+                        fontSize: '0.9rem',
+                        outline: 'none',
                       }}
                       placeholder="seu@email.com"
                     />
-                  </div>
+                  </motion.div>
 
-                  {/* Termos */}
-                  <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: '16px' }}>
-                    <label style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '12px', cursor: 'pointer' }}>
-                      <input
-                        type="checkbox"
-                        required
-                        checked={formData.termo1}
-                        onChange={e => setFormData({...formData, termo1: e.target.checked})}
-                        style={{ marginTop: '4px', accentColor: '#f5a623' }}
-                      />
-                      <span style={{ fontSize: '0.75rem', color: '#a0b2c1', lineHeight: 1.4 }}>
-                        Eu entendo que participação no curso é pessoal e intransferível. O inscrito é responsável, civil e criminalmente, pelo uso indevido do link, login e senha que lhe foram fornecidos.
-                      </span>
-                    </label>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                    style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '14px', marginBottom: '20px' }}
+                  >
+                    {[
+                      { key: 'termo1', text: 'Eu entendo que participação no curso é pessoal e intransferível.' },
+                      { key: 'termo2', text: 'Eu concordo que a FIEC poderá indeferir a inscrição em novos cursos para quem não comparecer.' },
+                      { key: 'termo3', text: 'Autorizo o compartilhamento dos meus dados pessoais com a FIEC.' },
+                      { key: 'termo4', text: 'Estou ciente das Normas Regimentais do CEPIN/FIEC.' },
+                    ].map((termo, i) => (
+                      <motion.label
+                        key={termo.key}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.45 + i * 0.05 }}
+                        style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '10px', cursor: 'pointer' }}
+                      >
+                        <motion.input
+                          whileTap={{ scale: 0.9 }}
+                          type="checkbox"
+                          required
+                          checked={formData[termo.key as keyof typeof formData] as boolean}
+                          onChange={e => setFormData({...formData, [termo.key]: e.target.checked})}
+                          style={{ marginTop: '3px', accentColor: '#f5a623', width: '16px', height: '16px' }}
+                        />
+                        <span style={{ fontSize: '0.72rem', color: '#8fb3cc', lineHeight: 1.4 }}>
+                          {termo.text}
+                        </span>
+                      </motion.label>
+                    ))}
+                  </motion.div>
 
-                    <label style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '12px', cursor: 'pointer' }}>
-                      <input
-                        type="checkbox"
-                        required
-                        checked={formData.termo2}
-                        onChange={e => setFormData({...formData, termo2: e.target.checked})}
-                        style={{ marginTop: '4px', accentColor: '#f5a623' }}
-                      />
-                      <span style={{ fontSize: '0.75rem', color: '#a0b2c1', lineHeight: 1.4 }}>
-                        Eu entendo e concordo que a FIEC poderá indeferir a inscrição em novos cursos e eventos daquele que deixar de comparecer, sem justificativa, pelo prazo de 1 ano.
-                      </span>
-                    </label>
-
-                    <label style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '12px', cursor: 'pointer' }}>
-                      <input
-                        type="checkbox"
-                        required
-                        checked={formData.termo3}
-                        onChange={e => setFormData({...formData, termo3: e.target.checked})}
-                        style={{ marginTop: '4px', accentColor: '#f5a623' }}
-                      />
-                      <span style={{ fontSize: '0.75rem', color: '#a0b2c1', lineHeight: 1.4 }}>
-                        Autorizo o compartilhamento dos meus dados pessoais com a FIEC para receber informações sobre eventos e conteúdos relacionados a educação e tecnologia.
-                      </span>
-                    </label>
-
-                    <label style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', cursor: 'pointer' }}>
-                      <input
-                        type="checkbox"
-                        required
-                        checked={formData.termo4}
-                        onChange={e => setFormData({...formData, termo4: e.target.checked})}
-                        style={{ marginTop: '4px', accentColor: '#f5a623' }}
-                      />
-                      <span style={{ fontSize: '0.75rem', color: '#a0b2c1', lineHeight: 1.4 }}>
-                        Firmo a presente matrícula e declaro estar ciente das Normas Regimentais do Centro de Educação Profissional de Indaiatuba - CEPIN/FIEC.
-                      </span>
-                    </label>
-                  </div>
-
-                  <button
+                  <motion.button
+                    whileHover={{ scale: 1.02, boxShadow: '0 8px 25px rgba(245, 166, 35, 0.4)' }}
+                    whileTap={{ scale: 0.98 }}
                     type="submit"
                     disabled={enviando}
                     style={{
                       width: '100%',
-                      padding: '14px',
-                      background: '#f5a623',
+                      padding: '16px',
+                      background: 'linear-gradient(135deg, #f5a623 0%, #e09510 100%)',
                       color: '#0d1a26',
                       border: 'none',
-                      borderRadius: '10px',
+                      borderRadius: '12px',
                       fontSize: '1rem',
-                      fontWeight: 700,
+                      fontWeight: 800,
                       textTransform: 'uppercase',
+                      letterSpacing: '1px',
                       cursor: enviando ? 'not-allowed' : 'pointer',
                       opacity: enviando ? 0.7 : 1,
+                      boxShadow: '0 4px 15px rgba(245, 166, 35, 0.3)',
                     }}
                   >
-                    {enviando ? 'Enviando...' : 'Enviar Inscrição'}
-                  </button>
+                    {enviando ? (
+                      <motion.span
+                        animate={{ opacity: [1, 0.5, 1] }}
+                        transition={{ repeat: Infinity, duration: 1 }}
+                      >
+                        Enviando...
+                      </motion.span>
+                    ) : 'Enviar Inscrição'}
+                  </motion.button>
                 </form>
               )}
             </div>
