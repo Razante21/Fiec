@@ -1,0 +1,34 @@
+{
+  "fiec": [
+    { "id": "m1-1", "tag": "Módulo I — Básico", "dias": "2ª e 4ª-feira", "horario": "08h30 às 10h00", "scriptUrl": "URL_SCRIPT_FIEC" },
+    { "id": "m1-2", "tag": "Módulo I — Básico", "dias": "3ª e 5ª-feira", "horario": "14h00 às 15h30", "scriptUrl": "URL_SCRIPT_FIEC" },
+    { "id": "m1-3", "tag": "Módulo I — Básico", "dias": "3ª e 5ª-feira", "horario": "19h00 às 20h30", "scriptUrl": "URL_SCRIPT_FIEC" },
+    { "id": "m2-1", "tag": "Módulo II — Intermediário", "dias": "2ª e 4ª-feira", "horario": "10h15 às 11h45", "scriptUrl": "URL_SCRIPT_FIEC" },
+    { "id": "m2-2", "tag": "Módulo II — Intermediário", "dias": "2ª e 4ª-feira", "horario": "14h00 às 15h30", "scriptUrl": "URL_SCRIPT_FIEC" },
+    { "id": "m2-3", "tag": "Módulo II — Intermediário", "dias": "2ª e 4ª-feira", "horario": "16h00 às 17h30", "scriptUrl": "URL_SCRIPT_FIEC" },
+    { "id": "m2-4", "tag": "Módulo II — Intermediário", "dias": "2ª e 4ª-feira", "horario": "19h00 às 20h30", "scriptUrl": "URL_SCRIPT_FIEC" },
+    { "id": "m2-5", "tag": "Módulo II — Intermediário", "dias": "3ª e 5ª-feira", "horario": "08h30 às 10h00", "scriptUrl": "URL_SCRIPT_FIEC" }
+  ],
+  "ceu": [
+    { "id": "m2-1", "tag": "Módulo II — Intermediário", "dias": "3ª e 5ª-feira", "horario": "14h00 às 15h30", "scriptUrl": "URL_SCRIPT_CEU" }
+  ],
+  "bem-viver": [
+    { "id": "bas-1", "tag": "Básico / Celular", "dias": "2ª e 4ª-feira", "horario": "09h30 às 11h30", "scriptUrl": "URL_SCRIPT_BEMVIVER" },
+    { "id": "int-1", "tag": "Intermediário / Celular", "dias": "3ª e 5ª-feira", "horario": "09h30 às 11h30", "scriptUrl": "URL_SCRIPT_BEMVIVER" }
+  ],
+  "casa-da-providencia": [
+    { "id": "m2-1", "tag": "Módulo II — Intermediário", "dias": "2ª e 4ª-feira", "horario": "09h30 às 11h00", "scriptUrl": "URL_SCRIPT_PROVIDENCIA" }
+  ],
+  "jd-brasil": [
+    { "id": "m2-1", "tag": "Módulo II — Intermediário", "dias": "2ª e 4ª-feira", "horario": "13h30 às 15h00", "scriptUrl": "URL_SCRIPT_JDBRASIL" }
+  ],
+  "sol-sol": [
+    { "id": "m1-1", "tag": "Módulo I — Básico", "dias": "2ª e 4ª-feira", "horario": "08h30 às 10h00", "scriptUrl": "URL_SCRIPT_SOLSOL" }
+  ],
+  "veredas": [
+    { "id": "int-1", "tag": "Módulo Intermediário", "dias": "Quarta-feira", "horario": "08h30 às 10h30", "scriptUrl": "URL_SCRIPT_VEREDAS" }
+  ],
+  "comunidade-independente": [
+    { "id": "m2-1", "tag": "Módulo II — Intermediário", "dias": "3ª e 5ª-feira", "horario": "14h00 às 16h00", "scriptUrl": "URL_SCRIPT_COMUNIDADE" }
+  ]
+}

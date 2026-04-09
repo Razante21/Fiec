@@ -3,8 +3,10 @@
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { FormModal } from '@/components/ui/form-modal'
+import { fetchTurmas } from '@/lib/turmas'
 
 const VAGAS_TOTAL = 40
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwAAK9EH6FuyGiMFVhjEeRqJEkFkDbSpIupwOz6mE6hqxOX4xpOa3phiYyEavP9yg6DXg/exec"
 
 interface ModuloData {
   id: string
@@ -17,46 +19,27 @@ interface ModuloData {
   esgotado: boolean
 }
 
-async function carregarVagas(scriptUrl: string): Promise<number> {
-  if (!scriptUrl || scriptUrl === 'SCRIPT_URL_AQUI') return -1
-  try {
-    const res = await fetch(scriptUrl)
-    if (!res.ok) throw new Error('erro')
-    const data = await res.json()
-    return data.inscritos ?? 0
-  } catch {
-    return -1
-  }
-}
-
 export default function PoloFiec() {
-  const [modulos, setModulos] = useState<ModuloData[]>([
-    { id: 'm1-1', tag: 'Módulo I — Básico', dias: '2ª e 4ª-feira', horario: '08h30 às 10h00', formUrl: 'LINK_FORM_FIEC_M1_24_MANHA', scriptUrl: 'SCRIPT_URL_AQUI', vagas: -1, esgotado: false },
-    { id: 'm1-2', tag: 'Módulo I — Básico', dias: '3ª e 5ª-feira', horario: '14h00 às 15h30', formUrl: 'LINK_FORM_FIEC_M1_35_TARDE', scriptUrl: 'https://script.google.com/macros/s/AKfycbx1JCkELQQCVoBj8pOJr5D8bD7jV1uKMNd_cstK1yLa-sLU0L6f_804lEmo96TxZJY58A/exec', vagas: -1, esgotado: false },
-    { id: 'm1-3', tag: 'Módulo I — Básico', dias: '3ª e 5ª-feira', horario: '19h00 às 20h30', formUrl: 'LINK_FORM_FIEC_M1_35_NOITE', scriptUrl: 'SCRIPT_URL_AQUI', vagas: -1, esgotado: false },
-    { id: 'm2-1', tag: 'Módulo II — Intermediário', dias: '2ª e 4ª-feira', horario: '10h15 às 11h45', formUrl: 'LINK_FORM_FIEC_M2_24_1', scriptUrl: 'SCRIPT_URL_AQUI', vagas: -1, esgotado: false },
-    { id: 'm2-2', tag: 'Módulo II — Intermediário', dias: '2ª e 4ª-feira', horario: '14h00 às 15h30', formUrl: 'LINK_FORM_FIEC_M2_24_2', scriptUrl: 'SCRIPT_URL_AQUI', vagas: -1, esgotado: false },
-    { id: 'm2-3', tag: 'Módulo II — Intermediário', dias: '2ª e 4ª-feira', horario: '16h00 às 17h30', formUrl: 'LINK_FORM_FIEC_M2_24_3', scriptUrl: 'SCRIPT_URL_AQUI', vagas: -1, esgotado: false },
-    { id: 'm2-4', tag: 'Módulo II — Intermediário', dias: '2ª e 4ª-feira', horario: '19h00 às 20h30', formUrl: 'LINK_FORM_FIEC_M2_24_4', scriptUrl: 'SCRIPT_URL_AQUI', vagas: -1, esgotado: false },
-    { id: 'm2-5', tag: 'Módulo II — Intermediário', dias: '3ª e 5ª-feira', horario: '08h30 às 10h00', formUrl: 'LINK_FORM_FIEC_M2_35_1', scriptUrl: 'SCRIPT_URL_AQUI', vagas: -1, esgotado: false },
-  ])
+  const [modulos, setModulos] = useState<ModuloData[]>([])
+  const [loading, setLoading] = useState(true)
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedModulo, setSelectedModulo] = useState<ModuloData | null>(null)
   const [listaEsperaModalOpen, setListaEsperaModalOpen] = useState(false)
 
   useEffect(() => {
-    const loadVagas = async () => {
-      const updated = await Promise.all(modulos.map(async (m) => {
-        if (m.scriptUrl && m.scriptUrl !== 'SCRIPT_URL_AQUI') {
-          const inscritos = await carregarVagas(m.scriptUrl)
-          const restantes = Math.max(0, VAGAS_TOTAL - inscritos)
-          return { ...m, vagas: restantes, esgotado: restantes === 0 }
-        }
-        return { ...m, vagas: -1 }
+    const loadTurmas = async () => {
+      const turmas = await fetchTurmas('FIEC')
+      const modulosComUrl = turmas.map(t => ({
+        ...t,
+        formUrl: '',
+        scriptUrl: SCRIPT_URL,
+        vagas: -1,
+        esgotado: false,
       }))
-      setModulos(updated)
+      setModulos(modulosComUrl)
+      setLoading(false)
     }
-    loadVagas()
+    loadTurmas()
   }, [])
 
   const containerVariants = {
