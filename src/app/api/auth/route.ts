@@ -4,6 +4,7 @@ import { verifyLogin } from '@/models/usuario';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+    console.log('Auth request:', body.usuario);
     
     if (!body.usuario || !body.senha) {
       return NextResponse.json({ success: false, error: 'Usuário e senha obrigatórios' }, { status: 400 });
