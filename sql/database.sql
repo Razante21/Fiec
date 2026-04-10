@@ -85,4 +85,4 @@ INSERT INTO polos (nome, slug, descricao) VALUES
 
 -- Inserir usuário admin padrão (senha: admin123)
 INSERT INTO usuarios (usuario, senha, nivel) VALUES 
-('admin', '$2a$10$xJwDxGkGkGkGkGkGkGkGeO.xJwDxGkGkGkGkGkGkGkGkGkG', 'admin');
+('admin', 'admin123', 'admin');
