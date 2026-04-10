@@ -10,7 +10,7 @@ export interface ModuloData {
 }
 
 const SCRIPT_URL_TURMAS = "https://script.google.com/macros/s/AKfycbwAAK9EH6FuyGiMFVhjEeRqJEkFkDbSpIupwOz6mE6hqxOX4xpOa3phiYyEavP9yg6DXg/exec"
-const SCRIPT_URL_LISTA_ESPERA = "" // Pendente - criar planilha
+const SCRIPT_URL_LISTA_ESPERA = "" // Pendente
 
 export async function fetchTurmas(polo: string): Promise<ModuloData[]> {
   try {
@@ -27,7 +27,7 @@ export async function fetchTurmas(polo: string): Promise<ModuloData[]> {
       dias: t.dias,
       horario: t.horario,
       formUrl: '',
-      scriptUrl: SCRIPT_URL_TURMAS,
+      scriptUrl: t.scriptUrl || '',
       vagas: -1,
       esgotado: false,
     }))
@@ -37,8 +37,16 @@ export async function fetchTurmas(polo: string): Promise<ModuloData[]> {
   }
 }
 
-export async function fetchVagas(polo: string): Promise<Record<string, number>> {
-  return {}
+export async function fetchVagas(scriptUrl: string): Promise<number> {
+  if (!scriptUrl || scriptUrl === '') return -1
+  try {
+    const res = await fetch(scriptUrl)
+    if (!res.ok) throw new Error('erro')
+    const data = await res.json()
+    return data.restantes ?? -1
+  } catch {
+    return -1
+  }
 }
 
 export function getListaEsperaUrl(): string {

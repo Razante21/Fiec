@@ -81,7 +81,9 @@ function getTurmas(ss) {
         modulo: dados[i][1],
         dias: dados[i][2],
         horario: dados[i][3],
-        tag: dados[i][1]
+        tag: dados[i][1],
+        scriptUrl: dados[i][5] || '',
+        formUrl: dados[i][6] || ''
       });
     }
   }

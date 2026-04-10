@@ -1,17 +1,17 @@
-Polo,Modulo,Dias,Horario,Ativo
-FIEC,Módulo I — Básico,2ª e 4ª-feira,08h30 às 10h00,sim
-FIEC,Módulo I — Básico,3ª e 5ª-feira,14h00 às 15h30,sim
-FIEC,Módulo I — Básico,3ª e 5ª-feira,19h00 às 20h30,sim
-FIEC,Módulo II — Intermediário,2ª e 4ª-feira,10h15 às 11h45,sim
-FIEC,Módulo II — Intermediário,2ª e 4ª-feira,14h00 às 15h30,sim
-FIEC,Módulo II — Intermediário,2ª e 4ª-feira,16h00 às 17h30,sim
-FIEC,Módulo II — Intermediário,2ª e 4ª-feira,19h00 às 20h30,sim
-FIEC,Módulo II — Intermediário,3ª e 5ª-feira,08h30 às 10h00,sim
-CEU,Módulo II — Intermediário,3ª e 5ª-feira,14h00 às 15h30,sim
-Bem Viver,Básico / Celular,2ª e 4ª-feira,09h30 às 11h30,sim
-Bem Viver,Intermediário / Celular,3ª e 5ª-feira,09h30 às 11h30,sim
-Casa da Providência,Módulo II — Intermediário,2ª e 4ª-feira,09h30 às 11h00,sim
-JD Brasil,Módulo II — Intermediário,2ª e 4ª-feira,13h30 às 15h00,sim
-Sol-Sol,Módulo I — Básico,2ª e 4ª-feira,08h30 às 10h00,sim
-Veredas,Módulo Intermediário,Quarta-feira,08h30 às 10h30,sim
-Comunidade Independente,Módulo II — Intermediário,3ª e 5ª-feira,14h00 às 16h00,sim
+Polo,Modulo,Dias,Horario,Ativo,ScriptUrl
+FIEC,Módulo I — Básico,2ª e 4ª-feira,08h30 às 10h00,sim,URL_SCRIPT_FIEC_1
+FIEC,Módulo I — Básico,3ª e 5ª-feira,14h00 às 15h30,sim,URL_SCRIPT_FIEC_2
+FIEC,Módulo I — Básico,3ª e 5ª-feira,19h00 às 20h30,sim,URL_SCRIPT_FIEC_3
+FIEC,Módulo II — Intermediário,2ª e 4ª-feira,10h15 às 11h45,sim,URL_SCRIPT_FIEC_4
+FIEC,Módulo II — Intermediário,2ª e 4ª-feira,14h00 às 15h30,sim,URL_SCRIPT_FIEC_5
+FIEC,Módulo II — Intermediário,2ª e 4ª-feira,16h00 às 17h30,sim,URL_SCRIPT_FIEC_6
+FIEC,Módulo II — Intermediário,2ª e 4ª-feira,19h00 às 20h30,sim,URL_SCRIPT_FIEC_7
+FIEC,Módulo II — Intermediário,3ª e 5ª-feira,08h30 às 10h00,sim,URL_SCRIPT_FIEC_8
+CEU,Módulo II — Intermediário,3ª e 5ª-feira,14h00 às 15h30,sim,URL_SCRIPT_CEU
+Bem Viver,Básico / Celular,2ª e 4ª-feira,09h30 às 11h30,sim,URL_SCRIPT_BEMVIVER_1
+Bem Viver,Intermediário / Celular,3ª e 5ª-feira,09h30 às 11h30,sim,URL_SCRIPT_BEMVIVER_2
+Casa da Providência,Módulo II — Intermediário,2ª e 4ª-feira,09h30 às 11h00,sim,URL_SCRIPT_PROVIDENCIA
+JD Brasil,Módulo II — Intermediário,2ª e 4ª-feira,13h30 às 15h00,sim,URL_SCRIPT_JDBRASIL
+Sol-Sol,Módulo I — Básico,2ª e 4ª-feira,08h30 às 10h00,sim,URL_SCRIPT_SOLSOL
+Veredas,Módulo Intermediário,Quarta-feira,08h30 às 10h30,sim,URL_SCRIPT_VEREDAS
+Comunidade Independente,Módulo II — Intermediário,3ª e 5ª-feira,14h00 às 16h00,sim,URL_SCRIPT_COMUNIDADE
