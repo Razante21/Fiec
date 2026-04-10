@@ -1,6 +1,5 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { FormModal } from '@/components/ui/form-modal'
 import { fetchTurmas, fetchVagas, getMasterUrl } from '@/lib/turmas'
@@ -54,14 +53,14 @@ export default function PoloCeu() {
 
   return (
     <main className="min-h-screen">
-      <motion.header initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ background: 'radial-gradient(ellipse 60% 60% at 8% 20%, rgba(245,166,35,.10) 0%, transparent 60%), linear-gradient(175deg, #091520 0%, #0d1a26 100%)', padding: '32px 24px 44px', textAlign: 'center', position: 'relative', borderBottom: '1px solid rgba(255,255,255,.07)' }}>
-        <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
+      <header style={{ background: 'radial-gradient(ellipse 60% 60% at 8% 20%, rgba(245,166,35,.10) 0%, transparent 60%), linear-gradient(175deg, #091520 0%, #0d1a26 100%)', padding: '32px 24px 44px', textAlign: 'center', position: 'relative', borderBottom: '1px solid rgba(255,255,255,.07)' }}>
+        <div style={{ opacity: 1, transform: 'translateX(0)' }}>
           <a href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#8fb3cc', textDecoration: 'none', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '22px' }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><polyline points="15 18 9 12 15 6" /></svg>Todos os polos
           </a>
-        </motion.div>
-        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 'clamp(2.2rem, 7vw, 3.8rem)', textTransform: 'uppercase', margin: 0 }}>Polo CEU</motion.h1>
-      </motion.header>
+        </div>
+        <h1 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 'clamp(2.2rem, 7vw, 3.8rem)', textTransform: 'uppercase', margin: 0, opacity: 1, transform: 'translateY(0)' }}>Polo CEU</h1>
+      </header>
 
       <div style={{ maxWidth: '1040px', margin: '44px auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '270px 1fr', gap: '32px', alignItems: 'start' }}>
         <aside style={{ position: 'sticky', top: '24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -161,12 +160,8 @@ export default function PoloCeu() {
 
 function ModuloCard({ modulo, index, onClick }: { modulo: ModuloData; index: number; onClick: () => void }) {
   return (
-    <motion.div
-      onClick={modulo.esgotado ? undefined : onClick}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.1 * index }}
-      whileHover={modulo.esgotado ? {} : { y: -3, borderColor: '#f5a623', boxShadow: '0 8px 24px rgba(0,0,0,.3)' }}
+    <div
+      onClick={() => !modulo.esgotado && onClick()}
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -178,6 +173,19 @@ function ModuloCard({ modulo, index, onClick }: { modulo: ModuloData; index: num
         color: 'white',
         cursor: modulo.esgotado ? 'not-allowed' : 'pointer',
         opacity: modulo.esgotado ? 0.55 : 1,
+        transition: 'transform 0.2s, border-color 0.2s, box-shadow 0.2s',
+      }}
+      onMouseEnter={(e) => {
+        if (!modulo.esgotado) {
+          e.currentTarget.style.transform = 'translateY(-3px)'
+          e.currentTarget.style.borderColor = '#f5a623'
+          e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,.3)'
+        }
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = ''
+        e.currentTarget.style.borderColor = 'rgba(255,255,255,.07)'
+        e.currentTarget.style.boxShadow = ''
       }}
     >
       <span style={{ fontSize: '0.6rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#f5a623', marginBottom: '4px' }}>{modulo.tag}</span>
@@ -190,6 +198,6 @@ function ModuloCard({ modulo, index, onClick }: { modulo: ModuloData; index: num
       ) : (
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.72rem', fontWeight: 700, fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: '0.1em', textTransform: 'uppercase', color: '#4a9eca', marginTop: 'auto' }}>Inscrever-se <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="13 6 19 12 13 18" /></svg></span>
       )}
-    </motion.div>
+    </div>
   )
 }
