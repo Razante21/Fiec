@@ -2,9 +2,13 @@ import { NextResponse } from 'next/server';
 import { verifyLogin } from '@/models/usuario';
 
 export async function POST(request: Request) {
-  const body = await request.json();
-  
   try {
+    const body = await request.json();
+    
+    if (!body.usuario || !body.senha) {
+      return NextResponse.json({ success: false, error: 'Usuário e senha obrigatórios' }, { status: 400 });
+    }
+    
     const usuario = await verifyLogin(body.usuario, body.senha);
     
     if (!usuario) {
@@ -19,7 +23,8 @@ export async function POST(request: Request) {
         nivel: usuario.nivel 
       }
     });
-  } catch (error) {
+  } catch (error: any) {
+    console.error('Auth error:', error.message);
     return NextResponse.json({ success: false, error: 'Erro ao fazer login' }, { status: 500 });
   }
 }
