@@ -1,7 +1,6 @@
 // ============================================================
-//  GOOGLE APPS SCRIPT - FIEC Educação Digital
-//  SÓ PARA LER TURMAS E SALVAR LISTA DE ESPERA
-//  As inscrições vão para as planilhas do Google Forms de cada turma
+//  GOOGLE APPS SCRIPT - PLANILHA MASTER FIEC
+//  Lê turmas e salva lista de espera
 // ============================================================
 
 // ============================================================
@@ -14,15 +13,21 @@ function doPost(e) {
     var dados = JSON.parse(e.postData.contents);
     
     if (dados.tipo === 'listaEspera') {
-      var aba = ss.getSheetByName("ListaEspera") || ss.insertSheet("ListaEspera");
+      var aba = ss.getSheetByName("ListaEspera");
+      if (!aba) {
+        aba = ss.insertSheet("ListaEspera");
+        aba.appendRow(["Data", "Turma", "Nome", "Telefone", "Email", "Status"]);
+      }
+      
       aba.appendRow([
         new Date(),
         dados.turma,
         dados.nome.toUpperCase().trim(),
         dados.telefone,
-        dados.email,
+        dados.email || "",
         "Pendente"
       ]);
+      
       return ContentService.createTextOutput(JSON.stringify({ success: true }))
         .setMimeType(ContentService.MimeType.JSON);
     }
@@ -82,8 +87,7 @@ function getTurmas(ss) {
         dias: dados[i][2],
         horario: dados[i][3],
         tag: dados[i][1],
-        scriptUrl: dados[i][5] || '',
-        formUrl: dados[i][6] || ''
+        scriptUrl: dados[i][5] || ''
       });
     }
   }

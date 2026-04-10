@@ -200,6 +200,15 @@ export default function Inicio() {
           <motion.div style={{ marginTop: '40px' }}>
             <p style={{ color: '#a0b2c1', fontSize: '0.8rem', letterSpacing: '2px', textTransform: 'uppercase' }}>Dia do evento</p>
             <p style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 'clamp(3.5rem, 10vw, 6rem)', fontWeight: 800, lineHeight: 1, color: '#ffffff' }}>30/06/2026</p>
+            <p style={{ color: '#8fb3cc', fontSize: '0.9rem', marginTop: '20px' }}>Das 09h às 12h</p>
+          </motion.div>
+        </FadeContent>
+
+        <FadeContent blur duration={0.6} delay={0.6}>
+          <motion.div style={{ marginTop: '40px', padding: '20px', background: 'rgba(61,186,126,0.1)', borderRadius: '12px', border: '1px solid rgba(61,186,126,0.3)' }}>
+            <p style={{ color: '#3dba7e', fontWeight: 700, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Início das aulas</p>
+            <p style={{ color: '#8fb3cc', fontSize: '0.95rem', marginTop: '8px' }}>Turmas de <strong style={{ color: '#fff' }}>2ª e 4ª</strong>: 03/08/26 (segunda-feira)</p>
+            <p style={{ color: '#8fb3cc', fontSize: '0.95rem', marginTop: '4px' }}>Turmas de <strong style={{ color: '#fff' }}>3ª e 5ª</strong>: 04/08/26 (terça-feira)</p>
           </motion.div>
         </FadeContent>
 

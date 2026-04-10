@@ -9,18 +9,18 @@ export interface ModuloData {
   esgotado: boolean
 }
 
-const SCRIPT_URL_TURMAS = "https://script.google.com/macros/s/AKfycbwAAK9EH6FuyGiMFVhjEeRqJEkFkDbSpIupwOz6mE6hqxOX4xpOa3phiYyEavP9yg6DXg/exec"
-const SCRIPT_URL_LISTA_ESPERA = "" // Pendente
+const SCRIPT_URL_TURMAS = "https://script.google.com/macros/s/AKfycbweWUdM750BmfdjZkcmTYE6Bg7WxIO4Dp1kV7Z35CPKkiQ-C-QMpiYBa3i6FtEL8t-j/exec"
+export const MASTER_URL = "https://script.google.com/macros/s/AKfycbweWUdM750BmfdjZkcmTYE6Bg7WxIO4Dp1kV7Z35CPKkiQ-C-QMpiYBa3i6FtEL8t-j/exec" // URL da planilha master paraInscrições e Lista de Espera
 
 export async function fetchTurmas(polo: string): Promise<ModuloData[]> {
   try {
     const res = await fetch(`${SCRIPT_URL_TURMAS}?action=turmasPorPolo&polo=${encodeURIComponent(polo)}`)
     const data = await res.json()
-    
+
     if (!data.turmas || data.turmas.length === 0) {
       return []
     }
-    
+
     return data.turmas.map((t: any, index: number) => ({
       id: `${polo}-${index}`,
       tag: t.modulo,
@@ -43,12 +43,13 @@ export async function fetchVagas(scriptUrl: string): Promise<number> {
     const res = await fetch(scriptUrl)
     if (!res.ok) throw new Error('erro')
     const data = await res.json()
-    return data.restantes ?? -1
+    // Script individual retorna "restantes", não "vagas"
+    return data.restantes ?? data.vagas ?? -1
   } catch {
     return -1
   }
 }
 
-export function getListaEsperaUrl(): string {
-  return SCRIPT_URL_LISTA_ESPERA
+export function getMasterUrl(): string {
+  return MASTER_URL
 }

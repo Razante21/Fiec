@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { FormModal } from '@/components/ui/form-modal'
-import { fetchTurmas } from '@/lib/turmas'
+import { fetchTurmas, fetchVagas, getMasterUrl } from '@/lib/turmas'
 
 const VAGAS_TOTAL = 40
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwAAK9EH6FuyGiMFVhjEeRqJEkFkDbSpIupwOz6mE6hqxOX4xpOa3phiYyEavP9yg6DXg/exec"
@@ -21,23 +21,55 @@ interface ModuloData {
 
 export default function PoloFiec() {
   const [modulos, setModulos] = useState<ModuloData[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedModulo, setSelectedModulo] = useState<ModuloData | null>(null)
   const [listaEsperaModalOpen, setListaEsperaModalOpen] = useState(false)
 
+  // Turmas estáticas - aparecem instantâneo
+  const turmas_estaticas: ModuloData[] = [
+    { id: 'fiec-0', tag: 'Módulo I — Básico', dias: '2ª e 4ª-feira', horario: '08h30 às 10h00', formUrl: '', scriptUrl: '', vagas: -1, esgotado: false },
+    { id: 'fiec-1', tag: 'Módulo I — Básico', dias: '3ª e 5ª-feira', horario: '14h00 às 15h30', formUrl: '', scriptUrl: '', vagas: -1, esgotado: false },
+    { id: 'fiec-2', tag: 'Módulo I — Básico', dias: '3ª e 5ª-feira', horario: '19h00 às 20h30', formUrl: '', scriptUrl: '', vagas: -1, esgotado: false },
+    { id: 'fiec-3', tag: 'Módulo II — Intermediário', dias: '2ª e 4ª-feira', horario: '10h15 às 11h45', formUrl: '', scriptUrl: '', vagas: -1, esgotado: false },
+    { id: 'fiec-4', tag: 'Módulo II — Intermediário', dias: '2ª e 4ª-feira', horario: '14h00 às 15h30', formUrl: '', scriptUrl: '', vagas: -1, esgotado: false },
+    { id: 'fiec-5', tag: 'Módulo II — Intermediário', dias: '2ª e 4ª-feira', horario: '16h00 às 17h30', formUrl: '', scriptUrl: '', vagas: -1, esgotado: false },
+    { id: 'fiec-6', tag: 'Módulo II — Intermediário', dias: '2ª e 4ª-feira', horario: '19h00 às 20h30', formUrl: '', scriptUrl: '', vagas: -1, esgotado: false },
+    { id: 'fiec-7', tag: 'Módulo II — Intermediário', dias: '3ª e 5ª-feira', horario: '08h30 às 10h00', formUrl: '', scriptUrl: '', vagas: -1, esgotado: false },
+  ]
+
   useEffect(() => {
+    // Mostra turmas estáticas na hora
+    setModulos(turmas_estaticas)
+    
+    // Busca da API em background
     const loadTurmas = async () => {
-      const turmas = await fetchTurmas('FIEC')
-      const modulosComUrl = turmas.map(t => ({
-        ...t,
-        formUrl: '',
-        scriptUrl: SCRIPT_URL,
-        vagas: -1,
-        esgotado: false,
-      }))
-      setModulos(modulosComUrl)
-      setLoading(false)
+      try {
+        const turmas = await fetchTurmas('FIEC')
+        if (turmas.length > 0) {
+          // Primeiro atualiza com scriptUrl
+          const turmasComScript = turmas.map((t, index) => ({
+            ...t,
+            id: `fiec-${index}`,
+            scriptUrl: t.scriptUrl || SCRIPT_URL,
+          }))
+          setModulos(turmasComScript)
+          
+          // Depois busca vagas em paralelo (sem esperar)
+          turmasComScript.forEach(async (t, idx) => {
+            if (t.scriptUrl) {
+              try {
+                const vagas = await fetchVagas(t.scriptUrl)
+                if (vagas >= 0) {
+                  setModulos(prev => prev.map((mod, i) => 
+                    i === idx ? { ...mod, vagas, esgotado: vagas === 0 } : mod
+                  ))
+                }
+              } catch (e) {}
+            }
+          })
+        }
+      } catch (e) {}
     }
     loadTurmas()
   }, [])
@@ -188,6 +220,33 @@ export default function PoloFiec() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
         >
+          {/* Datas importantes */}
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            style={{ 
+              background: 'linear-gradient(135deg, rgba(245,166,35,0.15) 0%, rgba(245,166,35,0.05) 100%)',
+              border: '1px solid rgba(245,166,35,0.3)',
+              borderRadius: '12px',
+              padding: '16px 20px',
+              marginBottom: '28px',
+            }}
+          >
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div>
+                <p style={{ fontSize: '0.65rem', color: '#f5a623', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}>Inscrição</p>
+                <p style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600 }}>30/06/2026</p>
+                <p style={{ fontSize: '0.75rem', color: '#8fb3cc' }}>Das 09h às 12h</p>
+              </div>
+              <div>
+                <p style={{ fontSize: '0.65rem', color: '#3dba7e', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}>Início das aulas</p>
+                <p style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600 }}>2ª e 4ª: 03/08 (segunda)</p>
+                <p style={{ fontSize: '0.75rem', color: '#8fb3cc' }}>3ª e 5ª: 04/08 (terça)</p>
+              </div>
+            </div>
+          </motion.div>
+
           <h2 style={{
             fontFamily: "'Barlow Condensed', sans-serif",
             fontWeight: 900,
@@ -259,9 +318,8 @@ export default function PoloFiec() {
             <p style={{ fontSize: '0.82rem', color: '#8fb3cc', marginBottom: '14px', lineHeight: 1.6 }}>
               Não encontrou vaga na turma desejada? Entre na lista de espera e entraremos em contato assim que uma vaga for liberada.
             </p>
-            <a
-              href="LINK_LISTA_ESPERA_POLO_FIEC"
-              target="_blank"
+            <button
+              onClick={() => setListaEsperaModalOpen(true)}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -277,13 +335,14 @@ export default function PoloFiec() {
                 textDecoration: 'none',
                 padding: '9px 22px',
                 borderRadius: '6px',
+                cursor: 'pointer',
               }}
             >
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" />
               </svg>
               Entrar na Lista de Espera
-            </a>
+            </button>
           </motion.div>
         </motion.main>
       </div>
@@ -308,17 +367,7 @@ export default function PoloFiec() {
         dias={selectedModulo?.dias || ''}
         horario={selectedModulo?.horario || ''}
         scriptUrl={selectedModulo?.scriptUrl}
-        listaEsperaOnly
-        listaEsperaTurmas={[
-          'FIEC: Módulo I — Básico - 2ª e 4ª-feira - 08h30 às 10h00',
-          'FIEC: Módulo I — Básico - 3ª e 5ª-feira - 14h00 às 15h30',
-          'FIEC: Módulo I — Básico - 3ª e 5ª-feira - 19h00 às 20h30',
-          'FIEC: Módulo II — Intermediário - 2ª e 4ª-feira - 10h15 às 11h45',
-          'FIEC: Módulo II — Intermediário - 2ª e 4ª-feira - 14h00 às 15h30',
-          'FIEC: Módulo II — Intermediário - 2ª e 4ª-feira - 16h00 às 17h30',
-          'FIEC: Módulo II — Intermediário - 2ª e 4ª-feira - 19h00 às 20h30',
-          'FIEC: Módulo II — Intermediário - 3ª e 5ª-feira - 08h30 às 10h00',
-        ]}
+        masterUrl={getMasterUrl()}
       />
 
       <FormModal
@@ -329,6 +378,7 @@ export default function PoloFiec() {
         dias=""
         horario=""
         scriptUrl=""
+        masterUrl={getMasterUrl()}
         listaEsperaOnly
         listaEsperaTurmas={[
           'FIEC: Módulo I — Básico - 2ª e 4ª-feira - 08h30 às 10h00',

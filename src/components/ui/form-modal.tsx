@@ -12,11 +12,12 @@ interface FormModalProps {
   dias: string
   horario: string
   scriptUrl?: string
+  masterUrl?: string
   listaEsperaOnly?: boolean
   listaEsperaTurmas?: string[]
 }
 
-export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, scriptUrl, listaEsperaOnly, listaEsperaTurmas }: FormModalProps) {
+export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, scriptUrl, masterUrl, listaEsperaOnly, listaEsperaTurmas }: FormModalProps) {
   const [enviando, setEnviando] = useState(false)
   const [enviado, setEnviado] = useState(false)
   const [showNormas, setShowNormas] = useState(false)
@@ -81,20 +82,64 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
     e.preventDefault()
     
     if (isListaEspera) {
-      // Enviar para lista de espera
       setEnviando(true)
+      
+      // Usar planilha master para lista de espera
+      if (masterUrl) {
+        try {
+          const res = await fetch(masterUrl, {
+            method: 'POST',
+            body: JSON.stringify({
+              tipo: 'listaEspera',
+              turma: formLista.turma,
+              nome: formLista.nome,
+              telefone: formLista.telefone,
+              email: formLista.email,
+            }),
+          })
+          const data = await res.json()
+          if (!data.success) {
+            alert(data.error || 'Erro ao enviar')
+            setEnviando(false)
+            return
+          }
+        } catch (err) {
+          console.error(err)
+        }
+      }
+      
       await new Promise(resolve => setTimeout(resolve, 1000))
       setEnviando(false)
       setEnviado(true)
       return
     }
     
+    // === INSCRIÇÃO NORMAL ===
     setEnviando(true)
 
+    // Validar idade mínima (12 anos) no frontend antes de enviar
+    if (formData.dataNascimento) {
+      const dataNasc = new Date(formData.dataNascimento)
+      const hoje = new Date()
+      let idade = hoje.getFullYear() - dataNasc.getFullYear()
+      const m = hoje.getMonth() - dataNasc.getMonth()
+      if (m < 0 || (m === 0 && hoje.getDate() < dataNasc.getDate())) {
+        idade--
+      }
+      
+      if (idade < 12) {
+        alert(`Idade mínima: 12 anos. Você tem ${idade} anos.`)
+        setEnviando(false)
+        return
+      }
+    }
+
+    // Enviar para a planilha individual da turma (scriptUrl)
     if (scriptUrl) {
       try {
-        const res = await fetch(scriptUrl, {
+        await fetch(scriptUrl, {
           method: 'POST',
+          mode: 'no-cors',
           body: JSON.stringify({
             ...formData,
             poloid: polo,
@@ -103,11 +148,9 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
             horario,
           }),
         })
-        const data = await res.json()
-        if (!data.success) {
-          alert(data.error || 'Erro ao enviar')
-          setEnviando(false)
-          return
+        // Atualiza vagas localmente (-1 para forçar reload na próxima abertura)
+        if (vagasRestantes > 0) {
+          setVagasRestantes(vagasRestantes - 1)
         }
       } catch (err) {
         console.error(err)
