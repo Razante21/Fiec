@@ -160,6 +160,9 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
     await new Promise(resolve => setTimeout(resolve, 1000))
     setEnviando(false)
     setEnviado(true)
+    
+    await new Promise(resolve => setTimeout(resolve, 800))
+    window.location.reload()
   }
 
   return (
