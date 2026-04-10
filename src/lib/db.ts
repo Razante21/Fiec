@@ -1,10 +1,10 @@
 import mysql from 'mysql2/promise';
 
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'sql.freedb.tech',
-  user: process.env.DB_USER || 'freedb_inclusao',
-  password: process.env.DB_PASSWORD || '$r4h?KQG6Zjm6*!',
-  database: process.env.DB_NAME || 'freedb_fiec_db',
+  host: process.env.DB_HOST || 'sql301.infinityfree.com',
+  user: process.env.DB_USER || 'if0_41629374',
+  password: process.env.DB_PASSWORD || 'BqAChDVdHJc3',
+  database: process.env.DB_NAME || 'if0_41629374_fiec_db',
   waitForConnections: true,
   connectionLimit: 5,
   queueLimit: 0,
