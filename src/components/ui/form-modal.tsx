@@ -340,8 +340,8 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
                     style={{ color: '#8fb3cc', fontSize: '0.9rem' }}
                   >
                     {isListaEspera 
-                      ? 'Você receberá um e-mail quando houver vagas disponíveis.' 
-                      : 'Você receberá um e-mail de confirmação em breve.'}
+                      ? 'Entraremos em contato quando houver vagas disponíveis.' 
+                      : 'Entraremos em contato para confirmar sua inscrição.'}
                   </motion.p>
                 </motion.div>
               ) : isListaEspera ? (
