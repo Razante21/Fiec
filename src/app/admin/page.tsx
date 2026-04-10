@@ -61,16 +61,21 @@ export default function AdminPage() {
 
   const loadPolos = async () => {
     try {
+      console.log('Carregando polos...')
       const res = await fetch('/api/polos')
+      console.log('Resposta:', res.status)
       const data = await res.json()
+      console.log('Data:', data)
       if (data.success) {
         setPolos(data.data)
         if (data.data.length > 0 && !selectedPolo) {
           setSelectedPolo(data.data[0].id)
         }
+      } else {
+        console.error('Erro da API:', data.error)
       }
     } catch (e) {
-      console.error(e)
+      console.error('Erro ao carregar polos:', e)
     }
   }
 
