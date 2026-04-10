@@ -2,6 +2,7 @@ import mysql from 'mysql2/promise';
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST || 'sql301.infinityfree.com',
+  port: parseInt(process.env.DB_PORT || '3306'),
   user: process.env.DB_USER || 'if0_41629374',
   password: process.env.DB_PASSWORD || 'BqAChDVdHJc3',
   database: process.env.DB_NAME || 'if0_41629374_fiec_db',
