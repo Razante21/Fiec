@@ -15,9 +15,13 @@ interface FormModalProps {
   masterUrl?: string
   listaEsperaOnly?: boolean
   listaEsperaTurmas?: string[]
+  turmaId?: number
+  liberado?: boolean
+  dataLiberacao?: string
 }
 
-export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, scriptUrl, masterUrl, listaEsperaOnly, listaEsperaTurmas }: FormModalProps) {
+export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, scriptUrl, masterUrl, listaEsperaOnly, listaEsperaTurmas, turmaId, liberado = true, dataLiberacao }: FormModalProps) {
+  const [naoLiberado, setNaoLiberado] = useState(!liberado)
   const [enviando, setEnviando] = useState(false)
   const [enviado, setEnviado] = useState(false)
   const [showNormas, setShowNormas] = useState(false)
