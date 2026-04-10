@@ -18,9 +18,9 @@ interface Turma {
   horario: string
   vagas_total: number
   vagas_usadas: number
-  liberado: boolean
+  liberado: number
   data_liberacao: string | null
-  ativo: boolean
+  ativo: number
 }
 
 export default function AdminPage() {

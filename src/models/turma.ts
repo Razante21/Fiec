@@ -8,19 +8,20 @@ export interface Turma {
   horario: string;
   vagas_total: number;
   vagas_usadas: number;
-  liberado: boolean;
-  data_liberacao: Date | null;
-  ativo: boolean;
+  liberado: number;
+  data_liberacao: string | null;
+  ativo: number;
 }
 
 export async function getTurmasByPolo(poloSlug: string): Promise<Turma[]> {
-  return query(`
+  const rows = await query(`
     SELECT t.* 
     FROM turmas t
     JOIN polos p ON t.polo_id = p.id
-    WHERE p.slug = ? AND t.ativo = TRUE
+    WHERE p.slug = ? AND t.ativo = 1
     ORDER BY t.modulo, t.horario
-  `, [poloSlug]) as Promise<Turma[]>;
+  `, [poloSlug]);
+  return rows as Turma[];
 }
 
 export async function getTurmaById(id: number): Promise<Turma | null> {
@@ -50,14 +51,14 @@ export async function updateTurma(
 ) {
   return query(
     'UPDATE turmas SET modulo = ?, dias = ?, horario = ?, ativo = ? WHERE id = ?',
-    [modulo, dias, horario, ativo, id]
+    [modulo, dias, horario, ativo ? 1 : 0, id]
   );
 }
 
-export async function setLiberacao(id: number, liberado: boolean, dataLiberacao?: Date) {
+export async function setLiberacao(id: number, liberado: boolean, dataLiberacao?: string) {
   return query(
     'UPDATE turmas SET liberado = ?, data_liberacao = ? WHERE id = ?',
-    [liberado, dataLiberacao || null, id]
+    [liberado ? 1 : 0, dataLiberacao || null, id]
   );
 }
 

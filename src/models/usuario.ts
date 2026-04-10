@@ -4,7 +4,7 @@ export interface Usuario {
   id: number;
   usuario: string;
   senha: string;
-  nivel: 'admin' | 'coordenador' | 'aluno';
+  nivel: string;
 }
 
 export async function getUsuarioByUsuario(usuario: string): Promise<Usuario | null> {

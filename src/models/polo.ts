@@ -5,12 +5,13 @@ export interface Polo {
   nome: string;
   slug: string;
   descricao: string;
-  endereco: string;
-  ativo: boolean;
+  endereco: string | null;
+  ativo: number;
 }
 
 export async function getPolos(): Promise<Polo[]> {
-  return query('SELECT * FROM polos WHERE ativo = TRUE ORDER BY nome') as Promise<Polo[]>;
+  const rows = await query('SELECT * FROM polos WHERE ativo = 1 ORDER BY nome');
+  return rows as Polo[];
 }
 
 export async function getPoloBySlug(slug: string): Promise<Polo | null> {
@@ -33,6 +34,6 @@ export async function createPolo(nome: string, slug: string, descricao: string, 
 export async function updatePolo(id: number, nome: string, descricao: string, ativo: boolean) {
   return query(
     'UPDATE polos SET nome = ?, descricao = ?, ativo = ? WHERE id = ?',
-    [nome, descricao, ativo, id]
+    [nome, descricao, ativo ? 1 : 0, id]
   );
 }

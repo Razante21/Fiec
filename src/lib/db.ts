@@ -6,8 +6,11 @@ const pool = mysql.createPool({
   password: process.env.DB_PASSWORD || '$r4h?KQG6Zjm6*!',
   database: process.env.DB_NAME || 'freedb_fiec_db',
   waitForConnections: true,
-  connectionLimit: 10,
+  connectionLimit: 5,
   queueLimit: 0,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 export default pool;
