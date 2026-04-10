@@ -8,14 +8,16 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 5,
   queueLimit: 0,
-  ssl: {
-    rejectUnauthorized: false,
-  },
 });
 
 export default pool;
 
 export async function query(sql: string, params?: any[]) {
-  const [rows] = await pool.execute(sql, params);
-  return rows;
+  try {
+    const [rows] = await pool.execute(sql, params);
+    return rows;
+  } catch (error: any) {
+    console.error('DB Query Error:', error.message)
+    throw error;
+  }
 }
