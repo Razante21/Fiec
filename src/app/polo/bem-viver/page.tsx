@@ -74,8 +74,8 @@ export default function PoloBemViver() {
         </motion.span>
       </motion.header>
 
-      <div style={{ maxWidth: '1040px', margin: '44px auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '270px 1fr', gap: '32px', alignItems: 'start' }}>
-        <aside style={{ position: 'sticky', top: '24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+      <div className="polo-grid" style={{ maxWidth: '1040px', margin: '44px auto', padding: '0 24px' }}>
+        <aside className="polo-aside" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }} style={{ background: '#1e3a52', borderRadius: '12px', border: '1px solid rgba(255,255,255,.07)', overflow: 'hidden' }}>
             <div style={{ background: '#162a3d', padding: '14px 18px', borderBottom: '1px solid rgba(255,255,255,.07)' }}><span style={{ fontSize: '0.66rem', textTransform: 'uppercase', letterSpacing: '0.18em', color: '#f5a623', fontWeight: 700 }}>Endereço</span></div>
             <div style={{ padding: '18px' }}><h2 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '1.4rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>Bem Viver</h2><p style={{ color: '#8fb3cc', fontSize: '0.85rem' }}>Av. Eng. Fábio Roberto Barnabé, 585<br />Vila Teller</p></div>

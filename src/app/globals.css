@@ -25,3 +25,50 @@ body {
   color: var(--text);
   min-height: 100vh;
 }
+
+.polo-grid {
+  display: grid;
+  grid-template-columns: 270px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .polo-grid {
+    grid-template-columns: 1fr;
+  }
+  .polo-aside {
+    position: static !important;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+  }
+  .polo-aside > * {
+    flex: 1 1 calc(50% - 7px) !important;
+    min-width: 140px;
+  }
+  .datas-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.polos-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 1024px) {
+  .polos-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .polos-grid {
+    grid-template-columns: 1fr;
+  }
+  .polos-container {
+    padding: 20px !important;
+    border-radius: 16px !important;
+  }
+}

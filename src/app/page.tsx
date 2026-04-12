@@ -266,7 +266,7 @@ export default function Inicio() {
 
         {/* Container tablet */}
         <AnimatedContent direction="vertical" distance={50} duration={0.6} delay={0.1}>
-          <motion.div style={{
+          <motion.div className="polos-container" style={{
             maxWidth: '1200px', 
             margin: '0 auto', 
             background: '#162a3d', 
@@ -275,11 +275,7 @@ export default function Inicio() {
             border: '1px solid rgba(255, 255, 255, 0.1)', 
             boxShadow: '0 25px 50px rgba(0, 0, 0, 0.5)',
           }}>
-            <div style={{
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(4, 1fr)', 
-              gap: '24px',
-            }}>
+            <div className="polos-grid" style={{ gap: '24px' }}>
               {poloData.map((polo, index) => (
                 <AnimatedContent 
                   key={polo.name} 

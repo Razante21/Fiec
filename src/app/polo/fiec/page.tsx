@@ -160,8 +160,8 @@ export default function PoloFiec() {
         </motion.span>
       </motion.header>
 
-      <div style={{ maxWidth: '1040px', margin: '44px auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '270px 1fr', gap: '32px', alignItems: 'start' }}>
-        <aside style={{ position: 'sticky', top: '24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+      <div className="polo-grid" style={{ maxWidth: '1040px', margin: '44px auto', padding: '0 24px' }}>
+        <aside className="polo-aside" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
