@@ -1,10 +1,10 @@
 import mysql from 'mysql2/promise';
 
-const host = 'sql100.infinityfree.com';
-const port = 3306;
-const user = 'if0_41629769';
-const password = 'Razante21';
-const database = 'if0_41629769_db_fiec';
+const host = process.env.MYSQLHOST || 'localhost';
+const port = parseInt(process.env.MYSQLPORT || '3306');
+const user = process.env.MYSQLUSER || 'root';
+const password = process.env.MYSQLPASSWORD || '';
+const database = process.env.MYSQLDATABASE || 'railway';
 
 console.log('DB Config:', { host, port, user, database });
 
