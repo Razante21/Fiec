@@ -61,19 +61,16 @@ export default function CronogramaPage() {
               Cronograma de Aulas
             </h2>
             <p className="text-gray-600 mb-8 max-w-lg mx-auto">
-              O cronograma integrado está sendo carregado. 
-              Por enquanto, você pode acessar a plataforma de cronograma 
-              através da aplicação separada.
+              O cronograma está disponível internamente no HUB.
+              Use o acesso abaixo para abrir a rota local.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-md mx-auto mt-8">
               <a
-                href="https://cronograma-alunos.vercel.app"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/cronograma-alunos"
                 className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium"
               >
-                Ir para Cronograma (Nova Aba)
+                Ir para Cronograma Alunos
               </a>
               <button
                 onClick={handleVoltar}
@@ -85,8 +82,8 @@ export default function CronogramaPage() {
 
             <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
               <p className="text-sm text-gray-700">
-                <strong>ℹ️ Informação:</strong> O cronograma será totalmente integrado 
-                ao HUB nos próximos passos de desenvolvimento utilizando a autenticação compartilhada.
+                <strong>ℹ️ Informação:</strong> Navegação atualizada para rota local do projeto,
+                sem redirecionamento para domínio externo.
               </p>
             </div>
           </div>

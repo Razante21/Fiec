@@ -31,7 +31,7 @@ const pages: PageCard[] = [
     titulo: '📅 Cronograma',
     descricao: 'Acompanhe as aulas e entregue seus exercícios',
     icon: '📅',
-    href: '/cronograma',
+    href: '/cronograma-alunos',
     requiresLogin: true,
     adminOnly: false,
     cor: 'from-green-500 to-green-600'
@@ -41,7 +41,7 @@ const pages: PageCard[] = [
     titulo: '⚙️ Admin Inscrições',
     descricao: 'Gerenciar polos, turmas e vagas',
     icon: '⚙️',
-    href: '/admin/inscricoes',
+    href: '/inscricoes/admin',
     requiresLogin: true,
     adminOnly: true,
     cor: 'from-purple-500 to-purple-600'
@@ -51,7 +51,7 @@ const pages: PageCard[] = [
     titulo: '⚙️ Admin Cronograma',
     descricao: 'Gerenciar aulas, exercícios e slides',
     icon: '⚙️',
-    href: '/admin/cronograma',
+    href: '/cronograma-alunos/admin',
     requiresLogin: true,
     adminOnly: true,
     cor: 'from-orange-500 to-orange-600'

@@ -112,12 +112,10 @@ export default function AdminCronogramaPage() {
               Acesso Rápido
             </h3>
             <a
-              href="https://cronograma-alunos.vercel.app"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/cronograma-alunos/admin"
               className="inline-block px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition font-medium"
             >
-              Ir para Plataforma de Cronograma →
+              Ir para Painel Cronograma Alunos →
             </a>
           </div>
         </div>
