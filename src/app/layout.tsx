@@ -6,6 +6,9 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'Inclusão Digital – Hub de Educação',
   description: 'Hub integrado de inscrições e cronograma - Inclusão Digital FIEC',
+  icons: {
+    icon: 'https://i.postimg.cc/MpRFphR6/Logo-digital-Edu-Portal-com-simbolos-educativos.png',
+  },
 }
 
 export default function RootLayout({
