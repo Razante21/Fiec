@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-export default function AdminInscricoesPage() {
+export default function AdminCronogramaPage() {
   const router = useRouter()
   const [usuario, setUsuario] = useState<string | null>(null)
   const [nivel, setNivel] = useState<string | null>(null)
@@ -29,7 +29,7 @@ export default function AdminInscricoesPage() {
   if (!carregado) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-purple-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-orange-600"></div>
       </div>
     )
   }
@@ -40,7 +40,7 @@ export default function AdminInscricoesPage() {
       <header className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">⚙️ Admin Inscrições</h1>
+            <h1 className="text-3xl font-bold text-gray-900">⚙️ Admin Cronograma</h1>
             <p className="text-gray-600 mt-1">{usuario && `Logado como: ${usuario}`}</p>
           </div>
           <button
@@ -55,30 +55,30 @@ export default function AdminInscricoesPage() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {/* Card: Polos */}
+          {/* Card: Aulas */}
           <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">📍 Polos</h3>
-            <p className="text-gray-600 mb-4">Gerenciar polos cadastrados</p>
-            <button className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">📚 Aulas</h3>
+            <p className="text-gray-600 mb-4">Criar e gerenciar aulas</p>
+            <button className="w-full py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition">
               Gerenciar
             </button>
           </div>
 
-          {/* Card: Turmas */}
+          {/* Card: Exercícios */}
           <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">🎓 Turmas</h3>
-            <p className="text-gray-600 mb-4">Criar, editar ou deletar turmas</p>
-            <button className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">✏️ Exercícios</h3>
+            <p className="text-gray-600 mb-4">Upload e gerenciamento de exercícios</p>
+            <button className="w-full py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition">
               Gerenciar
             </button>
           </div>
 
-          {/* Card: Inscrições */}
+          {/* Card: Slides */}
           <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">📋 Inscrições</h3>
-            <p className="text-gray-600 mb-4">Visualizar inscrições e vagas</p>
-            <button className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-              Visualizar
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">🎯 Slides</h3>
+            <p className="text-gray-600 mb-4">Upload e liberação de apresentações</p>
+            <button className="w-full py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition">
+              Gerenciar
             </button>
           </div>
         </div>
@@ -86,24 +86,37 @@ export default function AdminInscricoesPage() {
         {/* Info Section */}
         <div className="bg-white rounded-lg shadow p-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            Painel de Administração - Inscrições
+            Painel de Administração - Cronograma
           </h2>
           <p className="text-gray-600 mb-4">
-            Bem-vindo ao painel administrativo de inscrições. Aqui você pode:
+            Administre o cronograma de aulas e materiais didáticos:
           </p>
           <ul className="list-disc list-inside text-gray-600 space-y-2 ml-4">
-            <li>Gerenciar polos e suas informações</li>
-            <li>Criar e editar turmas por polo</li>
-            <li>Acompanhar inscrições em tempo real</li>
-            <li>Definir vagas disponíveis e datas de liberação</li>
-            <li>Visualizar lista de espera</li>
+            <li>Criar e editar aulas</li>
+            <li>Fazer upload de exercícios, slides e correções</li>
+            <li>Controlar a liberação de materiais</li>
+            <li>Acompanhar o progresso dos alunos</li>
+            <li>Gerenciar prazos e entregas</li>
           </ul>
 
           <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
             <p className="text-sm text-gray-700">
-              <strong>⚠️ Atenção:</strong> As funcionalidades completas de administração 
-              serão implementadas nas próximas fases de desenvolvimento.
+              <strong>⚠️ Atenção:</strong> O painel será totalmente integrado com a plataforma 
+              de cronograma-alunos nos próximos passos.
             </p>
+          </div>
+
+          {/* Acesso Rápido */}
+          <div className="mt-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">
+              Acesso Rápido
+            </h3>
+            <a
+              href="/cronograma-alunos/admin"
+              className="inline-block px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition font-medium"
+            >
+              Ir para Painel Cronograma Alunos →
+            </a>
           </div>
         </div>
       </main>
