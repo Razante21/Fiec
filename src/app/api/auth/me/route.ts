@@ -1,27 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query } from '@/lib/db'
+import { getBearerToken, verifySessionToken } from '@/lib/auth-server'
 
 export const dynamic = 'force-dynamic'
 
-type UsuarioRow = {
-  id: number
-  usuario: string
-  nivel: string
-}
-
-function extractUserIdFromToken(token: string): number | null {
-  const match = token.match(/^token_(\d+)_\d+$/)
-  if (!match) {
-    return null
-  }
-
-  return parseInt(match[1], 10)
-}
-
 export async function GET(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization') || ''
-    const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : ''
+    const token = getBearerToken(request)
 
     if (!token) {
       return NextResponse.json(
@@ -30,9 +15,9 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const userId = extractUserIdFromToken(token)
+    const session = verifySessionToken(token)
 
-    if (!userId) {
+    if (!session) {
       return NextResponse.json(
         { success: false, error: 'Token inválido' },
         { status: 401 }
@@ -41,10 +26,10 @@ export async function GET(request: NextRequest) {
 
     const resultado = await query({
       sql: 'SELECT id, usuario, nivel FROM usuarios WHERE id = ?',
-      values: [userId],
+      values: [session.sub],
     })
 
-    const usuarios = Array.isArray(resultado) ? (resultado as UsuarioRow[]) : []
+    const usuarios = Array.isArray(resultado) ? resultado as Array<{ id: number; usuario: string; nivel: string }> : []
 
     if (usuarios.length === 0) {
       return NextResponse.json(

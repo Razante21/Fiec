@@ -1,11 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { query } from '@/lib/db'
-
-type UsuarioRow = {
-  id: number
-  usuario: string
-  nivel: string
-}
+import { verifyLogin } from '@/models/usuario'
+import { createSessionToken } from '@/lib/auth-server'
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,15 +18,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Buscar usuário no banco de dados
-    const resultado = await query({
-      sql: 'SELECT id, usuario, nivel FROM usuarios WHERE usuario = ?',
-      values: [usuario],
-    })
+    const usuarioData = await verifyLogin(usuario, senha)
 
-    const usuarios = Array.isArray(resultado) ? (resultado as UsuarioRow[]) : []
-
-    if (usuarios.length === 0) {
+    if (!usuarioData) {
       return NextResponse.json(
         {
           erro: 'Usuário ou senha inválidos',
@@ -41,11 +30,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const usuarioData = usuarios[0]
-
-    // TODO: Implementar validação de senha com bcrypt
-    // Por enquanto, aceitar qualquer senha (apenas para desenvolvimento)
-    // Em produção: bcrypt.compare(senha, usuarioData.senha)
+    const token = createSessionToken({
+      sub: usuarioData.id,
+      usuario: usuarioData.usuario,
+      nivel: usuarioData.nivel as 'admin' | 'coordenador' | 'aluno',
+    })
 
     // Resposta bem-sucedida com dados do usuário
     return NextResponse.json(
@@ -54,7 +43,7 @@ export async function POST(request: NextRequest) {
         success: true,
         usuario: usuarioData.usuario,
         nivel: usuarioData.nivel,
-        token: `token_${usuarioData.id}_${Date.now()}`,
+        token,
         user: {
           id: usuarioData.id,
           usuario: usuarioData.usuario,

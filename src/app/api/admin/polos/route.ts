@@ -1,12 +1,17 @@
 import { NextResponse } from 'next/server';
 import { createPolo, updatePolo, getPolos, getPoloById } from '@/models/polo';
-import { verifyLogin, getUsuarioByUsuario } from '@/models/usuario';
+import { getBearerToken, verifySessionToken } from '@/lib/auth-server';
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const auth = request.headers.get('authorization');
-  
-  if (!auth) {
+  const token = getBearerToken(request);
+
+  if (!token) {
+    return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const session = verifySessionToken(token);
+
+  if (!session || session.nivel !== 'admin') {
     return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
   }
   

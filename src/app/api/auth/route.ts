@@ -1,27 +1,41 @@
 import { NextResponse } from 'next/server';
 import { verifyLogin } from '@/models/usuario';
+import { createSessionToken } from '@/lib/auth-server';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    console.log('Auth request:', body.usuario);
+    const usuario = body?.usuario || body?.username;
+    const senha = body?.senha || body?.password;
     
-    if (!body.usuario || !body.senha) {
+    if (!usuario || !senha) {
       return NextResponse.json({ success: false, error: 'Usuário e senha obrigatórios' }, { status: 400 });
     }
     
-    const usuario = await verifyLogin(body.usuario, body.senha);
+    const usuarioData = await verifyLogin(usuario, senha);
     
-    if (!usuario) {
+    if (!usuarioData) {
       return NextResponse.json({ success: false, error: 'Credenciais inválidas' }, { status: 401 });
     }
+
+    const token = createSessionToken({
+      sub: usuarioData.id,
+      usuario: usuarioData.usuario,
+      nivel: usuarioData.nivel as 'admin' | 'coordenador' | 'aluno',
+    });
     
     return NextResponse.json({ 
       success: true, 
       data: { 
-        id: usuario.id, 
-        usuario: usuario.usuario, 
-        nivel: usuario.nivel 
+        id: usuarioData.id, 
+        usuario: usuarioData.usuario, 
+        nivel: usuarioData.nivel,
+        token,
+        user: {
+          id: usuarioData.id,
+          usuario: usuarioData.usuario,
+          nivel: usuarioData.nivel,
+        }
       }
     });
   } catch (error: any) {

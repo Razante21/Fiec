@@ -1,8 +1,29 @@
 import { NextResponse } from 'next/server';
 import { createTurma, updateTurma, setLiberacao } from '@/models/turma';
 import { getTurmasByPolo, getTurmaById } from '@/models/turma';
+import { getBearerToken, verifySessionToken } from '@/lib/auth-server';
+
+function ensureAdmin(request: Request) {
+  const token = getBearerToken(request);
+
+  if (!token) {
+    return null;
+  }
+
+  const session = verifySessionToken(token);
+
+  if (!session || session.nivel !== 'admin') {
+    return null;
+  }
+
+  return session;
+}
 
 export async function GET(request: Request) {
+  if (!ensureAdmin(request)) {
+    return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+  }
+
   const { searchParams } = new URL(request.url);
   const poloSlug = searchParams.get('polo');
   const turmaId = searchParams.get('id');
@@ -25,6 +46,10 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  if (!ensureAdmin(request)) {
+    return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+  }
+
   const body = await request.json();
   
   try {
@@ -43,6 +68,10 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
+  if (!ensureAdmin(request)) {
+    return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+  }
+
   const body = await request.json();
   
   try {

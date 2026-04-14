@@ -46,6 +46,15 @@ export default function AdminPage() {
   const [appsScriptUrl, setAppsScriptUrl] = useState('')
   const [savingScriptUrl, setSavingScriptUrl] = useState(false)
 
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem('fiec_token')
+    if (!token) {
+      return {} as Record<string, string>
+    }
+
+    return { Authorization: `Bearer ${token}` }
+  }
+
   useEffect(() => {
     let mounted = true
 
@@ -87,7 +96,9 @@ export default function AdminPage() {
   const loadPolos = async () => {
     try {
       console.log('Carregando polos...')
-      const res = await fetch('/api/polos')
+      const res = await fetch('/api/polos', {
+        headers: getAuthHeaders(),
+      })
       console.log('Resposta:', res.status)
       const data = await res.json()
       console.log('Data:', data)
@@ -108,7 +119,9 @@ export default function AdminPage() {
     try {
       const polo = polos.find(p => p.id === poloId)
       if (!polo) return
-      const res = await fetch(`/api/turmas?polo=${polo.slug}`)
+      const res = await fetch(`/api/turmas?polo=${polo.slug}`, {
+        headers: getAuthHeaders(),
+      })
       const data = await res.json()
       if (data.success) {
         setTurmas(data.data)
@@ -124,11 +137,14 @@ export default function AdminPage() {
     try {
       const res = await fetch('/api/auth', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(loginForm),
       })
       const data = await res.json()
       if (data.success) {
-        localStorage.setItem('fiec_token', data.data.id)
+        localStorage.setItem('fiec_token', data.data.token || data.data.id)
         localStorage.setItem('fiec_usuario', data.data.usuario)
         localStorage.setItem('fiec_nivel', data.data.nivel)
         setLoggedIn(true)
@@ -157,6 +173,10 @@ export default function AdminPage() {
     try {
       const res = await fetch('/api/admin/turmas', {
         method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeaders(),
+        },
         body: JSON.stringify({
           action: 'liberar',
           id: turma.id,
@@ -179,6 +199,10 @@ export default function AdminPage() {
       if (editingTurma) {
         await fetch('/api/admin/turmas', {
           method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            ...getAuthHeaders(),
+          },
           body: JSON.stringify({
             id: editingTurma.id,
             modulo: turmaForm.modulo,
@@ -191,6 +215,10 @@ export default function AdminPage() {
       } else {
         await fetch('/api/admin/turmas', {
           method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...getAuthHeaders(),
+          },
           body: JSON.stringify({
             polo_id: selectedPolo,
             ...turmaForm,
@@ -211,6 +239,10 @@ export default function AdminPage() {
     try {
       await fetch('/api/admin/polos', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeaders(),
+        },
         body: JSON.stringify(poloForm),
       })
       setShowPoloModal(false)
@@ -223,7 +255,9 @@ export default function AdminPage() {
 
   const loadAppsScriptConfig = async () => {
     try {
-      const res = await fetch('/api/admin/config')
+      const res = await fetch('/api/admin/config', {
+        headers: getAuthHeaders(),
+      })
       const data = await res.json()
       if (data.success) {
         setAppsScriptUrl(data.data.appsScriptUrl || '')
@@ -238,6 +272,10 @@ export default function AdminPage() {
       setSavingScriptUrl(true)
       const res = await fetch('/api/admin/config', {
         method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeaders(),
+        },
         body: JSON.stringify({ appsScriptUrl }),
       })
       const data = await res.json()
