@@ -24,13 +24,14 @@ CREATE TABLE IF NOT EXISTS polos (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabela de turmas
-CREATE TABLE IF NOT EXISTS turmas (
+-- Tabela de alunos (inscritos em turmas)
+CREATE TABLE IF NOT EXISTS alunos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     polo_id INT NOT NULL,
     modulo VARCHAR(50) NOT NULL,
     dias VARCHAR(50) NOT NULL,
     horario VARCHAR(50) NOT NULL,
+    script_url VARCHAR(500),
     vagas_total INT DEFAULT 40,
     vagas_usadas INT DEFAULT 0,
     liberado BOOLEAN DEFAULT FALSE,
@@ -43,7 +44,7 @@ CREATE TABLE IF NOT EXISTS turmas (
 -- Tabela de inscrições
 CREATE TABLE IF NOT EXISTS inscricoes (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    turma_id INT NOT NULL,
+    aluno_id INT NOT NULL,
     nome VARCHAR(150) NOT NULL,
     data_nascimento DATE NOT NULL,
     cpf VARCHAR(11) NOT NULL,
@@ -57,20 +58,32 @@ CREATE TABLE IF NOT EXISTS inscricoes (
     termo4 BOOLEAN DEFAULT FALSE,
     status ENUM('pendente', 'confirmado', 'cancelado') DEFAULT 'pendente',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (turma_id) REFERENCES turmas(id) ON DELETE CASCADE
+    FOREIGN KEY (aluno_id) REFERENCES alunos(id) ON DELETE CASCADE
 );
 
 -- Tabela de lista de espera
 CREATE TABLE IF NOT EXISTS lista_espera (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    turma_id INT NOT NULL,
+    aluno_id INT NOT NULL,
     nome VARCHAR(150) NOT NULL,
     telefone VARCHAR(11) NOT NULL,
     email VARCHAR(150) NOT NULL,
     status ENUM('pendente', 'contatado', 'matriculado', 'expirado') DEFAULT 'pendente',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (turma_id) REFERENCES turmas(id) ON DELETE CASCADE
+    FOREIGN KEY (aluno_id) REFERENCES alunos(id) ON DELETE CASCADE
 );
+
+-- Tabela de configuracoes gerais
+CREATE TABLE IF NOT EXISTS configuracoes (
+    id INT PRIMARY KEY,
+    apps_script_url VARCHAR(500) NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- URL padrao do Apps Script (id fixo = 1)
+INSERT INTO configuracoes (id, apps_script_url) VALUES
+(1, 'https://script.google.com/macros/s/AKfycbweWUdM750BmfdjZkcmTYE6Bg7WxIO4Dp1kV7Z35CPKkiQ-C-QMpiYBa3i6FtEL8t-j/exec')
+ON DUPLICATE KEY UPDATE apps_script_url = apps_script_url;
 
 -- Inserir polos iniciais
 INSERT INTO polos (nome, slug, descricao) VALUES
@@ -87,8 +100,8 @@ INSERT INTO polos (nome, slug, descricao) VALUES
 INSERT INTO usuarios (usuario, senha, nivel) VALUES 
 ('admin', 'admin123', 'admin');
 
--- Inserir turmas do FIEC (polo_id = 1)
-INSERT INTO turmas (polo_id, modulo, dias, horario, vagas_total, liberado) VALUES 
+-- Inserir alunos (inscritos em turmas) do FIEC (polo_id = 1)
+INSERT INTO alunos (polo_id, modulo, dias, horario, vagas_total, liberado) VALUES 
 (1, 'Módulo I — Básico', '2ª e 4ª-feira', '08h30 às 10h00', 40, FALSE),
 (1, 'Módulo I — Básico', '3ª e 5ª-feira', '14h00 às 15h30', 40, FALSE),
 (1, 'Módulo I — Básico', '3ª e 5ª-feira', '19h00 às 20h30', 40, FALSE),
@@ -98,12 +111,12 @@ INSERT INTO turmas (polo_id, modulo, dias, horario, vagas_total, liberado) VALUE
 (1, 'Módulo II — Intermediário', '2ª e 4ª-feira', '19h00 às 20h30', 40, FALSE),
 (1, 'Módulo II — Intermediário', '3ª e 5ª-feira', '08h30 às 10h00', 40, FALSE);
 
--- Inserir turmas do CEU (polo_id = 2)
-INSERT INTO turmas (polo_id, modulo, dias, horario, vagas_total, liberado) VALUES 
+-- Inserir alunos (inscritos em turmas) do CEU (polo_id = 2)
+INSERT INTO alunos (polo_id, modulo, dias, horario, vagas_total, liberado) VALUES 
 (2, 'Módulo I — Básico', '3ª e 5ª-feira', '14h00 às 16h00', 40, FALSE);
 
--- Inserir turmas da Casa da Providência (polo_id = 4)
-INSERT INTO turmas (polo_id, modulo, dias, horario, vagas_total, liberado) VALUES 
+-- Inserir alunos (inscritos em turmas) da Casa da Providência (polo_id = 4)
+INSERT INTO alunos (polo_id, modulo, dias, horario, vagas_total, liberado) VALUES 
 (4, 'Módulo II — Intermediário', '2ª e 4ª-feira', '09h30 às 11h30', 40, FALSE);
 
 -- Inserir turmas do Sol-Sol (polo_id = 6)
