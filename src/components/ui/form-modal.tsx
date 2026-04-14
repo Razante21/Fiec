@@ -27,6 +27,7 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
   const [showNormas, setShowNormas] = useState(false)
   const [vagasRestantes, setVagasRestantes] = useState<number>(-1)
   const [isListaEspera, setIsListaEspera] = useState(listaEsperaOnly || false)
+  const [isMobile, setIsMobile] = useState(false)
   const [formData, setFormData] = useState({
     nome: '',
     dataNascimento: '',
@@ -69,6 +70,17 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
     setEnviado(false)
     setFormLista({ turma: '', nome: '', telefone: '', email: '' })
   }, [isOpen, listaEsperaOnly])
+
+  useEffect(() => {
+    const updateIsMobile = () => {
+      setIsMobile(window.innerWidth <= 640)
+    }
+
+    updateIsMobile()
+    window.addEventListener('resize', updateIsMobile)
+
+    return () => window.removeEventListener('resize', updateIsMobile)
+  }, [])
 
   useEffect(() => {
     if (scriptUrl && isOpen && !listaEsperaOnly) {
@@ -195,20 +207,23 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             style={{
               position: 'fixed',
-              top: '50%',
-              left: '50%',
-              marginTop: '-45vh',
-              marginLeft: '-240px',
-              width: '480px',
-              maxWidth: '92vw',
-              maxHeight: '85vh',
+              top: isMobile ? '12px' : '50%',
+              left: isMobile ? '12px' : '50%',
+              right: isMobile ? '12px' : 'auto',
+              bottom: isMobile ? '12px' : 'auto',
+              transform: isMobile ? 'none' : 'translate(-50%, -50%)',
+              width: isMobile ? 'auto' : '480px',
+              maxWidth: isMobile ? 'none' : '92vw',
+              maxHeight: isMobile ? 'calc(100dvh - 24px)' : '85vh',
               height: 'auto',
               background: 'linear-gradient(180deg, #162a3d 0%, #0d1a26 100%)',
-              borderRadius: '20px',
+              borderRadius: isMobile ? '16px' : '20px',
               border: '1px solid rgba(245, 166, 35, 0.3)',
               boxShadow: '0 25px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(245, 166, 35, 0.1)',
               overflow: 'hidden',
               zIndex: 9999,
+              display: 'flex',
+              flexDirection: 'column',
             }}
           >
             <motion.div
@@ -216,25 +231,27 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
               style={{
-                padding: '24px 24px 16px',
+                padding: isMobile ? '18px 16px 14px' : '24px 24px 16px',
                 borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
                 display: 'flex',
                 justifyContent: 'space-between',
-                alignItems: 'center',
+                alignItems: isMobile ? 'flex-start' : 'center',
+                gap: '12px',
               }}
             >
-              <div>
+              <div style={{ minWidth: 0, flex: 1 }}>
                 <motion.h2 
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 }}
                   style={{
                     fontFamily: "'Barlow Condensed', sans-serif",
-                    fontSize: '1.6rem',
+                    fontSize: isMobile ? '1.35rem' : '1.6rem',
                     fontWeight: 800,
                     textTransform: 'uppercase',
                     color: '#fff',
                     marginBottom: '4px',
+                    wordBreak: 'break-word',
                   }}
                 >
                   {listaEsperaOnly ? 'Lista de Espera' : polo}
@@ -289,6 +306,7 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  flexShrink: 0,
                 }}
               >
                 <X size={20} />
@@ -296,9 +314,11 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
             </motion.div>
 
             <div style={{
-              padding: '20px 24px 24px',
+              padding: isMobile ? '16px' : '20px 24px 24px',
               overflowY: 'auto',
-              maxHeight: 'calc(85vh - 100px)',
+              maxHeight: isMobile ? 'none' : 'calc(85vh - 100px)',
+              flex: 1,
+              minHeight: 0,
             }}>
               {enviado ? (
                 <motion.div 
@@ -532,7 +552,7 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '14px' }}
+                    style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '10px', marginBottom: '14px' }}
                   >
                     <div>
                       <label style={{ display: 'block', fontSize: '0.8rem', color: '#a0b2c1', marginBottom: '6px', fontWeight: 600 }}>
@@ -586,7 +606,7 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.25 }}
-                    style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '14px' }}
+                    style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '10px', marginBottom: '14px' }}
                   >
                     <div>
                       <label style={{ display: 'block', fontSize: '0.8rem', color: '#a0b2c1', marginBottom: '6px', fontWeight: 600 }}>
@@ -730,7 +750,7 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
                           background: 'rgba(0, 0, 0, 0.3)',
                           borderRadius: '10px',
                           border: '1px solid rgba(255, 255, 255, 0.1)',
-                          maxHeight: '200px',
+                            maxHeight: isMobile ? '160px' : '200px',
                           overflowY: 'auto',
                         }}
                       >

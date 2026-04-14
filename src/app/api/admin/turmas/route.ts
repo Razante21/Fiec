@@ -33,7 +33,8 @@ export async function POST(request: Request) {
       body.modulo,
       body.dias,
       body.horario,
-      body.vagas_total
+      body.vagas_total,
+      body.script_url
     );
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -50,7 +51,7 @@ export async function PUT(request: Request) {
       return NextResponse.json({ success: true });
     }
     
-    await updateTurma(body.id, body.modulo, body.dias, body.horario, body.ativo);
+    await updateTurma(body.id, body.modulo, body.dias, body.horario, body.ativo, body.script_url);
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ success: false, error: 'Erro ao atualizar turma' }, { status: 500 });

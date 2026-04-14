@@ -16,6 +16,7 @@ interface Turma {
   modulo: string
   dias: string
   horario: string
+  script_url: string | null
   vagas_total: number
   vagas_usadas: number
   liberado: number
@@ -37,10 +38,13 @@ export default function AdminPage() {
     modulo: '',
     dias: '',
     horario: '',
+    script_url: '',
     vagas_total: 40,
   })
   const [showPoloModal, setShowPoloModal] = useState(false)
   const [poloForm, setPoloForm] = useState({ nome: '', slug: '', descricao: '' })
+  const [appsScriptUrl, setAppsScriptUrl] = useState('')
+  const [savingScriptUrl, setSavingScriptUrl] = useState(false)
 
   useEffect(() => {
     const token = localStorage.getItem('fiec_token')
@@ -48,6 +52,7 @@ export default function AdminPage() {
     if (token && nivel === 'admin') {
       setLoggedIn(true)
       loadPolos()
+      loadAppsScriptConfig()
     } else {
       setLoading(false)
     }
@@ -107,6 +112,7 @@ export default function AdminPage() {
         localStorage.setItem('fiec_nivel', data.data.nivel)
         setLoggedIn(true)
         loadPolos()
+        loadAppsScriptConfig()
       } else {
         alert(data.error)
       }
@@ -155,6 +161,7 @@ export default function AdminPage() {
             modulo: turmaForm.modulo,
             dias: turmaForm.dias,
             horario: turmaForm.horario,
+            script_url: turmaForm.script_url,
             ativo: true,
           }),
         })
@@ -169,7 +176,7 @@ export default function AdminPage() {
       }
       setShowTurmaModal(false)
       setEditingTurma(null)
-      setTurmaForm({ modulo: '', dias: '', horario: '', vagas_total: 40 })
+      setTurmaForm({ modulo: '', dias: '', horario: '', script_url: '', vagas_total: 40 })
       loadTurmas(selectedPolo!)
     } catch (e) {
       alert('Erro ao salvar')
@@ -188,6 +195,38 @@ export default function AdminPage() {
       loadPolos()
     } catch (e) {
       alert('Erro ao criar polo')
+    }
+  }
+
+  const loadAppsScriptConfig = async () => {
+    try {
+      const res = await fetch('/api/admin/config')
+      const data = await res.json()
+      if (data.success) {
+        setAppsScriptUrl(data.data.appsScriptUrl || '')
+      }
+    } catch (e) {
+      console.error('Erro ao carregar URL do Apps Script:', e)
+    }
+  }
+
+  const saveAppsScriptConfig = async () => {
+    try {
+      setSavingScriptUrl(true)
+      const res = await fetch('/api/admin/config', {
+        method: 'PUT',
+        body: JSON.stringify({ appsScriptUrl }),
+      })
+      const data = await res.json()
+      if (!data.success) {
+        alert(data.error || 'Erro ao salvar URL')
+        return
+      }
+      alert('URL do Apps Script atualizada com sucesso!')
+    } catch (e) {
+      alert('Erro ao salvar URL do Apps Script')
+    } finally {
+      setSavingScriptUrl(false)
     }
   }
 
@@ -287,11 +326,31 @@ export default function AdminPage() {
           </div>
 
           <button
-            onClick={() => { setEditingTurma(null); setTurmaForm({ modulo: '', dias: '', horario: '', vagas_total: 40 }); setShowTurmaModal(true) }}
+            onClick={() => { setEditingTurma(null); setTurmaForm({ modulo: '', dias: '', horario: '', script_url: '', vagas_total: 40 }); setShowTurmaModal(true) }}
             style={{ width: '100%', padding: '14px', background: '#f5a623', border: 'none', borderRadius: '8px', color: '#0d1a26', fontSize: '0.9rem', fontWeight: 700, textTransform: 'uppercase', cursor: 'pointer' }}
           >
             + Nova Turma
           </button>
+
+          <div style={{ marginTop: '16px', background: '#1e3a52', borderRadius: '12px', padding: '16px' }}>
+            <h3 style={{ fontSize: '0.7rem', color: '#f5a623', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '12px' }}>
+              URL Apps Script
+            </h3>
+            <input
+              type="url"
+              value={appsScriptUrl}
+              onChange={e => setAppsScriptUrl(e.target.value)}
+              placeholder="https://script.google.com/macros/s/.../exec"
+              style={{ width: '100%', padding: '10px 12px', marginBottom: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', color: '#fff', fontSize: '0.8rem' }}
+            />
+            <button
+              onClick={saveAppsScriptConfig}
+              disabled={savingScriptUrl || !appsScriptUrl}
+              style={{ width: '100%', padding: '10px 12px', background: '#4a9eca', border: 'none', borderRadius: '8px', color: '#0d1a26', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', cursor: savingScriptUrl ? 'wait' : 'pointer', opacity: savingScriptUrl || !appsScriptUrl ? 0.7 : 1 }}
+            >
+              {savingScriptUrl ? 'Salvando...' : 'Salvar URL'}
+            </button>
+          </div>
         </aside>
 
         <main>
@@ -355,7 +414,7 @@ export default function AdminPage() {
                     {turma.liberado ? 'Bloquear' : 'Liberar'}
                   </button>
                   <button
-                    onClick={() => { setEditingTurma(turma); setTurmaForm({ modulo: turma.modulo, dias: turma.dias, horario: turma.horario, vagas_total: turma.vagas_total }); setShowTurmaModal(true) }}
+                    onClick={() => { setEditingTurma(turma); setTurmaForm({ modulo: turma.modulo, dias: turma.dias, horario: turma.horario, script_url: turma.script_url || '', vagas_total: turma.vagas_total }); setShowTurmaModal(true) }}
                     style={{ padding: '8px', background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '6px', color: '#8fb3cc', cursor: 'pointer' }}
                   >
                     Editar
@@ -398,6 +457,13 @@ export default function AdminPage() {
                 value={turmaForm.horario}
                 onChange={e => setTurmaForm({ ...turmaForm, horario: e.target.value })}
                 required
+                style={{ width: '100%', padding: '12px', marginBottom: '12px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', color: '#fff' }}
+              />
+              <input
+                type="url"
+                placeholder="URL do Apps Script da turma"
+                value={turmaForm.script_url}
+                onChange={e => setTurmaForm({ ...turmaForm, script_url: e.target.value })}
                 style={{ width: '100%', padding: '12px', marginBottom: '12px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', color: '#fff' }}
               />
               <input

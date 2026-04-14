@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import { AuthProvider } from '@/lib/auth-context'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Inscrições – Programa de Educação Digital',
-  description: 'FIEC - Programa de Educação Digital - II Semestre 2026',
+  title: 'Inclusão Digital – Hub de Educação',
+  description: 'Hub integrado de inscrições e cronograma - Inclusão Digital FIEC',
 }
 
 export default function RootLayout({
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body>
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
         <SpeedInsights />
       </body>
     </html>

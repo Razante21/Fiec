@@ -3,8 +3,8 @@ import mysql from 'mysql2/promise';
 const host = process.env.MYSQLHOST || 'localhost';
 const port = parseInt(process.env.MYSQLPORT || '3306');
 const user = process.env.MYSQLUSER || 'root';
-const password = process.env.MYSQLPASSWORD || '';
-const database = process.env.MYSQLDATABASE || 'railway';
+const password = process.env.MYSQLPASSWORD || process.env.MYSQL_ROOT_PASSWORD || '';
+const database = process.env.MYSQLDATABASE || process.env.MYSQL_DATABASE || 'railway';
 
 console.log('DB Config:', { host, port, user, database });
 

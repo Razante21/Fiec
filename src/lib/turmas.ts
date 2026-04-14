@@ -9,25 +9,54 @@ export interface ModuloData {
   esgotado: boolean
 }
 
-const SCRIPT_URL_TURMAS = "https://script.google.com/macros/s/AKfycbweWUdM750BmfdjZkcmTYE6Bg7WxIO4Dp1kV7Z35CPKkiQ-C-QMpiYBa3i6FtEL8t-j/exec"
-export const MASTER_URL = "https://script.google.com/macros/s/AKfycbweWUdM750BmfdjZkcmTYE6Bg7WxIO4Dp1kV7Z35CPKkiQ-C-QMpiYBa3i6FtEL8t-j/exec" // URL da planilha master paraInscrições e Lista de Espera
+export const MASTER_URL = "https://script.google.com/macros/s/AKfycbweWUdM750BmfdjZkcmTYE6Bg7WxIO4Dp1kV7Z35CPKkiQ-C-QMpiYBa3i6FtEL8t-j/exec" // URL da planilha master para inscrições e lista de espera
+
+let currentMasterUrl = MASTER_URL
+let loadedFromDb = false
+
+function poloToSlug(polo: string): string {
+  return polo
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+async function loadMasterUrl(): Promise<string> {
+  if (loadedFromDb) return currentMasterUrl
+
+  try {
+    const res = await fetch('/api/config')
+    const data = await res.json()
+
+    if (data?.success && data?.data?.appsScriptUrl) {
+      currentMasterUrl = data.data.appsScriptUrl
+    }
+  } catch (error) {
+    console.error('Erro ao carregar URL do Apps Script:', error)
+  }
+
+  loadedFromDb = true
+  return currentMasterUrl
+}
 
 export async function fetchTurmas(polo: string): Promise<ModuloData[]> {
   try {
-    const res = await fetch(`${SCRIPT_URL_TURMAS}?action=turmasPorPolo&polo=${encodeURIComponent(polo)}`)
+    const res = await fetch(`/api/turmas?polo=${encodeURIComponent(poloToSlug(polo))}`)
     const data = await res.json()
 
-    if (!data.turmas || data.turmas.length === 0) {
+    if (!data.success || !data.data || data.data.length === 0) {
       return []
     }
 
-    return data.turmas.map((t: any, index: number) => ({
-      id: `${polo}-${index}`,
+    return data.data.map((t: any) => ({
+      id: String(t.id),
       tag: t.modulo,
       dias: t.dias,
       horario: t.horario,
       formUrl: '',
-      scriptUrl: t.scriptUrl || '',
+      scriptUrl: t.script_url || '',
       vagas: -1,
       esgotado: false,
     }))
@@ -51,5 +80,5 @@ export async function fetchVagas(scriptUrl: string): Promise<number> {
 }
 
 export function getMasterUrl(): string {
-  return MASTER_URL
+  return currentMasterUrl
 }
