@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { FormModal } from '@/components/ui/form-modal'
-import { fetchTurmas, fetchVagas, getMasterUrl } from '@/lib/turmas'
+import { FormModal } from '@/app/inscricao/_components/form-modal'
+import { fetchTurmas, fetchVagas, getMasterUrl } from '@/app/inscricao/_presenter/turmas.presenter'
 
 const VAGAS_TOTAL = 40
 

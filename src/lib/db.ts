@@ -21,9 +21,20 @@ const pool = mysql.createPool({
 
 export default pool;
 
-export async function query(sql: string, params?: any[]) {
+export async function query(options: { sql: string; values?: any[] } | string, params?: any[]) {
   try {
-    const [rows] = await pool.execute(sql, params);
+    let sql: string;
+    let values: any[] = [];
+
+    if (typeof options === 'string') {
+      sql = options;
+      values = params || [];
+    } else {
+      sql = options.sql;
+      values = options.values || [];
+    }
+
+    const [rows] = await pool.execute(sql, values);
     return rows;
   } catch (error: any) {
     console.error('DB Query Error:', error.message)

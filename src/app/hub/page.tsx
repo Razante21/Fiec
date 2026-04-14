@@ -117,7 +117,7 @@ export default function HubPage() {
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                Inclusão Digital
+                Inclusão Digital Hub
               </h1>
               <p className="text-gray-600 mt-1">
                 {usuario && `Bem-vindo, ${usuario}`}
@@ -175,8 +175,8 @@ export default function HubPage() {
             ℹ️ Informações
           </h3>
           <p className="text-gray-600">
-            As inscrições não requerem login. Para acessar o cronograma e administração, 
-            faça login com suas credenciais.
+            Este Hub conecta dois projetos completos: Inscrições e Cronograma. 
+            Inscrições ficam abertas ao público e Cronograma/Admin seguem autenticação por perfil.
           </p>
         </motion.div>
       </main>

@@ -2,62 +2,62 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
-import { PoloCard } from '@/components/ui/polo-card'
+import { PoloCard } from '@/app/inscricao/_components/polo-card'
 
 const poloData = [
   { 
     name: 'Sol-Sol', 
     addr: 'Rua Athayde Puccinelli, 30\nJardim Flórida - Indaiatuba/SP', 
-    url: '/polo/sol-sol', 
+    url: '/inscricao/polo/sol-sol', 
     tag: '',
     image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&h=600&fit=crop'
   },
   { 
     name: 'FIEC', 
     addr: 'Av. Eng. Fábio Roberto Barnabé, 3405\nJardim Regina - Indaiatuba/SP', 
-    url: '/polo/fiec', 
+    url: '/inscricao/polo/fiec', 
     tag: '',
     image: 'https://images.unsplash.com/photo-1564981797816-52aabef2d9a9?w=800&h=600&fit=crop'
   },
   { 
     name: 'Comunidade Independente', 
     addr: 'Rua Alzira Barnabé, 240\nJardim Tropical - Indaiatuba/SP', 
-    url: '/polo/comunidade-independente', 
+    url: '/inscricao/polo/comunidade-independente', 
     tag: '',
     image: 'https://images.unsplash.com/photo-1576267423445-b2e0074d68a4?w=800&h=600&fit=crop'
   },
   { 
     name: 'CEU', 
     addr: 'Rua Juntalino Pieró Bom, 1500\nJardim São Conrado - Indaiatuba/SP', 
-    url: '/polo/ceu', 
+    url: '/inscricao/polo/ceu', 
     tag: '',
     image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&fit=crop'
   },
   { 
     name: 'Jardim Brasil', 
     addr: 'Rua Lourenço Martins do Amaral, 271\nJardim Brasil - Indaiatuba/SP', 
-    url: '/polo/jd-brasil', 
+    url: '/inscricao/polo/jd-brasil', 
     tag: '',
     image: 'https://images.unsplash.com/photo-1527192491265-7e15c55b1ed2?w=800&h=600&fit=crop'
   },
   { 
     name: 'Casa da Providência', 
     addr: 'Rua Aimore, 290\nJardim Dionéa - Indaiatuba/SP', 
-    url: '/polo/casa-da-providencia', 
+    url: '/inscricao/polo/casa-da-providencia', 
     tag: '',
     image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop'
   },
   { 
     name: 'Bem Viver', 
     addr: 'Av. Eng. Fábio Roberto Barnabé, 505\nVila Teller - Indaiatuba/SP', 
-    url: '/polo/bem-viver', 
+    url: '/inscricao/polo/bem-viver', 
     tag: 'Acima de 60 anos',
     image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&h=600&fit=crop'
   },
   { 
     name: 'Polo Veredas', 
     addr: 'Rua Clarindo Cassimiro Barbosa, s/n\nJardim Veredas - Indaiatuba/SP', 
-    url: '/polo/veredas', 
+    url: '/inscricao/polo/veredas', 
     tag: '',
     image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=600&fit=crop'
   },

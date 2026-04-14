@@ -2,8 +2,8 @@
 
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
-import { FormModal } from '@/components/ui/form-modal'
-import { fetchTurmas, fetchVagas, getMasterUrl } from '@/lib/turmas'
+import { FormModal } from '@/app/inscricao/_components/form-modal'
+import { fetchTurmas, fetchVagas, getMasterUrl } from '@/app/inscricao/_presenter/turmas.presenter'
 
 const VAGAS_TOTAL = 40
 
@@ -18,7 +18,7 @@ interface ModuloData {
   esgotado: boolean
 }
 
-export default function PoloCasaDaProvidencia() {
+export default function PoloJdBrasil() {
   const [modulos, setModulos] = useState<ModuloData[]>([])
   const [loading, setLoading] = useState(true)
   const [modalOpen, setModalOpen] = useState(false)
@@ -28,7 +28,7 @@ export default function PoloCasaDaProvidencia() {
   useEffect(() => {
     const loadTurmas = async () => {
       setLoading(true)
-      const turmas = await fetchTurmas('Casa da Providência')
+      const turmas = await fetchTurmas('JD Brasil')
       const turmasIniciais = turmas.map((t, index) => ({ ...t, vagas: -1, esgotado: false }))
       setModulos(turmasIniciais)
       setLoading(false)
@@ -56,12 +56,13 @@ export default function PoloCasaDaProvidencia() {
     <main className="min-h-screen">
       <motion.header initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ background: 'radial-gradient(ellipse 60% 60% at 8% 20%, rgba(245,166,35,.10) 0%, transparent 60%), linear-gradient(175deg, #091520 0%, #0d1a26 100%)', padding: '32px 24px 44px', textAlign: 'center', position: 'relative', borderBottom: '1px solid rgba(255,255,255,.07)' }}>
         <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}><a href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#8fb3cc', textDecoration: 'none', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '22px' }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><polyline points="15 18 9 12 15 6" /></svg>Todos os polos</a></motion.div>
-        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 'clamp(2.2rem, 7vw, 3.8rem)', textTransform: 'uppercase', margin: 0 }}>Polo Casa da Providência</motion.h1>
+        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 'clamp(2.2rem, 7vw, 3.8rem)', textTransform: 'uppercase', margin: 0 }}>Polo Jardim Brasil</motion.h1>
+        <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} style={{ display: 'block', fontSize: '0.82rem', color: '#8fb3cc', marginTop: '8px' }}>Sociedade de Amigos do Bairro Sobrasil</motion.span>
       </motion.header>
 
       <div className="polo-grid" style={{ maxWidth: '1040px', margin: '44px auto', padding: '0 24px' }}>
         <aside className="polo-aside" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }} style={{ background: '#1e3a52', borderRadius: '12px', border: '1px solid rgba(255,255,255,.07)', overflow: 'hidden' }}><div style={{ background: '#162a3d', padding: '14px 18px', borderBottom: '1px solid rgba(255,255,255,.07)' }}><span style={{ fontSize: '0.66rem', textTransform: 'uppercase', letterSpacing: '0.18em', color: '#f5a623', fontWeight: 700 }}>Endereço</span></div><div style={{ padding: '18px' }}><h2 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '1.4rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>Casa da Providência</h2><p style={{ color: '#8fb3cc', fontSize: '0.85rem' }}>Rua Aimore, 290<br />Jardim Olinda</p></div></motion.div>
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }} style={{ background: '#1e3a52', borderRadius: '12px', border: '1px solid rgba(255,255,255,.07)', overflow: 'hidden' }}><div style={{ background: '#162a3d', padding: '14px 18px', borderBottom: '1px solid rgba(255,255,255,.07)' }}><span style={{ fontSize: '0.66rem', textTransform: 'uppercase', letterSpacing: '0.18em', color: '#f5a623', fontWeight: 700 }}>Endereço</span></div><div style={{ padding: '18px' }}><h2 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '1.4rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px' }}>Jardim Brasil</h2><p style={{ color: '#8fb3cc', fontSize: '0.85rem' }}>Rua Lourenço Martim do Amaral, 271<br />Jardim Brasil</p></div></motion.div>
           <motion.button onClick={() => setListaEsperaModalOpen(true)} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 }} whileHover={{ background: '#4a9eca', color: '#0d1a26' }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'transparent', border: '1.5px solid #4a9eca', color: '#4a9eca', fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: '0.88rem', letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none', padding: '11px 16px', borderRadius: '10px', cursor: 'pointer' }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></svg>Lista de Espera</motion.button>
         </aside>
 
@@ -125,7 +126,7 @@ export default function PoloCasaDaProvidencia() {
       <FormModal
         isOpen={modalOpen}
         onClose={() => { setModalOpen(false); setSelectedModulo(null) }}
-        polo="Polo Casa da Providência"
+        polo="Polo Jardim Brasil"
         modulo={selectedModulo?.tag || ''}
         dias={selectedModulo?.dias || ''}
         horario={selectedModulo?.horario || ''}
@@ -136,14 +137,14 @@ export default function PoloCasaDaProvidencia() {
       <FormModal
         isOpen={listaEsperaModalOpen}
         onClose={() => setListaEsperaModalOpen(false)}
-        polo="Polo Casa da Providência"
+        polo="Polo Jardim Brasil"
         modulo=""
         dias=""
         horario=""
         scriptUrl=""
         masterUrl={getMasterUrl()}
         listaEsperaOnly
-        listaEsperaTurmas={modulos.map(m => `Casa da Providência: ${m.tag} - ${m.dias} - ${m.horario}`)}
+        listaEsperaTurmas={modulos.map(m => `JD Brasil: ${m.tag} - ${m.dias} - ${m.horario}`)}
       />
     </main>
   )

@@ -11,24 +11,39 @@ export default function LoginPage() {
   const [carregando, setCarregando] = useState(false)
   const [erro, setErro] = useState('')
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setCarregando(true)
     setErro('')
 
     try {
-      // TODO: Integrar com API de autenticação
-      // Por enquanto, validação básica
       if (!usuario || !senha) {
         setErro('Preencha todos os campos')
         setCarregando(false)
         return
       }
 
-      // Simulação de login bem-sucedido
-      // Em produção, fazer chamada API e salvar token
-      localStorage.setItem('usuario', usuario)
-      localStorage.setItem('nivel', 'aluno') // TODO: obter do backend
+      // Chamada à API de autenticação
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ usuario, senha }),
+      })
+
+      const dados = await response.json()
+
+      if (!response.ok) {
+        setErro(dados.erro || 'Erro ao fazer login')
+        setCarregando(false)
+        return
+      }
+
+      // Salvar dados no localStorage
+      localStorage.setItem('usuario', dados.usuario)
+      localStorage.setItem('nivel', dados.nivel)
+      localStorage.setItem('token', dados.token)
       
       // Redirecionar para hub
       router.push('/hub')
