@@ -1,7 +1,17 @@
 'use client'
 
-import CronogramaPage from '@/app/cronograma/page'
+import { useMemo } from 'react'
 
 export default function CronogramaAlunosPage() {
-  return <CronogramaPage />
+  const src = useMemo(() => '/cronograma-alunos-app/index.html#/', [])
+
+  return (
+    <main className="h-screen w-full overflow-hidden bg-white">
+      <iframe
+        title="Cronograma Alunos"
+        src={src}
+        className="h-full w-full border-0"
+      />
+    </main>
+  )
 }
