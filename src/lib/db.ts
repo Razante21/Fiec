@@ -19,6 +19,22 @@ const pool = mysql.createPool({
   queueLimit: 0,
 });
 
+function assertSingleStatement(sql: string) {
+  // MySQL aceita ';' final opcional; qualquer ';' extra indica múltiplos comandos.
+  const normalized = sql.trim();
+  if (!normalized) {
+    throw new Error('SQL vazio nao e permitido');
+  }
+
+  const stripped = normalized.endsWith(';')
+    ? normalized.slice(0, -1).trim()
+    : normalized;
+
+  if (stripped.includes(';')) {
+    throw new Error('Apenas 1 comando SQL por execucao e permitido');
+  }
+}
+
 export default pool;
 
 export async function query(options: { sql: string; values?: any[] } | string, params?: any[]) {
@@ -33,6 +49,8 @@ export async function query(options: { sql: string; values?: any[] } | string, p
       sql = options.sql;
       values = options.values || [];
     }
+
+    assertSingleStatement(sql);
 
     const [rows] = await pool.execute(sql, values);
     return rows;
