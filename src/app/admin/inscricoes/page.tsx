@@ -47,14 +47,34 @@ export default function AdminPage() {
   const [savingScriptUrl, setSavingScriptUrl] = useState(false)
 
   useEffect(() => {
-    const token = localStorage.getItem('fiec_token')
-    const nivel = localStorage.getItem('fiec_nivel')
-    if (token && nivel === 'admin') {
+    let mounted = true
+
+    const initializeAdmin = async () => {
+      const token = localStorage.getItem('fiec_token')
+      const nivel = localStorage.getItem('fiec_nivel')
+
+      if (!token || nivel !== 'admin') {
+        if (mounted) {
+          setLoading(false)
+        }
+        return
+      }
+
       setLoggedIn(true)
-      loadPolos()
-      loadAppsScriptConfig()
-    } else {
-      setLoading(false)
+
+      try {
+        await Promise.all([loadPolos(), loadAppsScriptConfig()])
+      } finally {
+        if (mounted) {
+          setLoading(false)
+        }
+      }
+    }
+
+    initializeAdmin()
+
+    return () => {
+      mounted = false
     }
   }, [])
 
@@ -100,6 +120,7 @@ export default function AdminPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
+    setLoading(true)
     try {
       const res = await fetch('/api/auth', {
         method: 'POST',
@@ -111,13 +132,14 @@ export default function AdminPage() {
         localStorage.setItem('fiec_usuario', data.data.usuario)
         localStorage.setItem('fiec_nivel', data.data.nivel)
         setLoggedIn(true)
-        loadPolos()
-        loadAppsScriptConfig()
+        await Promise.all([loadPolos(), loadAppsScriptConfig()])
       } else {
         alert(data.error)
       }
     } catch (e) {
       alert('Erro ao fazer login')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -126,6 +148,7 @@ export default function AdminPage() {
     localStorage.removeItem('fiec_usuario')
     localStorage.removeItem('fiec_nivel')
     setLoggedIn(false)
+    setLoading(false)
     setPolos([])
     setTurmas([])
   }

@@ -9,11 +9,16 @@ type UsuarioRow = {
 
 export async function POST(request: NextRequest) {
   try {
-    const { usuario, senha } = await request.json()
+    const body = await request.json()
+    const usuario = body?.usuario || body?.username
+    const senha = body?.senha || body?.password
 
     if (!usuario || !senha) {
       return NextResponse.json(
-        { erro: 'Usuário e senha são obrigatórios' },
+        {
+          erro: 'Usuário e senha são obrigatórios',
+          error: 'Usuario e senha sao obrigatorios',
+        },
         { status: 400 }
       )
     }
@@ -28,7 +33,10 @@ export async function POST(request: NextRequest) {
 
     if (usuarios.length === 0) {
       return NextResponse.json(
-        { erro: 'Usuário ou senha inválidos' },
+        {
+          erro: 'Usuário ou senha inválidos',
+          error: 'Usuario ou senha invalidos',
+        },
         { status: 401 }
       )
     }
@@ -43,16 +51,25 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         sucesso: true,
+        success: true,
         usuario: usuarioData.usuario,
         nivel: usuarioData.nivel,
-        token: `token_${usuarioData.id}_${Date.now()}` // TODO: Implementar JWT real
+        token: `token_${usuarioData.id}_${Date.now()}`,
+        user: {
+          id: usuarioData.id,
+          usuario: usuarioData.usuario,
+          nivel: usuarioData.nivel,
+        },
       },
       { status: 200 }
     )
   } catch (erro) {
     console.error('Erro na autenticação:', erro)
     return NextResponse.json(
-      { erro: 'Erro interno do servidor' },
+      {
+        erro: 'Erro interno do servidor',
+        error: 'Erro interno do servidor',
+      },
       { status: 500 }
     )
   }
