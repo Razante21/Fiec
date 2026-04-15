@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
+import { useAuthActions, useCurrentUser, useProtectedRoute } from '@/lib/auth-hooks'
 
 interface PageCard {
   id: string
@@ -80,40 +80,19 @@ const pages: PageCard[] = [
 
 export default function HubPage() {
   const router = useRouter()
-  const [usuario, setUsuario] = useState<string | null>(null)
-  const [nivel, setNivel] = useState<string | null>(null)
-  const [carregado, setCarregado] = useState(false)
-
-  useEffect(() => {
-    // Verificar se usuário está logado
-    const usuarioSalvo = localStorage.getItem('usuario')
-    const nivelSalvo = localStorage.getItem('nivel')
-
-    if (!usuarioSalvo) {
-      // Se não estiver logado, redirecionar para login
-      router.push('/login')
-    } else {
-      setUsuario(usuarioSalvo)
-      setNivel(nivelSalvo)
-      setCarregado(true)
-    }
-  }, [router])
-
-  const handleLogout = () => {
-    localStorage.removeItem('usuario')
-    localStorage.removeItem('nivel')
-    router.push('/login')
-  }
+  const { isReady, isAuthenticated, isAdmin } = useProtectedRoute(true, false)
+  const usuario = useCurrentUser()
+  const { handleLogout } = useAuthActions()
 
   const handlePageClick = (page: PageCard) => {
-    if (page.requiresLogin && !usuario) {
+    if (page.requiresLogin && !isAuthenticated) {
       router.push('/login')
       return
     }
     router.push(page.href)
   }
 
-  if (!carregado) {
+  if (!isReady) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-blue-600"></div>
@@ -123,7 +102,7 @@ export default function HubPage() {
 
   // Filtrar páginas que o usuário pode ver
   const paginasVisiveis = pages.filter(page => {
-    if (page.adminOnly && nivel !== 'admin') {
+    if (page.adminOnly && !isAdmin) {
       return false
     }
     return true
@@ -140,8 +119,8 @@ export default function HubPage() {
                 Inclusão Digital Hub
               </h1>
               <p className="text-gray-600 mt-1">
-                {usuario && `Bem-vindo, ${usuario}`}
-                {nivel === 'admin' && ' (Administrador)'}
+                {usuario.usuario && `Bem-vindo, ${usuario.usuario}`}
+                {isAdmin && ' (Administrador)'}
               </p>
             </div>
             <button
@@ -160,7 +139,7 @@ export default function HubPage() {
           {paginasVisiveis.map((page, index) => (
             <motion.button
               key={page.id}
-              initial={{ opacity: 0, scale: 0.8 }}
+              initial={false}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
               onClick={() => handlePageClick(page)}
@@ -170,7 +149,7 @@ export default function HubPage() {
                 <div className="text-4xl mb-4">{page.icon}</div>
                 <h2 className="text-2xl font-bold mb-2">{page.titulo}</h2>
                 <p className="text-white/90 mb-4">{page.descricao}</p>
-                {page.requiresLogin && !usuario && (
+                {page.requiresLogin && !isAuthenticated && (
                   <div className="text-sm text-white/70 italic">
                     Requer login
                   </div>
@@ -186,7 +165,7 @@ export default function HubPage() {
 
         {/* Info Message */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
           className="mt-12 bg-white rounded-lg shadow p-6"

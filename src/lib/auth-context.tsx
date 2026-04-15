@@ -29,19 +29,66 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Carregar dados salvos no localStorage ao montar
   useEffect(() => {
-    const usuarioSalvo = localStorage.getItem('usuario')
-    const nivelSalvo = localStorage.getItem('nivel')
-    const tokenSalvo = localStorage.getItem('token')
+    let ativo = true
 
-    if (usuarioSalvo) {
-      setUsuario({
-        usuario: usuarioSalvo,
-        nivel: (nivelSalvo as any) || null,
-        token: tokenSalvo || null
-      })
+    const limparSessao = () => {
+      localStorage.removeItem('usuario')
+      localStorage.removeItem('nivel')
+      localStorage.removeItem('token')
     }
 
-    setCarregando(false)
+    const carregarSessao = async () => {
+      const usuarioSalvo = localStorage.getItem('usuario')
+      const nivelSalvo = localStorage.getItem('nivel')
+      const tokenSalvo = localStorage.getItem('token')
+
+      if (!usuarioSalvo || !tokenSalvo) {
+        limparSessao()
+        if (ativo) {
+          setUsuario({ usuario: null, nivel: null, token: null })
+          setCarregando(false)
+        }
+        return
+      }
+
+      try {
+        const response = await fetch('/api/auth/me', {
+          headers: {
+            Authorization: `Bearer ${tokenSalvo}`,
+          },
+          cache: 'no-store',
+        })
+
+        const dados = await response.json().catch(() => null)
+
+        if (!response.ok || !dados?.success || !dados?.user) {
+          throw new Error('Sessão inválida')
+        }
+
+        if (ativo) {
+          setUsuario({
+            usuario: dados.user.usuario || usuarioSalvo,
+            nivel: (dados.user.nivel as UsuarioAuth['nivel']) || (nivelSalvo as UsuarioAuth['nivel']) || null,
+            token: tokenSalvo,
+          })
+        }
+      } catch {
+        limparSessao()
+        if (ativo) {
+          setUsuario({ usuario: null, nivel: null, token: null })
+        }
+      } finally {
+        if (ativo) {
+          setCarregando(false)
+        }
+      }
+    }
+
+    carregarSessao()
+
+    return () => {
+      ativo = false
+    }
   }, [])
 
   const login = (usuario: string, nivel: string, token?: string) => {

@@ -1,32 +1,18 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useCurrentUser, useProtectedRoute } from '@/lib/auth-hooks'
 
 export default function AdminInscricoesPage() {
   const router = useRouter()
-  const [usuario, setUsuario] = useState<string | null>(null)
-  const [nivel, setNivel] = useState<string | null>(null)
-  const [carregado, setCarregado] = useState(false)
-
-  useEffect(() => {
-    const usuarioSalvo = localStorage.getItem('usuario')
-    const nivelSalvo = localStorage.getItem('nivel')
-
-    if (!usuarioSalvo || nivelSalvo !== 'admin') {
-      router.push('/hub')
-    } else {
-      setUsuario(usuarioSalvo)
-      setNivel(nivelSalvo)
-      setCarregado(true)
-    }
-  }, [router])
+  const { isReady } = useProtectedRoute(true, true)
+  const usuario = useCurrentUser()
 
   const handleVoltar = () => {
     router.push('/hub')
   }
 
-  if (!carregado) {
+  if (!isReady) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-purple-600"></div>
@@ -41,7 +27,7 @@ export default function AdminInscricoesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">⚙️ Admin Inscrições</h1>
-            <p className="text-gray-600 mt-1">{usuario && `Logado como: ${usuario}`}</p>
+            <p className="text-gray-600 mt-1">{usuario.usuario && `Logado como: ${usuario.usuario}`}</p>
           </div>
           <button
             onClick={handleVoltar}
