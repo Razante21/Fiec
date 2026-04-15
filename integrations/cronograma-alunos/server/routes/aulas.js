@@ -78,7 +78,7 @@ router.put('/:id', authenticateToken, checkRole(['professor']), async (req, res)
     const { 
       titulo, descricao, data, tipo, ordem, status,
       exercicio, slide, correcao,
-      liberarExe, liberarSli, liberateCorr
+      liberarExe, liberarSli, liberarCorr
     } = req.body;
 
     const [aulas] = await pool.execute(
@@ -94,9 +94,9 @@ router.put('/:id', authenticateToken, checkRole(['professor']), async (req, res)
       `UPDATE aulas SET 
         titulo = ?, descricao = ?, data = ?, tipo = ?, ordem = ?, status = ?,
         exercicio = ?, slide = ?, correcao = ?,
-        liberarSli = ?, liberarCorr = ?
+        liberarExe = ?, liberarSli = ?, liberarCorr = ?
        WHERE id = ? AND fk_professor_id = ?`,
-      [titulo, descricao, data, tipo, ordem, status, exercicio, slide, correcao, liberarSli, liberateCorr, id, req.user.id_nivel]
+      [titulo, descricao, data, tipo, ordem, status, exercicio, slide, correcao, liberarExe || '', liberarSli || '', liberarCorr || '', id, req.user.id_nivel]
     );
 
     res.json({ success: true, message: 'Aula atualizada com sucesso' });
