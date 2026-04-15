@@ -37,16 +37,6 @@ const pages: PageCard[] = [
     cor: 'from-green-500 to-green-600'
   },
   {
-    id: 'cronograma-estagiarios',
-    titulo: '🧑‍🏫 Cronograma Estagiários',
-    descricao: 'Área de professores/estagiários para montar e liberar aulas',
-    icon: '🧑‍🏫',
-    href: '/cronograma-estagiarios',
-    requiresLogin: true,
-    adminOnly: false,
-    cor: 'from-cyan-500 to-cyan-600'
-  },
-  {
     id: 'admin-inscricoes',
     titulo: '⚙️ Admin Inscrições',
     descricao: 'Gerenciar polos, turmas e vagas',
@@ -65,16 +55,6 @@ const pages: PageCard[] = [
     requiresLogin: true,
     adminOnly: true,
     cor: 'from-orange-500 to-orange-600'
-  },
-  {
-    id: 'admin-cronograma-estagiarios',
-    titulo: '⚙️ Admin Cronograma Estagiários',
-    descricao: 'Painel administrativo compartilhado de turmas e professores',
-    icon: '🛠️',
-    href: '/cronograma-estagiarios/admin',
-    requiresLogin: true,
-    adminOnly: true,
-    cor: 'from-amber-500 to-amber-600'
   },
 ]
 
@@ -196,7 +176,7 @@ export default function HubPage() {
           </h3>
           <p className="text-gray-600">
             Este Hub conecta dois projetos completos: Inscrições e Cronograma. 
-            Inscrições ficam abertas ao público e os cronogramas (alunos/estagiários) compartilham autenticação e dados.
+            Inscrições ficam abertas ao público e Cronograma/Admin seguem autenticação por perfil.
           </p>
         </motion.div>
       </main>
