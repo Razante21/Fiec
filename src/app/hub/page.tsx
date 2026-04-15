@@ -80,7 +80,7 @@ const pages: PageCard[] = [
 
 export default function HubPage() {
   const router = useRouter()
-  const { isReady, isAuthenticated, isAdmin } = useProtectedRoute(true, false)
+  const { isReady, isAuthenticated, isAdmin } = useProtectedRoute(false, false)
   const usuario = useCurrentUser()
   const { handleLogout } = useAuthActions()
 
@@ -119,16 +119,26 @@ export default function HubPage() {
                 Inclusão Digital Hub
               </h1>
               <p className="text-gray-600 mt-1">
-                {usuario.usuario && `Bem-vindo, ${usuario.usuario}`}
-                {isAdmin && ' (Administrador)'}
+                {usuario.usuario
+                  ? `Bem-vindo, ${usuario.usuario}${isAdmin ? ' (Administrador)' : ''}`
+                  : 'Acesso público ao hub. Faça login para áreas restritas.'}
               </p>
             </div>
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium"
-            >
-              Sair
-            </button>
+            {isAuthenticated ? (
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium"
+              >
+                Sair
+              </button>
+            ) : (
+              <button
+                onClick={() => router.push('/login')}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
+              >
+                Entrar
+              </button>
+            )}
           </div>
         </div>
       </header>
