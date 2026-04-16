@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "concurrently \"next dev\" \"npm --prefix integrations/cronograma-alunos/client run dev\" \"npm --prefix integrations/cronograma-alunos/server run dev\"",
+    "build": "npm --prefix integrations/cronograma-alunos/client run build && cp -r integrations/cronograma-alunos/client/dist/* public/cronograma-alunos-app/ && next build",
     "start": "next start"
   },
   "dependencies": {
     "@vercel/speed-insights": "^2.0.0",
+    "bcryptjs": "^3.0.3",
     "framer-motion": "^11.2.10",
     "gsap": "^3.12.5",
     "lucide-react": "^1.8.0",
@@ -23,6 +24,7 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "autoprefixer": "^10.4.19",
+    "concurrently": "^9.2.1",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5"

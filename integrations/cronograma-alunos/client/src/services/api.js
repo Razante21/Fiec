@@ -1,4 +1,4 @@
-const API_URL = '/api';
+const API_URL = '/api/cronograma-alunos';
 
 const api = {
   async get(endpoint) {
