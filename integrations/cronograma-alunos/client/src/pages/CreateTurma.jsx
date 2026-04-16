@@ -10,6 +10,9 @@ function CreateTurma() {
   const [descricao, setDescricao] = useState('');
   const [professor, setProfessor] = useState('');
   const [professores, setProfessores] = useState([]);
+  const [turmasInscricoes, setTurmasInscricoes] = useState([]);
+  const [origemInscricaoId, setOrigemInscricaoId] = useState('');
+  const [warning, setWarning] = useState('');
   const [showSenha, setShowSenha] = useState(false);
   const [showConfirmar, setShowConfirmar] = useState(false);
   const [error, setError] = useState('');
@@ -18,16 +21,49 @@ function CreateTurma() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    loadProfessores();
+    loadInitialData();
   }, []);
 
-  const loadProfessores = async () => {
+  const loadInitialData = async () => {
+    setError('');
+    setWarning('');
+
     try {
-      const data = await api.get('/professores');
-      setProfessores(data);
+      const [profData, inscricoesData] = await Promise.all([
+        api.get('/professores'),
+        api.get('/integration/inscricoes/turmas')
+      ]);
+
+      setProfessores(profData);
+      setTurmasInscricoes(inscricoesData);
     } catch (err) {
-      setError(err.message);
+      try {
+        const profData = await api.get('/professores');
+        setProfessores(profData);
+        setWarning('Não foi possível carregar as turmas de inscrições agora. Você pode cadastrar manualmente.');
+      } catch (profErr) {
+        setError(profErr.message);
+      }
     }
+  };
+
+  const handleSelectTurmaInscricao = (value) => {
+    setOrigemInscricaoId(value);
+
+    if (!value) {
+      return;
+    }
+
+    const selected = turmasInscricoes.find((item) => String(item.id) === value);
+    if (!selected) {
+      return;
+    }
+
+    const nomeTurma = `${selected.modulo} - ${selected.polo_nome || 'Sem polo'}`;
+    const descricaoTurma = `${selected.dias || 'Dias nao informados'} | ${selected.horario || 'Horario nao informado'}`;
+
+    setTurma(nomeTurma);
+    setDescricao(descricaoTurma);
   };
 
   const handleSubmit = async (e) => {
@@ -104,8 +140,32 @@ function CreateTurma() {
         </div>
       )}
 
+      {warning && (
+        <div className="mb-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4">
+          <p className="text-sm text-amber-300">{warning}</p>
+        </div>
+      )}
+
       <div className="bg-[#111827] border border-[#1F2C42] rounded-2xl p-8">
         <form onSubmit={handleSubmit} className="space-y-4">
+          {turmasInscricoes.length > 0 && (
+            <div>
+              <label className="block text-xs uppercase tracking-widest text-[#8DA4BF] mb-1.5">Origem (Inscrições)</label>
+              <select
+                value={origemInscricaoId}
+                onChange={(e) => handleSelectTurmaInscricao(e.target.value)}
+                className="field-input"
+              >
+                <option value="">Selecionar turma de inscrições (opcional)...</option>
+                {turmasInscricoes.map((item) => (
+                  <option key={item.id} value={String(item.id)}>
+                    #{item.id} - {item.modulo} - {item.polo_nome || 'Sem polo'} - {item.dias} - {item.horario}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
           <div>
             <label className="block text-xs uppercase tracking-widest text-[#8DA4BF] mb-1.5">Nome do usuário (login)</label>
             <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} placeholder="Nome de login da turma" className="field-input" required />

@@ -273,6 +273,31 @@ async function handleGet(path: string[], request: NextRequest) {
     return NextResponse.json(rows)
   }
 
+  if (path[0] === 'integration' && path[1] === 'inscricoes' && path[2] === 'turmas' && path.length === 3) {
+    const roleCheck = checkRole(context, ['administrador'])
+    if (!roleCheck.ok) {
+      return roleCheck.response
+    }
+
+    const [rows] = await pool.execute(`
+      SELECT
+        a.id,
+        a.modulo,
+        a.dias,
+        a.horario,
+        a.ativo,
+        a.liberado,
+        p.nome AS polo_nome,
+        p.slug AS polo_slug
+      FROM alunos a
+      LEFT JOIN polos p ON p.id = a.polo_id
+      WHERE a.ativo = TRUE
+      ORDER BY p.nome, a.modulo, a.dias, a.horario
+    `)
+
+    return NextResponse.json(rows)
+  }
+
   if (path[0] === 'aulas' && path[1] === 'aluno' && path.length === 2) {
     const roleCheck = checkRole(context, ['aluno'])
     if (!roleCheck.ok) {

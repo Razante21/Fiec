@@ -120,7 +120,7 @@ function AdminPainel() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
                   </div>
-                  <span className="text-sm text-[#E8EFF7] font-medium">{turma.nome}</span>
+                  <span className="text-sm text-[#E8EFF7] font-medium">{turma.turma}</span>
                 </div>
                 <Link to={`/admin/excluir/turma/${turma.id}`}
                    className="text-xs font-semibold px-3 py-1.5 rounded-lg text-red-400 border border-red-500/20 hover:bg-red-500/10 transition-all duration-150">
