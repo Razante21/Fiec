@@ -1,5 +1,6 @@
 // Gera v2/app_config.js a partir das variáveis de ambiente do Vercel
 const fs = require('fs');
+const path = require('path');
 
 const config = `window.APP_CONFIG = {
   SUPABASE_URL: '${process.env.SUPABASE_URL || ''}',
@@ -9,5 +10,6 @@ const config = `window.APP_CONFIG = {
   GEMINI_MODEL: '${process.env.GEMINI_MODEL || 'gemini-2.0-flash-lite'}'
 };`;
 
-fs.writeFileSync('v2/app_config.js', config);
+const outputPath = path.join(__dirname, 'v2', 'app_config.js');
+fs.writeFileSync(outputPath, config);
 console.log('✓ v2/app_config.js gerado');

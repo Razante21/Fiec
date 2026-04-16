@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"next dev\" \"npm --prefix integrations/cronograma-alunos/client run dev\"",
-    "build": "npm --prefix integrations/cronograma-alunos/client ci --include=dev --no-audit --no-fund && npm --prefix integrations/cronograma-alunos/client run build && cp -r integrations/cronograma-alunos/client/dist/* public/cronograma-alunos-app/ && next build",
+    "prepare:cronograma-estagiarios": "node integrations/cronograma-estagiarios/build.js && mkdir -p public/cronograma-estagiarios-app && cp integrations/cronograma-estagiarios/v2/index.html public/cronograma-estagiarios-app/index.html && cp integrations/cronograma-estagiarios/v2/style.css public/cronograma-estagiarios-app/style.css && cp integrations/cronograma-estagiarios/v2/app.js public/cronograma-estagiarios-app/app.js && cp integrations/cronograma-estagiarios/v2/app_config.js public/cronograma-estagiarios-app/app_config.js",
+    "dev": "npm run prepare:cronograma-estagiarios && concurrently \"next dev\" \"npm --prefix integrations/cronograma-alunos/client run dev\"",
+    "build": "npm --prefix integrations/cronograma-alunos/client ci --include=dev --no-audit --no-fund && npm --prefix integrations/cronograma-alunos/client run build && cp -r integrations/cronograma-alunos/client/dist/* public/cronograma-alunos-app/ && npm run prepare:cronograma-estagiarios && next build",
     "start": "next start"
   },
   "dependencies": {

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 
 export default function CronogramaEstagiariosAdminPage() {
   const router = useRouter()
-  const src = useMemo(() => '/cronograma-alunos-app/index.html#/admin', [])
+  const src = useMemo(() => '/cronograma-estagiarios-app/index.html', [])
   const [loaded, setLoaded] = useState(false)
   const [failed, setFailed] = useState(false)
 
