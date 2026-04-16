@@ -6,6 +6,12 @@ const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
 
+function normalizeHash(passwordHash) {
+  return passwordHash.startsWith('$2y$')
+    ? `$2a$${passwordHash.slice(4)}`
+    : passwordHash;
+}
+
 router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -31,11 +37,10 @@ router.post('/login', async (req, res) => {
 
     const user = users[0];
     const passwordHash = String(user.senha || '');
-    const normalizedHash = passwordHash.startsWith('$2y$')
-      ? `$2a$${passwordHash.slice(4)}`
-      : passwordHash;
 
-    const validPassword = await bcrypt.compare(password, normalizedHash);
+    const validPassword = passwordHash.startsWith('$2')
+      ? await bcrypt.compare(password, normalizeHash(passwordHash))
+      : password === passwordHash;
 
     if (!validPassword) {
       return res.status(401).json({ error: 'Usuário ou senha incorretos!' });

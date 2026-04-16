@@ -8,6 +8,21 @@ interface UsuarioAuth {
   token: string | null
 }
 
+function normalizeNivel(nivel: string | null | undefined): UsuarioAuth['nivel'] {
+  switch (nivel) {
+    case 'admin':
+    case 'administrador':
+      return 'admin'
+    case 'professor':
+    case 'coordenador':
+      return 'professor'
+    case 'aluno':
+      return 'aluno'
+    default:
+      return null
+  }
+}
+
 interface AuthContextType {
   usuario: UsuarioAuth
   login: (usuario: string, nivel: string, token?: string) => void
@@ -66,9 +81,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
 
         if (ativo) {
+          const nivelNormalizado = normalizeNivel(dados.user.nivel) || normalizeNivel(nivelSalvo)
           setUsuario({
-            usuario: dados.user.usuario || usuarioSalvo,
-            nivel: (dados.user.nivel as UsuarioAuth['nivel']) || (nivelSalvo as UsuarioAuth['nivel']) || null,
+            usuario: dados.user.usuario || dados.user.nome || usuarioSalvo,
+            nivel: nivelNormalizado || null,
             token: tokenSalvo,
           })
         }
@@ -92,15 +108,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const login = (usuario: string, nivel: string, token?: string) => {
+    const nivelNormalizado = normalizeNivel(nivel) || 'aluno'
+
     const novoUsuario = {
       usuario,
-      nivel: (nivel as any) || 'aluno',
+      nivel: nivelNormalizado,
       token: token || null
     }
 
     setUsuario(novoUsuario)
     localStorage.setItem('usuario', usuario)
-    localStorage.setItem('nivel', nivel)
+    localStorage.setItem('nivel', nivelNormalizado)
     if (token) {
       localStorage.setItem('token', token)
     }

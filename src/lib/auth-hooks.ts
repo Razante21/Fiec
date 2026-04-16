@@ -79,7 +79,7 @@ export function useAuthActions() {
 
   const handleLogout = () => {
     logout()
-    router.push('/login')
+    router.push('/inscricao')
   }
 
   return {
