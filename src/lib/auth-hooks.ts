@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 
 /**
  * Hook para verificar autenticação e redirecionar se necessário
- * @param requireAuth - Se true, redireciona para /login se não autenticado
- * @param requireAdmin - Se true, redireciona para /hub se não for admin
+ * @param requireAuth - Se true, redireciona para /inscricao se não autenticado
+ * @param requireAdmin - Se true, exige perfil admin
  */
 export function useProtectedRoute(requireAuth = true, requireAdmin = false) {
   const { isAuthenticated, isAdmin, carregando } = useAuth()
@@ -15,11 +15,11 @@ export function useProtectedRoute(requireAuth = true, requireAdmin = false) {
     if (carregando) return
 
     if (requireAuth && !isAuthenticated) {
-      router.push('/login')
+      router.push('/inscricao')
       return
     }
 
-    if (requireAdmin && !isAdmin) {
+    if (requireAdmin && isAuthenticated && !isAdmin) {
       router.push('/hub')
       return
     }

@@ -80,7 +80,7 @@ const pages: PageCard[] = [
 
 export default function HubPage() {
   const router = useRouter()
-  const { isReady, isAuthenticated, isAdmin } = useProtectedRoute(false, false)
+  const { isReady, isAuthenticated, isAdmin } = useProtectedRoute(true, false)
   const usuario = useCurrentUser()
   const { handleLogout } = useAuthActions()
 
