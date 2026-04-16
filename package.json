@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"next dev\" \"npm --prefix integrations/cronograma-alunos/client run dev\" \"npm --prefix integrations/cronograma-alunos/server run dev\"",
-    "build": "npm --prefix integrations/cronograma-alunos/client run build && cp -r integrations/cronograma-alunos/client/dist/* public/cronograma-alunos-app/ && next build",
+    "dev": "concurrently \"next dev\" \"npm --prefix integrations/cronograma-alunos/client run dev\"",
+    "build": "npm --prefix integrations/cronograma-alunos/client ci --include=dev --no-audit --no-fund && npm --prefix integrations/cronograma-alunos/client run build && cp -r integrations/cronograma-alunos/client/dist/* public/cronograma-alunos-app/ && next build",
     "start": "next start"
   },
   "dependencies": {
