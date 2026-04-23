@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createTurma, updateTurma, setLiberacao } from '@/models/turma';
+import { createTurma, updateTurma, setLiberacao, deleteTurma } from '@/models/turma';
 import { getTurmasByPolo, getTurmaById } from '@/models/turma';
 
 export async function GET(request: Request) {
@@ -54,5 +54,21 @@ export async function PUT(request: Request) {
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ success: false, error: 'Erro ao atualizar turma' }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const turmaId = searchParams.get('id');
+
+  if (!turmaId) {
+    return NextResponse.json({ success: false, error: 'ID da turma é obrigatório' }, { status: 400 });
+  }
+
+  try {
+    await deleteTurma(parseInt(turmaId, 10));
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: 'Erro ao excluir turma' }, { status: 500 });
   }
 }

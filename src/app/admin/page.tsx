@@ -171,6 +171,29 @@ export default function AdminPage() {
     }
   }
 
+  const excluirTurma = async (turma: Turma) => {
+    const confirmar = window.confirm(`Tem certeza que deseja excluir a turma "${turma.modulo} - ${turma.dias} ${turma.horario}"?`)
+
+    if (!confirmar) {
+      return
+    }
+
+    try {
+      const res = await fetch(`/api/admin/turmas?id=${turma.id}`, {
+        method: 'DELETE',
+      })
+      const data = await res.json()
+
+      if (data.success) {
+        await loadTurmas(selectedPolo!)
+      } else {
+        alert(data.error || 'Erro ao excluir turma')
+      }
+    } catch (e) {
+      alert('Erro ao excluir turma')
+    }
+  }
+
   const saveTurma = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
@@ -340,7 +363,7 @@ export default function AdminPage() {
                     borderRadius: '10px',
                     padding: '16px',
                     display: 'grid',
-                    gridTemplateColumns: '1fr 1fr 1fr 100px 80px',
+                    gridTemplateColumns: '1fr 1fr 1fr 100px 80px 80px',
                     gap: '16px',
                     alignItems: 'center',
                     border: '1px solid rgba(255,255,255,0.05)',
@@ -386,6 +409,12 @@ export default function AdminPage() {
                     style={{ padding: '8px', background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '6px', color: '#8fb3cc', cursor: 'pointer' }}
                   >
                     Editar
+                  </button>
+                  <button
+                    onClick={() => excluirTurma(turma)}
+                    style={{ padding: '8px', background: 'transparent', border: '1px solid rgba(224,92,92,0.4)', borderRadius: '6px', color: '#e05c5c', cursor: 'pointer' }}
+                  >
+                    Excluir
                   </button>
                 </motion.div>
               ))}

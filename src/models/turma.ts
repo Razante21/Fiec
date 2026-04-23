@@ -66,6 +66,14 @@ export async function setLiberacao(id: number, liberado: boolean, dataLiberacao?
   );
 }
 
+export async function deleteTurma(id: number) {
+  // Soft delete para manter histórico e evitar quebra de relacionamentos.
+  return query(
+    'UPDATE turmas SET ativo = 0, liberado = 0, data_liberacao = NULL WHERE id = ?',
+    [id]
+  );
+}
+
 export async function incrementVagasUsadas(id: number) {
   return query('UPDATE turmas SET vagas_usadas = vagas_usadas + 1 WHERE id = ?', [id]);
 }
