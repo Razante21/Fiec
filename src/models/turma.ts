@@ -56,9 +56,13 @@ export async function updateTurma(
 }
 
 export async function setLiberacao(id: number, liberado: boolean, dataLiberacao?: string) {
+  const dataLiberacaoNormalizada = dataLiberacao
+    ? dataLiberacao.replace('T', ' ').replace('Z', '').slice(0, 19)
+    : null
+
   return query(
     'UPDATE turmas SET liberado = ?, data_liberacao = ? WHERE id = ?',
-    [liberado ? 1 : 0, dataLiberacao || null, id]
+    [liberado ? 1 : 0, dataLiberacaoNormalizada, id]
   );
 }
 

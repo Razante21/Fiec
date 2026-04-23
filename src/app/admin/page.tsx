@@ -43,13 +43,34 @@ export default function AdminPage() {
   const [poloForm, setPoloForm] = useState({ nome: '', slug: '', descricao: '' })
 
   useEffect(() => {
-    const token = localStorage.getItem('fiec_token')
-    const nivel = localStorage.getItem('fiec_nivel')
-    if (token && nivel === 'admin') {
+    let mounted = true
+
+    const initializeAdmin = async () => {
+      const token = localStorage.getItem('fiec_token')
+      const nivel = localStorage.getItem('fiec_nivel')
+
+      if (!token || nivel !== 'admin') {
+        if (mounted) {
+          setLoading(false)
+        }
+        return
+      }
+
       setLoggedIn(true)
-      loadPolos()
-    } else {
-      setLoading(false)
+
+      try {
+        await loadPolos()
+      } finally {
+        if (mounted) {
+          setLoading(false)
+        }
+      }
+    }
+
+    initializeAdmin()
+
+    return () => {
+      mounted = false
     }
   }, [])
 
@@ -95,6 +116,7 @@ export default function AdminPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
+    setLoading(true)
     try {
       const res = await fetch('/api/auth', {
         method: 'POST',
@@ -106,12 +128,14 @@ export default function AdminPage() {
         localStorage.setItem('fiec_usuario', data.data.usuario)
         localStorage.setItem('fiec_nivel', data.data.nivel)
         setLoggedIn(true)
-        loadPolos()
+        await loadPolos()
       } else {
         alert(data.error)
       }
     } catch (e) {
       alert('Erro ao fazer login')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -120,6 +144,7 @@ export default function AdminPage() {
     localStorage.removeItem('fiec_usuario')
     localStorage.removeItem('fiec_nivel')
     setLoggedIn(false)
+    setLoading(false)
     setPolos([])
     setTurmas([])
   }
@@ -132,12 +157,14 @@ export default function AdminPage() {
           action: 'liberar',
           id: turma.id,
           liberado: !turma.liberado,
-          data_liberacao: !turma.liberado ? new Date().toISOString() : null,
+          data_liberacao: !turma.liberado ? new Date().toISOString().slice(0, 19).replace('T', ' ') : null,
         }),
       })
       const data = await res.json()
       if (data.success) {
-        loadTurmas(selectedPolo!)
+        await loadTurmas(selectedPolo!)
+      } else {
+        alert(data.error || 'Erro ao atualizar turma')
       }
     } catch (e) {
       alert('Erro ao atualizar')
