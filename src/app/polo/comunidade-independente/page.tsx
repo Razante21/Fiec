@@ -116,7 +116,7 @@ export default function PoloComunidadeIndependente() {
                     </div>
                   )
                 })}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>{modulos.map((m, i) => <ModuloCard key={m.id} modulo={m} index={i} onClick={() => { setSelectedModulo(m); setModalOpen(true) }} />)}</div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>{modulos.map((m, i) => <ModuloCard key={m.id} modulo={m} index={i} onClick={() => { if (!m.liberado) { alert('Inscrições ainda não liberadas para esta turma.'); return } setSelectedModulo(m); setModalOpen(true) }} />)}</div>
               </div>
             </motion.div>
           )}

@@ -137,7 +137,7 @@ export default function PoloBemViver() {
                   {moduloName.tag.toLowerCase().includes('intermediário') && (
                     <motion.div variants={itemVariants} style={{ background: 'rgba(61,186,126,.06)', border: '1px solid rgba(61,186,126,.18)', borderLeft: '3px solid #3dba7e', padding: '14px 16px', borderRadius: '8px', fontSize: '0.82rem', lineHeight: 1.6, color: '#8fb3cc', marginBottom: '18px' }}><strong style={{ color: '#3dba7e' }}>Pré-requisito para esta turma:</strong><br />É necessário ter concluído o módulo básico do curso de inclusão digital da FIEC ou ter conhecimentos básicos de informática e computação.</motion.div>
                   )}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}><ModuloCard key={moduloName.id} modulo={moduloName} index={idx} onClick={() => { setSelectedModulo(moduloName); setModalOpen(true) }} /></div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}><ModuloCard key={moduloName.id} modulo={moduloName} index={idx} onClick={() => { if (!moduloName.liberado) { alert('Inscrições ainda não liberadas para esta turma.'); return } setSelectedModulo(moduloName); setModalOpen(true) }} /></div>
                 </div>
               ))}
             </motion.div>

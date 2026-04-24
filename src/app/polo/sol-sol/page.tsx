@@ -109,7 +109,7 @@ export default function PoloSolSol() {
                 return (
                   <div key={moduloName} style={{ marginBottom: '28px' }}>
                     <motion.div variants={itemVariants} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}><h4 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '1rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#8fb3cc', whiteSpace: 'nowrap' }}>{moduloName}</h4><div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,.07)' }} /></motion.div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>{modulosFiltrados.map((m, i) => <ModuloCard key={m.id} modulo={m} index={i} onClick={() => { setSelectedModulo(m); setModalOpen(true) }} />)}</div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>{modulosFiltrados.map((m, i) => <ModuloCard key={m.id} modulo={m} index={i} onClick={() => { if (!m.liberado) { alert('Inscrições ainda não liberadas para esta turma.'); return } setSelectedModulo(m); setModalOpen(true) }} />)}</div>
                   </div>
                 )
               })}

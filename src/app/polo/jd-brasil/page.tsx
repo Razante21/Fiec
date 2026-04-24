@@ -113,7 +113,7 @@ export default function PoloJdBrasil() {
                     {moduloName === 'Módulo II — Intermediário' && (
                       <motion.div variants={itemVariants} style={{ background: 'rgba(61,186,126,.06)', border: '1px solid rgba(61,186,126,.18)', borderLeft: '3px solid #3dba7e', padding: '14px 16px', borderRadius: '8px', fontSize: '0.82rem', lineHeight: 1.6, color: '#8fb3cc', marginBottom: '18px' }}><strong style={{ color: '#3dba7e' }}>Pré-requisito:</strong> É necessário ter concluído o módulo básico do curso de inclusão digital da FIEC ou ter conhecimentos básicos de informática.</motion.div>
                     )}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>{modulosFiltrados.map((m, i) => <ModuloCard key={m.id} modulo={m} index={i} onClick={() => { setSelectedModulo(m); setModalOpen(true) }} />)}</div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>{modulosFiltrados.map((m, i) => <ModuloCard key={m.id} modulo={m} index={i} onClick={() => { if (!m.liberado) { alert('Inscrições ainda não liberadas para esta turma.'); return } setSelectedModulo(m); setModalOpen(true) }} />)}</div>
                   </div>
                 )
               })}

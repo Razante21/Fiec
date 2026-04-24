@@ -270,7 +270,7 @@ export default function PoloFiec() {
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>
                 {modulos.filter(m => m.tag === 'Módulo I — Básico').map((modulo, idx) => (
-                  <ModuloCard key={modulo.id} modulo={modulo} index={idx} onClick={() => { setSelectedModulo(modulo); setModalOpen(true) }} />
+                  <ModuloCard key={modulo.id} modulo={modulo} index={idx} onClick={() => { if (!modulo.liberado) { alert('Inscrições ainda não liberadas para esta turma.'); return } setSelectedModulo(modulo); setModalOpen(true) }} />
                 ))}
               </div>
             </div>
@@ -298,7 +298,7 @@ export default function PoloFiec() {
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>
                 {modulos.filter(m => m.tag === 'Módulo II — Intermediário').map((modulo, idx) => (
-                  <ModuloCard key={modulo.id} modulo={modulo} index={idx + 3} onClick={() => { setSelectedModulo(modulo); setModalOpen(true) }} />
+                  <ModuloCard key={modulo.id} modulo={modulo} index={idx + 3} onClick={() => { if (!modulo.liberado) { alert('Inscrições ainda não liberadas para esta turma.'); return } setSelectedModulo(modulo); setModalOpen(true) }} />
                 ))}
               </div>
             </div>
