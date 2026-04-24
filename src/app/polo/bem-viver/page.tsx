@@ -16,6 +16,8 @@ interface ModuloData {
   scriptUrl: string
   vagas: number
   esgotado: boolean
+  liberado?: boolean
+  dataLiberacao?: string | null
 }
 
 export default function PoloBemViver() {
@@ -156,6 +158,8 @@ export default function PoloBemViver() {
         horario={selectedModulo?.horario || ''}
         scriptUrl={selectedModulo?.scriptUrl}
         masterUrl={getMasterUrl()}
+        liberado={selectedModulo?.liberado}
+        dataLiberacao={selectedModulo?.dataLiberacao || undefined}
       />
 
       <FormModal

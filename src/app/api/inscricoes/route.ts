@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createInscricao, createListaEspera } from '@/models/inscricao';
 import { incrementVagasUsadas, getTurmaById } from '@/models/turma';
+import { isValidCpf, sanitizeCpf } from '@/lib/cpf';
 
 export async function POST(request: Request) {
   try {
@@ -28,6 +29,11 @@ export async function POST(request: Request) {
         data_liberacao: turma.data_liberacao 
       }, { status: 403 });
     }
+
+    const cpf = sanitizeCpf(body.cpf || '');
+    if (!isValidCpf(cpf)) {
+      return NextResponse.json({ success: false, error: 'CPF inválido' }, { status: 400 });
+    }
     
     const vagasRestantes = turma.vagas_total - turma.vagas_usadas;
     if (vagasRestantes <= 0) {
@@ -38,7 +44,7 @@ export async function POST(request: Request) {
       turma_id: body.turma_id,
       nome: body.nome,
       data_nascimento: body.dataNascimento,
-      cpf: body.cpf,
+      cpf,
       telefone: body.telefone,
       endereco: body.endereco,
       cep: body.cep,

@@ -7,6 +7,8 @@ export interface ModuloData {
   scriptUrl: string
   vagas: number
   esgotado: boolean
+  liberado?: boolean
+  dataLiberacao?: string | null
 }
 
 const SCRIPT_URL_TURMAS = "https://script.google.com/macros/s/AKfycbweWUdM750BmfdjZkcmTYE6Bg7WxIO4Dp1kV7Z35CPKkiQ-C-QMpiYBa3i6FtEL8t-j/exec"
@@ -30,6 +32,8 @@ export async function fetchTurmas(polo: string): Promise<ModuloData[]> {
       scriptUrl: t.scriptUrl || '',
       vagas: -1,
       esgotado: false,
+      liberado: Boolean(t.liberado),
+      dataLiberacao: t.data_liberacao ?? null,
     }))
   } catch (error) {
     console.error('Erro ao carregar turmas:', error)

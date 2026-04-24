@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Check } from 'lucide-react'
 import { useState, useEffect } from 'react'
+import { isValidCpf, sanitizeCpf } from '@/lib/cpf'
 
 interface FormModalProps {
   isOpen: boolean
@@ -20,13 +21,13 @@ interface FormModalProps {
   dataLiberacao?: string
 }
 
-export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, scriptUrl, masterUrl, listaEsperaOnly, listaEsperaTurmas, turmaId, liberado = true, dataLiberacao }: FormModalProps) {
-  const [naoLiberado, setNaoLiberado] = useState(!liberado)
+export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, scriptUrl, masterUrl, listaEsperaOnly, listaEsperaTurmas, turmaId, liberado = false, dataLiberacao }: FormModalProps) {
   const [enviando, setEnviando] = useState(false)
   const [enviado, setEnviado] = useState(false)
   const [showNormas, setShowNormas] = useState(false)
   const [vagasRestantes, setVagasRestantes] = useState<number>(-1)
   const [isListaEspera, setIsListaEspera] = useState(listaEsperaOnly || false)
+  const formularioBloqueado = !liberado
   const [formData, setFormData] = useState({
     nome: '',
     dataNascimento: '',
@@ -84,7 +85,7 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (isListaEspera) {
       setEnviando(true)
       
@@ -117,10 +118,21 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
       setEnviado(true)
       return
     }
+
+    if (formularioBloqueado) {
+      alert(dataLiberacao
+        ? `Este formulário ainda está bloqueado. Liberação prevista em ${dataLiberacao}.`
+        : 'Este formulário ainda está bloqueado.')
+      return
+    }
+
+    const cpf = sanitizeCpf(formData.cpf)
+    if (!isValidCpf(cpf)) {
+      alert('CPF inválido. Verifique os números informados.')
+      return
+    }
     
     // === INSCRIÇÃO NORMAL ===
-    setEnviando(true)
-
     // Validar idade mínima (12 anos) no frontend antes de enviar
     if (formData.dataNascimento) {
       const dataNasc = new Date(formData.dataNascimento)
@@ -133,10 +145,11 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
       
       if (idade < 12) {
         alert(`Idade mínima: 12 anos. Você tem ${idade} anos.`)
-        setEnviando(false)
         return
       }
     }
+
+    setEnviando(true)
 
     // Enviar para a planilha individual da turma (scriptUrl)
     if (scriptUrl) {
@@ -146,6 +159,7 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
           mode: 'no-cors',
           body: JSON.stringify({
             ...formData,
+            cpf,
             poloid: polo,
             modulo,
             dias,
@@ -351,6 +365,19 @@ export function FormModal({ isOpen, onClose, polo, modulo, dias, horario, script
                       : 'Entraremos em contato para confirmar sua inscrição.'}
                   </motion.p>
                 </motion.div>
+              ) : formularioBloqueado && !listaEsperaOnly ? (
+                <div style={{ padding: '28px 6px 8px', textAlign: 'center' }}>
+                  <div style={{ margin: '0 auto 18px', width: '72px', height: '72px', borderRadius: '50%', background: 'rgba(224, 92, 92, 0.14)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#e05c5c', border: '1px solid rgba(224, 92, 92, 0.35)' }}>
+                    <X size={34} strokeWidth={2.5} />
+                  </div>
+                  <h3 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '1.8rem', fontWeight: 800, color: '#fff', marginBottom: '10px', textTransform: 'uppercase' }}>
+                    Inscrições bloqueadas
+                  </h3>
+                  <p style={{ color: '#8fb3cc', fontSize: '0.92rem', lineHeight: 1.6 }}>
+                    Este formulário ainda não foi liberado para respostas.
+                    {dataLiberacao ? ` Liberação prevista: ${dataLiberacao}.` : ''}
+                  </p>
+                </div>
               ) : isListaEspera ? (
                 <form onSubmit={handleSubmit}>
                   <motion.div
