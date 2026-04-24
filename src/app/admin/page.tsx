@@ -16,6 +16,7 @@ interface Turma {
   modulo: string
   dias: string
   horario: string
+  script_url: string | null
   vagas_total: number
   vagas_usadas: number
   liberado: number
@@ -37,6 +38,7 @@ export default function AdminPage() {
     modulo: '',
     dias: '',
     horario: '',
+    script_url: '',
     vagas_total: 40,
   })
   const [showPoloModal, setShowPoloModal] = useState(false)
@@ -205,6 +207,7 @@ export default function AdminPage() {
             modulo: turmaForm.modulo,
             dias: turmaForm.dias,
             horario: turmaForm.horario,
+            script_url: turmaForm.script_url,
             ativo: true,
           }),
         })
@@ -219,7 +222,7 @@ export default function AdminPage() {
       }
       setShowTurmaModal(false)
       setEditingTurma(null)
-      setTurmaForm({ modulo: '', dias: '', horario: '', vagas_total: 40 })
+      setTurmaForm({ modulo: '', dias: '', horario: '', script_url: '', vagas_total: 40 })
       loadTurmas(selectedPolo!)
     } catch (e) {
       alert('Erro ao salvar')
@@ -337,7 +340,7 @@ export default function AdminPage() {
           </div>
 
           <button
-            onClick={() => { setEditingTurma(null); setTurmaForm({ modulo: '', dias: '', horario: '', vagas_total: 40 }); setShowTurmaModal(true) }}
+            onClick={() => { setEditingTurma(null); setTurmaForm({ modulo: '', dias: '', horario: '', script_url: '', vagas_total: 40 }); setShowTurmaModal(true) }}
             style={{ width: '100%', padding: '14px', background: '#f5a623', border: 'none', borderRadius: '8px', color: '#0d1a26', fontSize: '0.9rem', fontWeight: 700, textTransform: 'uppercase', cursor: 'pointer' }}
           >
             + Nova Turma
@@ -372,6 +375,11 @@ export default function AdminPage() {
                   <div>
                     <span style={{ fontSize: '0.7rem', color: '#f5a623', fontWeight: 700, textTransform: 'uppercase' }}>{turma.modulo}</span>
                     <p style={{ color: '#fff', fontSize: '0.9rem' }}>{turma.dias} - {turma.horario}</p>
+                    {turma.script_url && (
+                      <p style={{ color: '#8fb3cc', fontSize: '0.72rem', marginTop: '6px', wordBreak: 'break-all' }}>
+                        Apps Script: {turma.script_url}
+                      </p>
+                    )}
                   </div>
                   <div>
                     <span style={{ fontSize: '0.7rem', color: '#8fb3cc' }}>Vagas</span>
@@ -405,7 +413,7 @@ export default function AdminPage() {
                     {turma.liberado ? 'Bloquear' : 'Liberar'}
                   </button>
                   <button
-                    onClick={() => { setEditingTurma(turma); setTurmaForm({ modulo: turma.modulo, dias: turma.dias, horario: turma.horario, vagas_total: turma.vagas_total }); setShowTurmaModal(true) }}
+                    onClick={() => { setEditingTurma(turma); setTurmaForm({ modulo: turma.modulo, dias: turma.dias, horario: turma.horario, script_url: turma.script_url || '', vagas_total: turma.vagas_total }); setShowTurmaModal(true) }}
                     style={{ padding: '8px', background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '6px', color: '#8fb3cc', cursor: 'pointer' }}
                   >
                     Editar
@@ -454,6 +462,13 @@ export default function AdminPage() {
                 value={turmaForm.horario}
                 onChange={e => setTurmaForm({ ...turmaForm, horario: e.target.value })}
                 required
+                style={{ width: '100%', padding: '12px', marginBottom: '12px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', color: '#fff' }}
+              />
+              <input
+                type="url"
+                placeholder="URL do Apps Script da turma"
+                value={turmaForm.script_url}
+                onChange={e => setTurmaForm({ ...turmaForm, script_url: e.target.value })}
                 style={{ width: '100%', padding: '12px', marginBottom: '12px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', color: '#fff' }}
               />
               <input

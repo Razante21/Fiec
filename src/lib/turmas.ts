@@ -29,7 +29,7 @@ export async function fetchTurmas(polo: string): Promise<ModuloData[]> {
       dias: t.dias,
       horario: t.horario,
       formUrl: '',
-      scriptUrl: t.scriptUrl || '',
+      scriptUrl: t.script_url || t.scriptUrl || '',
       vagas: -1,
       esgotado: false,
       liberado: Boolean(t.liberado),

@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS turmas (
     modulo VARCHAR(50) NOT NULL,
     dias VARCHAR(50) NOT NULL,
     horario VARCHAR(50) NOT NULL,
+    script_url TEXT,
     vagas_total INT DEFAULT 40,
     vagas_usadas INT DEFAULT 0,
     liberado BOOLEAN DEFAULT FALSE,

@@ -6,6 +6,7 @@ export interface Turma {
   modulo: string;
   dias: string;
   horario: string;
+  script_url: string | null;
   vagas_total: number;
   vagas_usadas: number;
   liberado: number;
@@ -34,11 +35,12 @@ export async function createTurma(
   modulo: string,
   dias: string,
   horario: string,
+  scriptUrl: string | null,
   vagasTotal: number = 40
 ) {
   return query(
-    'INSERT INTO turmas (polo_id, modulo, dias, horario, vagas_total) VALUES (?, ?, ?, ?, ?)',
-    [poloId, modulo, dias, horario, vagasTotal]
+    'INSERT INTO turmas (polo_id, modulo, dias, horario, script_url, vagas_total) VALUES (?, ?, ?, ?, ?, ?)',
+    [poloId, modulo, dias, horario, scriptUrl, vagasTotal]
   );
 }
 
@@ -47,11 +49,12 @@ export async function updateTurma(
   modulo: string,
   dias: string,
   horario: string,
+  scriptUrl: string | null,
   ativo: boolean
 ) {
   return query(
-    'UPDATE turmas SET modulo = ?, dias = ?, horario = ?, ativo = ? WHERE id = ?',
-    [modulo, dias, horario, ativo ? 1 : 0, id]
+    'UPDATE turmas SET modulo = ?, dias = ?, horario = ?, script_url = ?, ativo = ? WHERE id = ?',
+    [modulo, dias, horario, scriptUrl, ativo ? 1 : 0, id]
   );
 }
 
